@@ -3,10 +3,12 @@ const CounterAchat = require("./Counters/VenteCounter"); // Adjust the path as n
 // Other model imports...
 const Product = require("./product");
 const achatSchema = new mongoose.Schema({
+  id_achat: { type: Number, unique: true, index: true },
   id_fournisseur: { type: Number, ref: "Fournisseur" },
   id_produit: { type: Number, ref: "Product" },
   quantite_achat: { type: Number, required: true },
   montant_total_achat: { type: Number },
+  reste: { type: Number, default: 0 },
   date_achat: { type: Date, default: Date.now },
   statut_paiement_achat: { type: Boolean, required: true, default: true },
 });
@@ -33,6 +35,9 @@ achatSchema.pre("save", async function (next) {
       next(new Error("Product not found"));
     } else {
       this.montant_total_achat = product.price * this.quantite_achat;
+      if (!this.statut_paiement_achat) {
+        this.reste = this.montant_total_achat;
+      }
       next();
     }
   } catch (err) {

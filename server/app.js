@@ -9,6 +9,7 @@ const clientRoutes = require("./routes/ClientRoutes");
 const fourRouter = require("./routes/FournisseurRoutes");
 const venteRouter = require("./routes/VenteRoutes");
 const StockRouter = require("./routes/ProduitStockRoutes");
+const RegelmentRoutes = require("./routes/RegelmentRoutes");
 // ... rest of your server setup ...
 
 // Middleware to parse JSON
@@ -27,6 +28,7 @@ app.use("/", clientRoutes);
 app.use("/", fourRouter);
 app.use("/", venteRouter);
 app.use("/", StockRouter);
+app.use("/", RegelmentRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -47,10 +47,20 @@ exports.createAchat = async (req, res) => {
       await newProduitStockEntry.save();
     }
     if (!statut_paiement_achat) {
-        Fournisseur.solde_fournisseur += montant_total_achat;
-        await Fournisseur.save();
-    }
+      const fournisseur = await Fournisseur.findOne({
+        Id_fournisseur: id_fournisseur,
+      });
 
+      if (fournisseur) {
+        fournisseur.solde_fournisseur += newAchat.montant_total_achat;
+
+        await fournisseur.save();
+      } else {
+        throw new Error("Fournisseur not found");
+      }
+      newAchat.reste = newAchat.montant_total_achat;
+      await newAchat.save();
+    }
     res.status(201).send({
       message: "Achat created and stock updated successfully",
       data: newAchat,
