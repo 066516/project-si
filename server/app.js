@@ -7,10 +7,13 @@ const employeRoutes = require("./routes/EmployeRoutes");
 const productRoutes = require("./routes/productRoutes");
 const clientRoutes = require("./routes/ClientRoutes");
 const fourRouter = require("./routes/FournisseurRoutes");
-const venteRouter = require("./routes/VenteRoutes");
+const AchatRouter = require("./routes/AchatRoutes");
 const StockRouter = require("./routes/ProduitStockRoutes");
 const RegelmentRoutes = require("./routes/RegelmentRoutes");
 const transRoutes = require("./routes/transferRoutes");
+const VenteRoutes = require("./routes/VenteRoutes");
+const pvRoutes = require("./routes/PvRoutes");
+const AbsenceRoutes = require("./routes/AbsenceRoutes");
 // ... rest of your server setup ...
 
 // Middleware to parse JSON
@@ -27,10 +30,13 @@ app.use("/", employeRoutes);
 app.use("/", productRoutes);
 app.use("/", clientRoutes);
 app.use("/", fourRouter);
-app.use("/", venteRouter);
+app.use("/", AchatRouter);
 app.use("/", StockRouter);
 app.use("/", RegelmentRoutes);
 app.use("/", transRoutes);
+app.use("/", VenteRoutes);
+app.use("/", pvRoutes);
+app.use("/", AbsenceRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,125 +1,114 @@
-const Achat = require("../modles/Achat"); // Adjust the path as necessary
-const Fournisseur = require("../modles/Fournisseur"); // Adjust path as necessary
-const Product = require("../modles/product");
+const Vente = require("../modles/Vente");
+const Client = require("../modles/client"); // Adjust the path as necessary
+const Product = require("../modles/product"); // Adjust the path as necessary
+const Shop = require("../modles/Shop"); // Adjust the path as necessary
+const ProduitStock = require("../modles/ProduitStock"); // Adjust the path as necessary
 
-const ProduitStock = require("../modles/ProduitStock");
-
-exports.createAchat = async (req, res) => {
+exports.createVente = async (req, res) => {
   const {
-    id_fournisseur,
+    id_client,
     id_produit,
-    quantite_achat,
-    montant_total_achat,
-    statut_paiement_achat,
+    id_shop,
+    quantite_vendue,
+    prix_unitaire_vente,
   } = req.body;
 
   try {
-    // Check if the Fournisseur exists
-    const fournisseurExists = await Fournisseur.findOne({
-      Id_fournisseur: id_fournisseur,
-    });
-    if (!fournisseurExists) {
-      return res.status(404).send({ message: "Fournisseur not found" });
+    // Verify if the Client exists
+    const clientExists = await Client.findOne({ clientId: id_client });
+    if (!clientExists) {
+      return res.status(404).send({ message: "Client not found" });
     }
 
-    // Check if the Product exists
+    // Verify if the Product exists
     const productExists = await Product.findOne({ productId: id_produit });
     if (!productExists) {
       return res.status(404).send({ message: "Product not found" });
     }
 
-    // Create the Achat
-    const newAchat = new Achat(req.body);
-    await newAchat.save();
-
-    // Update or create a new entry in ProduitStock
-    const produitStockEntry = await ProduitStock.findOne({
-      id_produit: id_produit,
+    // Verify if the Shop exists
+    const shopExists = await Shop.findOne({ shopID: id_shop });
+    if (!shopExists) {
+      return res.status(404).send({ message: "Shop not found" });
+    }
+    const stockItem = await ProduitStock.findOne({ id_produit, id_shop });
+    if (!stockItem || stockItem.quantite_en_stock < quantite_vendue) {
+      return res.status(400).send({
+        message: "Insufficient stock for this product in the specified shop",
+      });
+    }
+    // If all exist, create the Vente
+    const newVente = new Vente({
+      id_client,
+      id_produit,
+      id_shop,
+      quantite_vendue,
+      prix_unitaire_vente,
+      date_vente: new Date(),
+      statut_paiement_vente: true, // or based on your business logic
     });
-    if (produitStockEntry) {
-      produitStockEntry.quantite_en_stock += quantite_achat;
-      await produitStockEntry.save();
-    } else {
-      const newProduitStockEntry = new ProduitStock({
-        id_produit: id_produit,
-        quantite_en_stock: quantite_achat,
-      });
-      await newProduitStockEntry.save();
-    }
-    if (!statut_paiement_achat) {
-      const fournisseur = await Fournisseur.findOne({
-        Id_fournisseur: id_fournisseur,
-      });
-
-      if (fournisseur) {
-        fournisseur.solde_fournisseur += newAchat.montant_total_achat;
-
-        await fournisseur.save();
-      } else {
-        throw new Error("Fournisseur not found");
-      }
-      newAchat.reste = newAchat.montant_total_achat;
-      await newAchat.save();
-    }
+    await newVente.save();
+    stockItem.quantite_en_stock -= quantite_vendue;
+    await stockItem.save();
     res.status(201).send({
-      message: "Achat created and stock updated successfully",
-      data: newAchat,
+      message: "Vente created successfully",
+      data: newVente,
     });
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
-// Get a single achat by ID
-exports.getAchat = async (req, res) => {
+// Get a single Vente entry by ID
+exports.getVente = async (req, res) => {
   try {
-    const achat = await Achat.findById(req.params.id);
-    if (!achat) {
-      return res.status(404).send({ message: "Achat not found" });
+    const vente = await Vente.findById(req.params.id);
+    if (!vente) {
+      return res.status(404).send({ message: "Vente not found" });
     }
-    res.status(200).send(achat);
+    res.status(200).send(vente);
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
-// Get all achats
-exports.getAllAchats = async (req, res) => {
+// Get all Vente entries
+exports.getAllVentes = async (req, res) => {
   try {
-    const achats = await Achat.find();
-    res.status(200).send(achats);
+    const ventes = await Vente.find();
+    res.status(200).send(ventes);
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
-// Update an achat by ID
-exports.updateAchat = async (req, res) => {
+// Update a Vente entry by ID
+exports.updateVente = async (req, res) => {
   try {
-    const updatedAchat = await Achat.findByIdAndUpdate(
+    const updatedVente = await Vente.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    if (!updatedAchat) {
-      return res.status(404).send({ message: "Achat not found" });
+    if (!updatedVente) {
+      return res.status(404).send({ message: "Vente not found" });
     }
     res
       .status(200)
-      .send({ message: "Achat updated successfully", data: updatedAchat });
+      .send({ message: "Vente updated successfully", data: updatedVente });
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
-// Delete an achat by ID
-exports.deleteAchat = async (req, res) => {
+// Delete a Vente entry by ID
+exports.deleteVente = async (req, res) => {
   try {
-    const achat = await Achat.findByIdAndDelete(req.params.id);
-    if (!achat) {
-      return res.status(404).send({ message: "Achat not found" });
+    const vente = await Vente.findByIdAndDelete(req.params.id);
+    if (!vente) {
+      return res.status(404).send({ message: "Vente not found" });
     }
-    res.status(200).send({ message: "Achat deleted successfully" });
+    res.status(200).send({ message: "Vente deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
   }
