@@ -1,4 +1,4 @@
-const Achat = require("../modles/Vente"); // Adjust the path as necessary
+const Achat = require("../modles/Achat"); // Adjust the path as necessary
 const Fournisseur = require("../modles/Fournisseur"); // Adjust path as necessary
 const Product = require("../modles/product");
 

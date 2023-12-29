@@ -1,7 +1,7 @@
 const Reglement = require("../modles/ReglementVente"); // Adjust path as necessary
 
 const Fournisseur = require("../modles/Fournisseur"); // Adjust the path as necessary
-const Vente = require("../modles/Vente"); // Adjust the path as necessary
+const Vente = require("../modles/Achat"); // Adjust the path as necessary
 
 exports.createReglement = async (req, res) => {
   const { id_fournisseur, id_vente, montant_reglement } = req.body;
