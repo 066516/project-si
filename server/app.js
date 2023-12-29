@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const shopRoutes = require("./routes/shopRoutes");
 const employeRoutes = require("./routes/EmployeRoutes");
@@ -17,11 +19,18 @@ const AbsenceRoutes = require("./routes/AbsenceRoutes");
 const MasroufRoutes = require("./routes/MasroufRoutes");
 const Analyse = require("./routes/Analyse");
 const SalaryRoutes = require("./routes/SalaryRoutes");
-// ... rest of your server setup ...
+const authRoutes = require("./auth/authRoutes"); // Routes for authentication
 
+require("dotenv").config();
 // Middleware to parse JSON
 app.use(express.json());
-
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3001", // React app's URL
+    credentials: true,
+  })
+);
 // Start the server
 
 mongoose
@@ -43,6 +52,7 @@ app.use("/", AbsenceRoutes);
 app.use("/", MasroufRoutes);
 app.use("/", Analyse);
 app.use("/", SalaryRoutes);
+app.use("/", authRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
