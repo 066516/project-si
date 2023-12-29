@@ -12,7 +12,7 @@ const EmployeSchema = new mongoose.Schema({
 
 EmployeSchema.pre("save", async function (next) {
   const doc = this;
-  try {
+  if (this.isNew) {
     const counterDoc = await EmployeCounter.findByIdAndUpdate(
       { _id: "EmployeID" },
       { $inc: { seq: 1 } },
@@ -20,8 +20,8 @@ EmployeSchema.pre("save", async function (next) {
     );
     doc.EmployeID = counterDoc.seq;
     next();
-  } catch (err) {
-    next(err);
+  } else {
+    next(); 
   }
 });
 
