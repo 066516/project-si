@@ -4,7 +4,9 @@ const productSchema = new mongoose.Schema({
   productId: { type: Number, index: true, unique: true },
   name: String,
   categoryId: String,
+  status: { type: String, default: "premier" },
   price: Number,
+  count: { type: Number, default: 0 },
 });
 productSchema.pre("save", async function (next) {
   const doc = this;

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const CounterTransfert = require("./Counters/TransfertCounter"); // Adjust the path as necessary
+const Product = require("./product");
 
 const transfertSchema = new mongoose.Schema({
   id_transfert: { type: Number, unique: true, index: true },

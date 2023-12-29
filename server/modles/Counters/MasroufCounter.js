@@ -1,12 +1,9 @@
-const Masrouf = require("./models/Masrouf");
+const mongoose = require("mongoose");
 
-const createMasrouf = async (employeId, montant) => {
-  const newMasrouf = new Masrouf({
-    id_employe: employeId,
-    montant_masrouf: montant,
-  });
-  await newMasrouf.save();
-  console.log("New Masrouf record created with ID:", newMasrouf.id_masrouf);
-};
+const MasroufCounterSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
+  seq: { type: Number, default: 0 },
+});
 
-createMasrouf("employeObjectId", 100.0); // Replace 'employeObjectId' and amount as needed
+const MasroufCounter = mongoose.model("MasroufCounter", MasroufCounterSchema);
+module.exports = MasroufCounter; // Replace 'employeObjectId' and amount as needed

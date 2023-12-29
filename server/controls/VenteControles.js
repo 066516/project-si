@@ -27,10 +27,10 @@ exports.createVente = async (req, res) => {
     }
 
     // Verify if the Shop exists
-    const shopExists = await Shop.findOne({ shopID: id_shop });
-    if (!shopExists) {
-      return res.status(404).send({ message: "Shop not found" });
-    }
+    // const shopExists = await Shop.findOne({ shopID: id_shop });
+    // if (!shopExists) {
+    //   return res.status(404).send({ message: "Shop not found" });
+    // }
     const stockItem = await ProduitStock.findOne({ id_produit, id_shop });
     if (!stockItem || stockItem.quantite_en_stock < quantite_vendue) {
       return res.status(400).send({

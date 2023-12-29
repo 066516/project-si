@@ -14,6 +14,8 @@ const transRoutes = require("./routes/transferRoutes");
 const VenteRoutes = require("./routes/VenteRoutes");
 const pvRoutes = require("./routes/PvRoutes");
 const AbsenceRoutes = require("./routes/AbsenceRoutes");
+const MasroufRoutes = require("./routes/MasroufRoutes");
+const Analyse = require("./routes/Analyse");
 // ... rest of your server setup ...
 
 // Middleware to parse JSON
@@ -37,6 +39,8 @@ app.use("/", transRoutes);
 app.use("/", VenteRoutes);
 app.use("/", pvRoutes);
 app.use("/", AbsenceRoutes);
+app.use("/", MasroufRoutes);
+app.use("/", Analyse);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

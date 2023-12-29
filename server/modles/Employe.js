@@ -7,7 +7,7 @@ const EmployeSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   workIn: { type: Number, ref: "Shop", index: true },
-  salary:{type:Number},
+  salary: { type: Number, default: 0 },
 });
 
 EmployeSchema.pre("save", async function (next) {
