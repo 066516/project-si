@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("./user");
 const router = express.Router();
 const authenticateToken = require("./Middleware/authenticateToken");
-// Register User
+
 router.post("/register", async (req, res) => {
   try {
     const user = new User(req.body);
@@ -21,7 +21,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login User
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -29,25 +28,27 @@ router.post("/login", async (req, res) => {
       return res.status(401).send({ message: "Invalid credentials" });
     }
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 3600000,
-    }); // 1 hour expiry
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "strict",
+    //   maxAge: 3600000,
+    // });
 
     res.status(200).send({ token });
   } catch (error) {
     res.status(500).send(error);
   }
 });
-router.get("/getUser", authenticateToken, (req, res) => {
-  // Access user ID and email from the request object
+router.get("/getUser", authenticateToken, async (req, res) => {
   const userId = req.user.id;
-
-  res.send({ userId });
-  // Rest of your route logic
+  try {
+    const nowUser = await User.findOne({ id: userId });
+    res.send({ nowUser });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 module.exports = router;
