@@ -38,7 +38,7 @@ app.get("/cool", (req, res) => res.send(cool()));
 
 // Start the server
 mongoose
-  .connect("mongodb://127.0.0.1:27017/stock")
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
