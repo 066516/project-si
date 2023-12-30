@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
+const cool = require("cool-ascii-faces");
+const path = require("path");
 const shopRoutes = require("./routes/shopRoutes");
 const employeRoutes = require("./routes/EmployeRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -31,12 +32,16 @@ app.use(
     credentials: true,
   })
 );
-// Start the server
 
+// New route to display a cool ASCII face
+app.get("/cool", (req, res) => res.send(cool()));
+
+// Start the server
 mongoose
   .connect("mongodb://127.0.0.1:27017/stock")
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
+
 app.use("/", shopRoutes);
 app.use("/", employeRoutes);
 app.use("/", productRoutes);
@@ -53,6 +58,7 @@ app.use("/", MasroufRoutes);
 app.use("/", Analyse);
 app.use("/", SalaryRoutes);
 app.use("/", authRoutes);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
