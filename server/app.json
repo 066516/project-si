@@ -1,0 +1,10 @@
+{
+    "environments": {
+      "production": {
+        "defaults": {
+          "language": "nodejs"
+        }
+      }
+    }
+  }
+  
