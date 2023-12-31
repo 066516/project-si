@@ -7,7 +7,7 @@ const clientSchema = new Schema({
   prenomClient: { type: String, required: true }, // varchar equivalent
   adresseClient: { type: String, required: true }, // varchar equivalent
   telephoneClient: { type: String, required: true }, // varchar equivalent
-  creditClient: { type: Number, required: true }, // Decimal equivalent
+  creditClient: { type: Number }, // Decimal equivalent
 });
 clientSchema.pre("save", async function (next) {
   if (this.isNew) {

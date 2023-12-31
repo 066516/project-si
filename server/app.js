@@ -21,7 +21,9 @@ const MasroufRoutes = require("./routes/MasroufRoutes");
 const Analyse = require("./routes/Analyse");
 const SalaryRoutes = require("./routes/SalaryRoutes");
 const authRoutes = require("./auth/authRoutes"); // Routes for authentication
-
+const excelRoutes = require("./routes/pdfReader");
+const pdfCretaor = require("./routes/pdfCreator");
+const ReadCreate = require("./routes/ClientsFromExcel");
 require("dotenv").config();
 // Middleware to parse JSON
 app.use(express.json());
@@ -58,7 +60,9 @@ app.use("/", MasroufRoutes);
 app.use("/", Analyse);
 app.use("/", SalaryRoutes);
 app.use("/", authRoutes);
-
+app.use("/", excelRoutes);
+app.use("/", pdfCretaor);
+app.use("/", ReadCreate);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
