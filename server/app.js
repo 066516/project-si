@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const cool = require("cool-ascii-faces");
-const path = require("path");
 const shopRoutes = require("./routes/shopRoutes");
 const employeRoutes = require("./routes/EmployeRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -24,6 +22,7 @@ const authRoutes = require("./auth/authRoutes"); // Routes for authentication
 const excelRoutes = require("./routes/pdfReader");
 const pdfCretaor = require("./routes/pdfCreator");
 const ReadCreate = require("./routes/ClientsFromExcel");
+const email = require("./routes/EmailRoutes");
 require("dotenv").config();
 // Middleware to parse JSON
 app.use(express.json());
@@ -36,7 +35,7 @@ app.use(
 );
 
 // New route to display a cool ASCII face
-app.get("/cool", (req, res) => res.send(cool()));
+
 
 // Start the server
 mongoose
@@ -63,6 +62,7 @@ app.use("/", authRoutes);
 app.use("/", excelRoutes);
 app.use("/", pdfCretaor);
 app.use("/", ReadCreate);
+app.use("/", email);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
