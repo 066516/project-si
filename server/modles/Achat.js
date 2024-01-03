@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const CounterAchat = require("./Counters/AchatCounter"); // Adjust the path as necessary
-// Other model imports...
+const CounterAchat = require("./Counters/AchatCounter"); 
 const Product = require("./product");
+
 const achatSchema = new mongoose.Schema({
   id_achat: { type: Number, unique: true, index: true },
   id_fournisseur: { type: Number, ref: "Fournisseur" },
@@ -22,7 +22,7 @@ achatSchema.pre("save", async function (next) {
         { new: true, upsert: true }
       );
       this.id_achat = counterDoc.seq;
-      // Continue with the rest of the pre-save logic...
+    
     } catch (err) {
       return next(err);
     }

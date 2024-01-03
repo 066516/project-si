@@ -29,13 +29,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3001", // React app's URL
+    origin: "*",
     credentials: true,
   })
 );
 
 // New route to display a cool ASCII face
-
 
 // Start the server
 mongoose

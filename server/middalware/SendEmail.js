@@ -1,7 +1,7 @@
 const transporter = require("../controls/Email"); // Assuming this file exports your transporter instance
 const path = require("path");
 const sendEmail = async (title) => {
-  const to = "sirineouarab@gmail.com";
+  const to = "d@gmail.com";
   const subject = "last pv";
   const text = "pv today";
 
