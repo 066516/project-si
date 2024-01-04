@@ -62,7 +62,7 @@ exports.updateFournisseur = async (req, res) => {
 // Delete a fournisseur by ID
 exports.deleteFournisseur = async (req, res) => {
   try {
-    const fournisseur = await Fournisseur.findOne({
+    const fournisseur = await Fournisseur.findOneAndDelete({
       Id_fournisseur: req.params.id,
     });
     if (!fournisseur) {
