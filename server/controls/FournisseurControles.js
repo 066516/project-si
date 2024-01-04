@@ -40,22 +40,29 @@ exports.getAllFournisseurs = async (req, res) => {
 };
 
 // Update a fournisseur by ID
+// Assuming you have imported the necessary modules and set up your Fournisseur model.
+
 exports.updateFournisseur = async (req, res) => {
   try {
-    const updatedFournisseur = await Fournisseur.findOne(
+    // Find the Fournisseur by its Id_fournisseur
+    const updatedFournisseur = await Fournisseur.findOneAndUpdate(
       { Id_fournisseur: req.params.id },
+
       req.body,
+
       { new: true }
     );
+
     if (!updatedFournisseur) {
       return res.status(404).send({ message: "Fournisseur not found" });
     }
+
     res.status(200).send({
       message: "Fournisseur updated successfully",
       data: updatedFournisseur,
     });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Error updating Fournisseur", error });
   }
 };
 
