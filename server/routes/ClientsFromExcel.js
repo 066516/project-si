@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ExcelJS = require("exceljs");
 const path = require("path");
-const Client = require("../modles/client");
+const Fournisseur = require("../modles/Fournisseur");
 
 // Define a route for reading information from an Excel file
 router.get("/read-create/:fileName", async (req, res) => {
@@ -45,7 +45,7 @@ router.get("/read-create/:fileName", async (req, res) => {
     // Create clients from the data
     for (const cl of data) {
       try {
-        const client = await new Client(cl);
+        const client = await new Fournisseur(cl);
         await client.save();
       } catch (err) {
         console.log(err);
@@ -53,7 +53,7 @@ router.get("/read-create/:fileName", async (req, res) => {
     }
 
     // Send the processed data as a response
-    res.json({ msg: "Clients created!" });
+    res.json({ msg: "Fournisseurs created!" });
   } catch (error) {
     // Handle errors, e.g., file not found or invalid Excel file
     console.error(error);
