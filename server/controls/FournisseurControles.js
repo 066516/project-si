@@ -5,12 +5,10 @@ exports.createFournisseur = async (req, res) => {
   try {
     const newFournisseur = new Fournisseur(req.body);
     await newFournisseur.save();
-    res
-      .status(201)
-      .send({
-        message: "Fournisseur created successfully",
-        data: newFournisseur,
-      });
+    res.status(201).send({
+      message: "Fournisseur created successfully",
+      data: newFournisseur,
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -44,20 +42,18 @@ exports.getAllFournisseurs = async (req, res) => {
 // Update a fournisseur by ID
 exports.updateFournisseur = async (req, res) => {
   try {
-    const updatedFournisseur = await Fournisseur.findByIdAndUpdate(
-      req.params.id,
+    const updatedFournisseur = await Fournisseur.findOne(
+      { Id_fournisseur: req.params.id },
       req.body,
       { new: true }
     );
     if (!updatedFournisseur) {
       return res.status(404).send({ message: "Fournisseur not found" });
     }
-    res
-      .status(200)
-      .send({
-        message: "Fournisseur updated successfully",
-        data: updatedFournisseur,
-      });
+    res.status(200).send({
+      message: "Fournisseur updated successfully",
+      data: updatedFournisseur,
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -66,7 +62,9 @@ exports.updateFournisseur = async (req, res) => {
 // Delete a fournisseur by ID
 exports.deleteFournisseur = async (req, res) => {
   try {
-    const fournisseur = await Fournisseur.findByIdAndDelete(req.params.id);
+    const fournisseur = await Fournisseur.findOne({
+      Id_fournisseur: req.params.id,
+    });
     if (!fournisseur) {
       return res.status(404).send({ message: "Fournisseur not found" });
     }
