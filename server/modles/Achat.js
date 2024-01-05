@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const CounterAchat = require("./Counters/AchatCounter"); 
+const CounterAchat = require("./Counters/AchatCounter");
 const Product = require("./product");
 
 const achatSchema = new mongoose.Schema({
   id_achat: { type: Number, unique: true, index: true },
-  id_fournisseur: { type: Number, ref: "Fournisseur" },
-  id_produit: { type: Number, ref: "Product" },
+  id_fournisseur: { type: Number, ref: "Fournisseur", required: true },
+  id_produit: { type: Number, ref: "Product", required: true },
   quantite_achat: { type: Number, required: true },
   montant_total_achat: { type: Number },
   reste: { type: Number, default: 0 },
@@ -22,7 +22,6 @@ achatSchema.pre("save", async function (next) {
         { new: true, upsert: true }
       );
       this.id_achat = counterDoc.seq;
-    
     } catch (err) {
       return next(err);
     }

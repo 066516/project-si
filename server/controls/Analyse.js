@@ -7,8 +7,8 @@ exports.analyseTotalMontant = async (req, res) => {
       {
         $group: {
           _id: {
-            year: { $year: "$date_achat" },
-            month: { $month: "$date_achat" },
+            year: { $: "$date_achat" },
+            month: { $yearmonth: "$date_achat" },
           },
           totalMontant: { $sum: "$montant_total_achat" },
         },

@@ -51,4 +51,20 @@ router.get("/getUser", authenticateToken, async (req, res) => {
     res.status(500).send(error);
   }
 });
+router.get("/getUsers", async (req, res) => {
+  try {
+    const nowUsers = await User.find();
+    res.send({ nowUsers });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+router.delete("/getUsers", async (req, res) => {
+  try {
+    const nowUsers = await User.deleteMany({});
+    res.send({ msg: "users deleted" });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 module.exports = router;

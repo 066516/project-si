@@ -6,7 +6,7 @@ exports.createClient = async (req, res) => {
     const newClient = new Client(req.body);
     await newClient.save();
     res
-      .status(201)
+      .status(200)
       .send({ message: "Client created successfully", data: newClient });
   } catch (error) {
     res.status(500).send(error);
@@ -16,7 +16,7 @@ exports.createClient = async (req, res) => {
 // Get a single client by ID
 exports.getClient = async (req, res) => {
   try {
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findOne({ clientId: req.params.id });
     if (!client) {
       return res.status(404).send({ message: "Client not found" });
     }
@@ -39,8 +39,8 @@ exports.getAllClients = async (req, res) => {
 // Update a client by ID
 exports.updateClient = async (req, res) => {
   try {
-    const updatedClient = await Client.findByIdAndUpdate(
-      req.params.id,
+    const updatedClient = await Client.findOneAndUpdate(
+      { clientId: req.params.id },
       req.body,
       { new: true }
     );
@@ -58,9 +58,9 @@ exports.updateClient = async (req, res) => {
 // Delete a client by ID
 exports.deleteClient = async (req, res) => {
   try {
-    const client = await Client.findByIdAndDelete(req.params.id);
+    const client = await Client.findOneAndDelete({ clientId: req.params.id });
     if (!client) {
-      return res.status(404).send({ message: "Client not found" });
+      return res.status(404).send({ message: "Client not found !!!!!" });
     }
     res.status(200).send({ message: "Client deleted successfully" });
   } catch (error) {

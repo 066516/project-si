@@ -5,7 +5,7 @@ const clientController = require("../controls/ClientControls"); // Adjust the pa
 router.post("/client", clientController.createClient);
 router.get("/clients/:id", clientController.getClient);
 router.get("/clients", clientController.getAllClients);
-router.put("/clients/:id", clientController.updateClient);
+router.put("/client/:id", clientController.updateClient);
 router.delete("/clients/:id", clientController.deleteClient);
 
 module.exports = router;

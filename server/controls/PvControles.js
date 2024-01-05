@@ -8,31 +8,31 @@ exports.createPvQuotidien = async (req, res) => {
   // const date_pv = Date.now();
   try {
     // Verify if the Employe exists
-    // const employeExists = await Employe.findOne({ EmployeID: id_employe });
-    // if (!employeExists) {
-    //   return res.status(404).send({ message: "Employe not found" });
-    // }
+    const employeExists = await Employe.findOne({ EmployeID: id_employe });
+    if (!employeExists) {
+      return res.status(404).send({ message: "Employe not found" });
+    }
 
     // Verify if the Centre exists
-    // const centreExists = await Centre.findOne({ shopID: id_centre });
-    // if (!centreExists) {
-    //   return res.status(404).send({ message: "Centre not found" });
-    // }
+    const centreExists = await Centre.findOne({ shopID: id_centre });
+    if (!centreExists) {
+      return res.status(404).send({ message: "Centre not found" });
+    }
 
     // Check if a PvQuotidien has already been created for the centre on the specified date
-    // const existingPv = await PvQuotidien.findOne({
-    //   id_centre: id_centre,
-    //   date_pv: {
-    //     $gte: new Date(date_pv).setHours(0, 0, 0, 0),
-    //     $lt: new Date(date_pv).setHours(23, 59, 59, 999),
-    //   },
-    // });
-    // if (existingPv) {
-    //   return res.status(400).send({
-    //     message:
-    //       "A PvQuotidien has already been created for this centre on the specified date",
-    //   });
-    // }
+    const existingPv = await PvQuotidien.findOne({
+      id_centre: id_centre,
+      date_pv: {
+        $gte: new Date(date_pv).setHours(0, 0, 0, 0),
+        $lt: new Date(date_pv).setHours(23, 59, 59, 999),
+      },
+    });
+    if (existingPv) {
+      return res.status(400).send({
+        message:
+          "A PvQuotidien has already been created for this centre on the this date",
+      });
+    }
 
     // Create the PvQuotidien
     const newPvQuotidien = new PvQuotidien(req.body);
