@@ -41,6 +41,7 @@ function Layout() {
             <Link to="/ventes">Ventes</Link>
             <Link to="/achats">Achats</Link>
             <Link to="/dealers">Dealers</Link>
+            <Link to="/stock">Stock</Link>
           </div>
           <div className="  fixed bottom-0 p-4 w-full xl:w-1/6 sm:w-1/6 border-t justify-center flex items-center border-t-black ">
             <FaSignOutAlt

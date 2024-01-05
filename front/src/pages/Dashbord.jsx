@@ -1,8 +1,8 @@
 import RecentSales from "../Comp/RecentSales";
 import RecentVentes from "../Comp/RecentVentes";
-import SalesChart from "./charts/Chart1";
-import PieChart from "./charts/Circule";
-import LineChart from "./charts/Line";
+import SalesChart from "../Comp/charts/Chart1";
+import PieChart from "../Comp/charts/Circule";
+import LineChart from "../Comp/charts/Line";
 
 function Dashbord() {
   return (

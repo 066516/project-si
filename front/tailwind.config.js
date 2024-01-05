@@ -9,6 +9,7 @@ export default {
         purple: "rgba(153, 102, 255, 1)",
         smaoy: "rgba(75, 192, 192, 1)",
         blue2: "rgba(54, 162, 235, 1)",
+        red2: "rgba(255, 99, 132, 1)",
       },
       boxShadow: {
         t: "0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)", // top
