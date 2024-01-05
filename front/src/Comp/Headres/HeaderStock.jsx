@@ -1,5 +1,3 @@
-import React from "react";
-
 function HeaderStock() {
   return (
     <div className="grid md:grid-cols-3 gap-2">
@@ -15,7 +13,6 @@ function HeaderStock() {
         <h1>Grand product Stock</h1>
         <h2> Tomato</h2>
       </div>
-     
     </div>
   );
 }

@@ -3,6 +3,7 @@ import RecentTransfer from "../Comp/RecentTransfer";
 import RecentSalesShop from "../Comp/RecentSalesShop";
 import { useEffect, useState } from "react";
 import HeaderTops from "../Comp/Headres/HeaderTops";
+import { Link } from "react-router-dom";
 
 function Shops() {
   const [idShop, setIdShop] = useState(1);
@@ -51,10 +52,12 @@ function Shops() {
           <h1 className="py-2 px-5 text-center  border border-smaoy font-bold text-smaoy rounded-xl border-[2px]">
             Shop {idShop}
           </h1>
-          <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-smaoy text-smaoy rounded-xl border-[2px]">
-            See Detail Shop {idShop}
-            <IoIosRedo />
-          </h1>
+          <Link to={`/shop?idShop=${idShop}`}>
+            <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-smaoy text-smaoy rounded-xl border-[2px]">
+              See Detail Shop {idShop}
+              <IoIosRedo />
+            </h1>
+          </Link>
         </div>
         <div className="w-full mt-5 flex gap-5 md:flex-row flex-col  px-2 md:px-0 ">
           <div className="md:w-1/2 rounded-xl">

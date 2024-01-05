@@ -1,4 +1,3 @@
-import React from "react";
 import HeaderStock from "../Comp/Headres/HeaderStock";
 import { IoMdAdd } from "react-icons/io";
 import StockListe from "../Comp/Listes/StockListe";
