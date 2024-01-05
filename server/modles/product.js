@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const CounterProduct = require("./Counters/counterProduct");
 const productSchema = new mongoose.Schema({
   productId: { type: Number, index: true, unique: true },
-  name: String,
+  name: { type: String, required: true },
   categoryId: String,
-  status: { type: String, default: "premier" },
-  price: Number,
+  IsRawMaterial: { type: Boolean, default: true },
+  price: { type: Number, required: true },
   count: { type: Number, default: 0 },
 });
 productSchema.pre("save", async function (next) {
