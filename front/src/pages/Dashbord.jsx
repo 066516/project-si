@@ -1,27 +1,59 @@
-import React from "react";
+import RecentSales from "../Comp/RecentSales";
+import RecentVentes from "../Comp/RecentVentes";
+import SalesChart from "./charts/Chart1";
+import PieChart from "./charts/Circule";
+import LineChart from "./charts/Line";
 
 function Dashbord() {
   return (
     <div
-      className={` text-black  z-20 shadow-lg   top-10  relative  h-screen w-full  p-2   `}
+      className={` text-black   shadow-lg       h-screen w-full  lg:pr-6 lg:px-0 px-3   overflow-y-scroll md:pb-28      `}
     >
-      <div className="w-3/4">
-        <div className="grid grid-cols-3 gap-2">
-          <div className=" border rounded-xl text-center bg-blueBg text-white py-2 font-medium uppercase ">
-            <h1>Top fournisseur</h1>
-            <h2> nabil gh</h2>
+      <div className="h-full flex lg:flex-row flex-col lg:mt-20 md:mt-10 mt-16  gap-5">
+        <div className="lg:w-3/4 flex flex-col justify-center ">
+          <div className="grid md:grid-cols-3 gap-2">
+            <div className=" border rounded-xl text-center bg-blueBg text-white py-2 font-medium uppercase ">
+              <h1>Top fournisseur</h1>
+              <h2> nabil gh</h2>
+            </div>
+            <div className=" border rounded-xl text-center bg-blueBg text-white py-2 font-medium uppercase">
+              <h1>Top fournisseur</h1>
+              <h2> nabil gh</h2>
+            </div>
+            <div className=" border rounded-xl text-center bg-blueBg text-white py-2 font-medium uppercase">
+              <h1>Top fournisseur</h1>
+              <h2> nabil gh</h2>
+            </div>
           </div>
-          <div className=" border rounded-xl text-center bg-blueBg text-white py-2 font-medium uppercase">
-            <h1>Top fournisseur</h1>
-            <h2> nabil gh</h2>
+          <div className="w-full flex flex-col  items-center">
+            <div className="flex items-center md:flex-row flex-col mt-5 md:mt-0">
+              <div className="md:w-[50%] w-[100%] md:h-[200px] flex items-center">
+                <PieChart />
+              </div>
+              <div className="w-[50%] w-full  md:h-[300px] flex items-center">
+                <LineChart />
+              </div>
+            </div>
+            <div className="md:w-[90%] w-full  flex items center justify-center  ">
+              <SalesChart />
+            </div>
           </div>
-          <div className=" border rounded-xl text-center bg-blueBg text-white py-2 font-medium uppercase">
-            <h1>Top fournisseur</h1>
-            <h2> nabil gh</h2>
+        </div>
+        <div className="lg:w-1/4 w-full flex flex-col gap-3 lg:mt-8 rounded-3xl justify-center items-center pb-10  ">
+          <div className="w-full rounded-3xl">
+            <div className="bg-purple w-full py-2   text-center text-white uppercase font-bold">
+              Recently Sales
+            </div>
+            <RecentSales />
+          </div>
+          <div className="w-full rounded-xl">
+            <div className="bg-purple w-full py-2   text-center text-white uppercase font-bold">
+              Recently Ventes
+            </div>
+            <RecentVentes />
           </div>
         </div>
       </div>
-      <div></div>
     </div>
   );
 }

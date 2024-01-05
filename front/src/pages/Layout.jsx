@@ -37,11 +37,7 @@ function Layout() {
           {!bol ? <img src={img} className=" image1 w-1/3 py-6" /> : ""}
           <div className=" text-black font-medium flex flex-col h-1/2 sm:h-1/3  justify-between mt-20 sm:mt-7">
             <Link to={{ pathname: "/dashboard" }}>Dashboard</Link>
-            {role === "admin" ? (
-              <Link to="/shops">Shops</Link>
-            ) : (
-              ""
-            )}
+            {role === "admin" ? <Link to="/shops">Shops</Link> : ""}
             <Link to="/ventes">Ventes</Link>
             <Link to="/achats">Achats</Link>
             <Link to="/dealers">Dealers</Link>
