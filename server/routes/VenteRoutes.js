@@ -7,5 +7,6 @@ router.get("/ventes/:id", venteController.getVente);
 router.get("/ventes", venteController.getAllVentes);
 router.put("/ventes/:id", venteController.updateVente);
 router.delete("/ventes/:id", venteController.deleteVente);
+router.delete("/ventes", venteController.deleteAllVente);
 
 module.exports = router;

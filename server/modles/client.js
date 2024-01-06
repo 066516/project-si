@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const CounterClient = require("./Counters/clientCounter");
 const clientSchema = new Schema({
+  _id: { type: Number },
   clientId: { type: Number, unique: true, index: true }, // clé primaire
   nomClient: { type: String, required: true }, // varchar equivalent
   prenomClient: { type: String, required: true }, // varchar equivalent

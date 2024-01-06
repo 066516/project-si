@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const CounterProduct = require("./Counters/counterProduct");
 const productSchema = new mongoose.Schema({
+  _id: { type: Number },
   productId: { type: Number, index: true, unique: true },
   name: { type: String, required: true },
   categoryId: String,

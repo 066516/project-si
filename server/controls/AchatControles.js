@@ -9,7 +9,6 @@ exports.createAchat = async (req, res) => {
     id_fournisseur,
     id_produit,
     quantite_achat,
-    montant_total_achat,
     statut_paiement_achat,
   } = req.body;
 

@@ -25,8 +25,6 @@ exports.createTransfert = async (req, res) => {
       id_produit,
       id_centre,
       quantite_transfert,
-      cout_transfert,
-      date_transfert: new Date(), // or it will be set by default
     });
     await newTransfert.save();
 
