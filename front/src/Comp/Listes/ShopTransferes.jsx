@@ -1,15 +1,20 @@
 import { IoMdAdd } from "react-icons/io";
 
-function ShopTransferes() {
+function ShopTransferes({ setAddTransft }) {
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
         <h1 className="py-2 px-5 text-center  border border-smaoy font-bold text-smaoy rounded-xl border-[2px]">
-         Liste Transfers
+          Liste Transfers
         </h1>
         <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-smaoy text-smaoy rounded-xl border-[2px]">
-          Add Transfer  
-          <IoMdAdd fontSize="25px" />
+          Add Transfer
+          <IoMdAdd
+            fontSize="25px"
+            onClick={() => {
+              setAddTransft(true);
+            }}
+          />
         </h1>
       </div>
 
