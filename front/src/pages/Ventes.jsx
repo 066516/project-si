@@ -1,27 +1,70 @@
 import { IoMdAdd } from "react-icons/io";
 import HeaderTopsVente from "../Comp/Headres/HeaderTopsVente";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddVente from "../Comp/pupouts/AddPupouts/AddVente";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
 import UpdateVentes from "../Comp/pupouts/Updates/UpdateVentes";
 import DeleteVente from "../Comp/pupouts/DeletePupouts/DeleteVente";
+import axios from "axios";
 function Ventes() {
   const [newvente, setAddVente] = useState(false);
   const [Editvente, setEditVente] = useState(false);
   const [Deletevente, setDeleteVente] = useState(false);
-  const [info, setInfo] = useState({
-    product: 3,
-    client: 2,
-    count: 23,
-    price: 22,
-    type: "Totalment",
-  });
-  const handleEDit = () => {
+  const [ventesListe, setVentesListe] = useState([]);
+  const [info, setInfo] = useState({});
+  const [loading, setLaoding] = useState(true);
+  useEffect(() => {
+    console.log("Fetching ventes...");
+    const fetchVentes = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/ventes`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setVentesListe(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        setLaoding(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+
+    fetchVentes();
+  }, []);
+
+  // Use useEffect to log the ventesListe whenever it changes
+  // useEffect(() => {
+  //   if (ventesListe) {
+  //     console.log("liste:", JSON.stringify(ventesListe, null, 2));
+  //   }
+  // }, [ventesListe]);
+  console.log("liste", ventesListe);
+
+  const handleEDit = (vente) => {
+    console.log(vente);
+    setInfo(vente);
     setEditVente(true);
   };
-  const handleDelete = () => {
+  const handleDelete = (vente) => {
+    console.log(vente);
+    setInfo(vente);
     setDeleteVente(true);
   };
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate(); // Gets the day of the month (1-31)
+    const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1
+    const year = date.getFullYear(); // Gets the year (four digits)
+
+    // Format the date as "dd/mm/yyyy"
+    return `${day}/${month}/${year}`;
+  }
+
   return (
     <>
       {newvente && (
@@ -68,61 +111,53 @@ function Ventes() {
             <h2 className="hidden md:flex">Paiment type</h2>
             <h2 className="text-red-500">Update Or delete Vente</h2>
           </div>
+
           <div>
-            <div className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center">
-              <h1 className="font-medium text-red-500 ">Tomato</h1>
-              <h2 className="font-medium text-green-500">
-                Nabil ghemam djeridi
-              </h2>
-              <h2 className="hidden md:flex">25/10/2023</h2>
-              <h2>20</h2>
-              <h2>200DA</h2>
-              <h2 className="hidden md:flex">Parcielment</h2>
-              <h2 className="flex justify-evenly">
-                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
-                <MdDeleteForever
-                  fontSize="25px"
-                  color="red"
-                  onClick={handleDelete}
-                />
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center">
-              <h1 className="font-medium text-red-500 ">Tomato</h1>
-              <h2 className="font-medium text-green-500">
-                Nabil ghemam djeridi
-              </h2>
-              <h2 className="hidden md:flex">25/10/2023</h2>
-              <h2>20</h2>
-              <h2>200DA</h2>
-              <h2 className="hidden md:flex">Parcielment</h2>
-              <h2 className="flex justify-evenly">
-                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
-                <MdDeleteForever
-                  fontSize="25px"
-                  color="red"
-                  onClick={handleDelete}
-                />
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center">
-              <h1 className="font-medium text-red-500 ">Tomato</h1>
-              <h2 className="font-medium text-green-500">
-                Nabil ghemam djeridi
-              </h2>
-              <h2 className="hidden md:flex">25/10/2023</h2>
-              <h2>20</h2>
-              <h2>200DA</h2>
-              <h2 className="hidden md:flex">Parcielment</h2>
-              <h2 className="flex justify-evenly">
-                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
-                <MdDeleteForever
-                  fontSize="25px"
-                  color="red"
-                  onClick={handleDelete}
-                />
-              </h2>
-            </div>
+            {loading
+              ? "loading"
+              : ventesListe.map((vente) => {
+                  return (
+                    <div
+                      key={vente._id}
+                      className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center"
+                    >
+                      <h1 className="font-medium text-red-500 ">
+                        {vente.productDetails.name}
+                      </h1>
+                      <h2 className="font-medium text-green-500">
+                        {vente.clientDetails.nomClient}{" "}
+                        {vente.clientDetails.prenomClient}
+                      </h2>
+                      <h2 className="hidden md:flex">
+                        {formatDate(vente.date_vente)}
+                      </h2>
+                      <h2>{vente.quantite_vendue}</h2>
+                      <h2>{vente.montant_total_vente} </h2>
+                      {vente.statut_paiement_vente ? (
+                        <h2 className="hidden md:flex">Totalment</h2>
+                      ) : (
+                        <h2 className="hidden md:flex">Parcielment</h2>
+                      )}
+
+                      <h2 className="flex justify-evenly">
+                        <MdEdit
+                          fontSize="25px"
+                          color="blue"
+                          onClick={() => {
+                            handleEDit(vente);
+                          }}
+                        />
+                        <MdDeleteForever
+                          fontSize="25px"
+                          color="red"
+                          onClick={() => {
+                            handleDelete(vente);
+                          }}
+                        />
+                      </h2>
+                    </div>
+                  );
+                })}
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
-import React from "react";
-import { IoMdAdd, IoMdSearch } from "react-icons/io";
-
+import { useEffect } from "react";
+import { IoMdSearch } from "react-icons/io";
+import axios from "axios";
 function ShopListeVentes() {
+  
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">

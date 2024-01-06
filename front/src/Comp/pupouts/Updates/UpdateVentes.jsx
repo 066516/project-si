@@ -1,30 +1,61 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function UpdateVentes({ setEditVente, info }) {
   // Sample data for products and clients
-  const fakeProducts = [
-    { id: 1, name: "Product 1" },
-    { id: 2, name: "Product 2" },
-    { id: 3, name: "Product 3" },
-    // ... other products
-  ];
-  const fakeClients = [
-    { id: 1, name: "Client 1" },
-    { id: 2, name: "Client 2" },
-    { id: 3, name: "Client 3" },
-    // ... other clients
-  ];
+  const [products, setProducts] = useState([]);
+  const [clients, setClients] = useState([]);
 
   // State for selected product, client, count, and price
-  const [selectedProductId, setSelectedProductId] = useState(info.product);
-  const [selectedClientId, setSelectedClientId] = useState(info.client);
-  const [selectedTypePay, setSelectedTypePay] = useState(info.type);
+  const [selectedProductId, setSelectedProductId] = useState(info.id_produit);
+  const [selectedClientId, setSelectedClientId] = useState(info.id_client);
+  const [selectedTypePay, setSelectedTypePay] = useState(
+    info.statut_paiement_vente ? "Totalment" : "Parcielment"
+  );
+  const [loading, setLaoding] = useState(true);
 
-  const [count, setCount] = useState(info.count);
-  const [price, setPrice] = useState(info.price);
+  const [count, setCount] = useState(info.quantite_vendue);
+  const [price, setPrice] = useState(info.prix_unitaire_vente);
 
-  // Event handlers
+  useEffect(() => {
+    console.log("Fetching ventes...");
+    const fetchProducts = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/products`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setProducts(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        console.log("Fetch attempt finished");
+      }
+    };
+    const fetchClients = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/clients`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setClients(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        setLaoding(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+    fetchClients();
+    fetchProducts();
+  }, []);
   const handleProductChange = (event) => {
     setSelectedProductId(event.target.value);
   };
@@ -40,9 +71,25 @@ function UpdateVentes({ setEditVente, info }) {
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
   };
-  const handleCreateVente = () => {
-    console.log("Vente updated");
-    // Add logic to create vente
+  const handleUpdateVente = () => {
+    function updateDate(newDate) {
+      return axios
+        .put(`http://localhost:3000/ventes/${info.id_vente}`, {
+          id_client: selectedClientId,
+          id_produit: selectedProductId,
+          quantite_vendue: count,
+          statut_paiement_vente: selectedTypePay === "Totalment" ? true : false,
+        })
+        .then((response) => {
+          console.log("Update successful:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error("Error updating date:", error);
+        });
+    }
+    setEditVente(false)
+    updateDate();
   };
   const handleCancelVente = () => {
     console.log("Vente canceled");
@@ -65,8 +112,8 @@ function UpdateVentes({ setEditVente, info }) {
             className="rounded-xl w-60 border-blue2 border border-1"
           >
             <option value="">Select a product</option>
-            {fakeProducts.map((product) => (
-              <option key={product.id} value={product.id}>
+            {products.map((product) => (
+              <option key={product.id} value={product.productId}>
                 {product.name}
               </option>
             ))}
@@ -79,9 +126,9 @@ function UpdateVentes({ setEditVente, info }) {
             className="rounded-xl w-60 border-blue2 border border-1"
           >
             <option value="">Select a client</option>
-            {fakeClients.map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.name}
+            {clients.map((client) => (
+              <option key={client.id} value={client.clientId}>
+                {client.nomClient} {client.prenomClient}
               </option>
             ))}
           </select>
@@ -117,7 +164,7 @@ function UpdateVentes({ setEditVente, info }) {
           <div className="mt-5 flex justify-between">
             <h1
               className="bg-blue2 w-fit text-white px-5 py-2 cursor-pointer rounded-xl"
-              onClick={handleCreateVente}
+              onClick={handleUpdateVente}
             >
               Update
             </h1>
