@@ -3,14 +3,37 @@ import { IoMdAdd } from "react-icons/io";
 import StockListe from "../Comp/Listes/StockListe";
 import { useState } from "react";
 import AddProduct from "../Comp/pupouts/AddPupouts/AddProduct";
+import DeleteProduct from "../Comp/pupouts/DeletePupouts/DeleteProduct";
+import UpdateProduct from "../Comp/pupouts/Updates/UpdatePtoduct";
 
 function Stock() {
   const [newPoduct, setAddProduct] = useState(false);
+  const [EditPoduct, setEditPoductt] = useState(false);
+  const [deletePoduct, setDeleteProduct] = useState(false);
+  const [product, setProduct] = useState({
+    name: "toamto",
+    catogry: "hh",
+    count: 22,
+    price: 34,
+  });
   return (
     <>
       {newPoduct && (
         <div className="w-screen h-screen">
           <AddProduct setAddProduct={setAddProduct} />
+        </div>
+      )}
+      {EditPoduct && (
+        <div className="w-screen h-screen">
+          <UpdateProduct setEditPoductt={setEditPoductt} product={product} />
+        </div>
+      )}
+      {deletePoduct && (
+        <div className="w-screen h-screen">
+          <DeleteProduct
+            setDeleteProduct={setDeleteProduct}
+            product={product}
+          />
         </div>
       )}
 
@@ -32,7 +55,10 @@ function Stock() {
             <IoMdAdd fontSize="25px" />
           </h1>
         </div>
-        <StockListe />
+        <StockListe
+          setEditPoductt={setEditPoductt}
+          setDeleteProduct={setDeleteProduct}
+        />
       </div>
     </>
   );
