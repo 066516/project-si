@@ -6,8 +6,12 @@ function DeleteVente({ setDeleteVente, info }) {
   const [loading, setLaoding] = useState(true);
 
   console.log(info);
-  useEffect(() => {
-    console.log("Fetching ventes...");
+  useEffect(() => {}, []);
+  const handleCancelVente = () => {
+    console.log("Vente canceled");
+    setDeleteVente(false);
+  };
+  const handleDelteVente = () => {
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
@@ -24,16 +28,8 @@ function DeleteVente({ setDeleteVente, info }) {
     };
 
     fetchVentes();
-  }, []);
-  const handleCancelVente = () => {
-    console.log("Vente canceled");
+    console.log("vente deleted");
     setDeleteVente(false);
-  };
-  const handleDelteVente = () => {
-    if (!loading) {
-      console.log("vente deleted");
-      setDeleteVente(false);
-    }
   };
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">

@@ -1,29 +1,64 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function UpdateAchat({ setEditacaht, info }) {
+  console.log("====================================");
+  console.log(info);
+  console.log("====================================");
   // Sample data for products and suppliers
-  const fakeProducts = [
-    { id: 1, name: "Product 1" },
-    { id: 2, name: "Product 2" },
-    { id: 3, name: "Product 3" },
-    // ... other products
-  ];
-  const fakeSuppliers = [
-    { id: 1, name: "Supplier 1" },
-    { id: 2, name: "Supplier 2" },
-    { id: 3, name: "Supplier 3" },
-    // ... other suppliers
-  ];
-
+  const [products, setProducts] = useState([]);
+  const [Fournisseurs, setFournisseurs] = useState([]);
+  const [loading, setLaoding] = useState(true);
+  const [loadingPost, setLaodingPost] = useState(true);
+  useEffect(() => {
+    console.log("Fetching ventes...");
+    const fetchProducts = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/products`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setProducts(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        console.log("Fetch attempt finished");
+      }
+    };
+    const fetchFournisseurs = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/fournisseurs`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setFournisseurs(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        setLaoding(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+    fetchFournisseurs();
+    fetchProducts();
+  }, []);
   // State for selected product, supplier, count, price, and payment type
-  const [selectedProductId, setSelectedProductId] = useState(info.product);
+  const [selectedProductId, setSelectedProductId] = useState(info.id_produit);
   const [selectedSupplierId, setSelectedSupplierId] = useState(
-    info.fournisseur
+    info.id_fournisseur
   );
-  const [selectedTypePay, setSelectedTypePay] = useState(info.type);
+  const [selectedTypePay, setSelectedTypePay] = useState(
+    info.statut_paiement_achat ? "Totalment" : "Parcielment"
+  );
 
-  const [count, setCount] = useState(info.count);
+  const [count, setCount] = useState(info.quantite_achat);
   const [price, setPrice] = useState(info.price);
 
   // Event handlers
@@ -42,9 +77,26 @@ function UpdateAchat({ setEditacaht, info }) {
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
   };
-  const handleCreateAchat = () => {
+  const handleUpdateAchat = () => {
     console.log("Achat created");
-    // Add logic to create achat
+    function updateDate() {
+      return axios
+        .put(`http://localhost:3000/achats/${info.id_achat}`, {
+          id_fournisseur: selectedSupplierId,
+          id_produit: selectedProductId,
+          quantite_achat: count,
+          statut_paiement_achat: selectedTypePay === "Totalment" ? true : false,
+        })
+        .then((response) => {
+          console.log("Update successful:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error("Error updating date:", error);
+        });
+    }
+    updateDate();
+    setEditacaht(false);
   };
   const handleCancelAchat = () => {
     console.log("Achat canceled");
@@ -67,8 +119,8 @@ function UpdateAchat({ setEditacaht, info }) {
             className="rounded-xl w-60 border-blue2 border border-1"
           >
             <option value="">Select a product</option>
-            {fakeProducts.map((product) => (
-              <option key={product.id} value={product.id}>
+            {products.map((product) => (
+              <option key={product.id} value={product.productId}>
                 {product.name}
               </option>
             ))}
@@ -81,9 +133,9 @@ function UpdateAchat({ setEditacaht, info }) {
             className="rounded-xl w-60 border-blue2 border border-1"
           >
             <option value="">Select a supplier</option>
-            {fakeSuppliers.map((supplier) => (
-              <option key={supplier.id} value={supplier.id}>
-                {supplier.name}
+            {Fournisseurs.map((supplier) => (
+              <option key={supplier.id} value={supplier.Id_fournisseur}>
+                {supplier.Nom_fournisseur} {supplier.Prenom_fournisseur}
               </option>
             ))}
           </select>
@@ -120,7 +172,7 @@ function UpdateAchat({ setEditacaht, info }) {
           <div className="mt-5 flex justify-between">
             <h1
               className="bg-blue2 w-fit text-white px-5 py-2 cursor-pointer rounded-xl"
-              onClick={handleCreateAchat}
+              onClick={handleUpdateAchat}
             >
               Save
             </h1>

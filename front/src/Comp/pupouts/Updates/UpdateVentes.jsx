@@ -72,7 +72,7 @@ function UpdateVentes({ setEditVente, info }) {
     setSelectedTypePay(event.target.value);
   };
   const handleUpdateVente = () => {
-    function updateDate(newDate) {
+    function updateDate() {
       return axios
         .put(`http://localhost:3000/ventes/${info.id_vente}`, {
           id_client: selectedClientId,
