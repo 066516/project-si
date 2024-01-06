@@ -12,6 +12,10 @@ import DeleteFournisseur from "../Comp/pupouts/DeletePupouts/DeleteFournisseur";
 import UpdateClient from "../Comp/pupouts/Updates/UpdateClient";
 import UpdateFournisseur from "../Comp/pupouts/Updates/UpdateFournisseur";
 import UpdateEmploye from "../Comp/pupouts/Updates/UpdateEmploye";
+import Salary from "../Comp/pupouts/pay/Salary";
+import ReglementFournisseur from "../Comp/pupouts/pay/ReglementFournisseur";
+import ReglementClient from "../Comp/pupouts/pay/ReglementClient";
+import Absence from "../Comp/pupouts/pay/Absence";
 
 function Dealers() {
   const [typeDealres, setIdtypeDealres] = useState(1);
@@ -27,6 +31,10 @@ function Dealers() {
   const [client, setClient] = useState(null);
   const [Employe, setEmploye] = useState(null);
   const [fournisseur, setfournisseur] = useState(null);
+  const [paySalary, setpaySalary] = useState(false);
+  const [reglementFournisseur, setreglementFournisseur] = useState(false);
+  const [reglementClient, setreglementClient] = useState(false);
+  const [absence, setAbsence] = useState(false);
   useEffect(() => {
     console.log(typeDealres);
   });
@@ -80,6 +88,28 @@ function Dealers() {
           <DeleteEmploye setDeleteEmploye={setDeleteEmploye} />
         </div>
       )}
+      {paySalary && (
+        <div className="w-screen h-screen">
+          <Salary setpaySalary={setpaySalary} />
+        </div>
+      )}
+      {reglementFournisseur && (
+        <div className="w-screen h-screen">
+          <ReglementFournisseur
+            setreglementFournisseur={setreglementFournisseur}
+          />
+        </div>
+      )}
+      {reglementClient && (
+        <div className="w-screen h-screen">
+          <ReglementClient setreglementClient={setreglementClient} />
+        </div>
+      )}
+      {absence && (
+        <div className="w-screen h-screen">
+          <Absence setAbsence={setAbsence} />
+        </div>
+      )}
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
       >
@@ -122,6 +152,8 @@ function Dealers() {
             setEditEmploye={setEditEmploye}
             setDeleteEmploye={setDeleteEmploye}
             setEmploye={setEmploye}
+            setpaySalary={setpaySalary}
+            setAbsence={setAbsence}
           />
         )}
         {typeDealres == 2 && (
@@ -130,6 +162,7 @@ function Dealers() {
             setEditFournisseur={setEditFournisseur}
             setDeleteFournisseur={setDeleteFournisseur}
             setfournisseur={setfournisseur}
+            setreglementFournisseur={setreglementFournisseur}
           />
         )}
         {typeDealres == 3 && (
@@ -138,6 +171,7 @@ function Dealers() {
             setEditClient={setEditClient}
             setDeleteClient={setDeleteClient}
             setClient={setClient}
+            setreglementClient={setreglementClient}
           />
         )}
       </div>

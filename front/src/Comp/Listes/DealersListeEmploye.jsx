@@ -1,16 +1,24 @@
 import { IoMdAdd } from "react-icons/io";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
-
+import { GiPayMoney } from "react-icons/gi";
 function DealersListeEmploye({
   setAddEmplye,
   setDeleteEmploye,
   setEditEmploye,
+  setpaySalary,
+  setAbsence,
 }) {
   const handleEDit = () => {
     setEditEmploye(true);
   };
   const handleDelete = () => {
     setDeleteEmploye(true);
+  };
+  const paysalaryHandle = () => {
+    setpaySalary(true);
+  };
+  const AbsenceHandle = () => {
+    setAbsence(true);
   };
   return (
     <div className="w-full text-center font-medium mt-5">
@@ -43,13 +51,20 @@ function DealersListeEmploye({
           <h2 className="hidden md:flex justify-center">0665666666</h2>
           <h2 className="hidden md:flex justify-center">300000DA</h2>
           <h2>20</h2>
-          <h2 className="flex justify-evenly">
+          <h2 className="flex justify-evenly cursor-pointer items-center ">
             <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
             <MdDeleteForever
               fontSize="25px"
               color="red"
               onClick={handleDelete}
             />
+            <GiPayMoney onClick={paysalaryHandle} />
+            <span
+              className="font-bold text-3xl text-center  pb-3 flex items-center justify-center "
+              onClick={AbsenceHandle}
+            >
+              -
+            </span>
           </h2>
         </div>
         <div className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center">
@@ -58,13 +73,17 @@ function DealersListeEmploye({
           <h2 className="hidden md:flex justify-center">0665666666</h2>
           <h2 className="hidden md:flex justify-center">300000DA</h2>
           <h2>20</h2>
-          <h2 className="flex justify-evenly">
+          <h2 className="flex justify-evenly items-center">
             <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
             <MdDeleteForever
               fontSize="25px"
               color="red"
               onClick={handleDelete}
             />
+            <GiPayMoney />
+            <span className="font-bold text-3xl text-center  pb-3 flex items-center justify-center ">
+              -
+            </span>
           </h2>
         </div>
         <div className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center">

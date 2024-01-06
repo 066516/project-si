@@ -1,12 +1,21 @@
 import { IoMdAdd } from "react-icons/io";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
+import { GiPayMoney } from "react-icons/gi";
 
-function DealersListeClients({ setAddClient, setEditClient,setDeleteClient }) {
+function DealersListeClients({
+  setAddClient,
+  setEditClient,
+  setDeleteClient,
+  setreglementClient,
+}) {
   const handleEDit = () => {
     setEditClient(true);
   };
   const handleDelete = () => {
     setDeleteClient(true);
+  };
+  const reglementyHandle = () => {
+    setreglementClient(true);
   };
   return (
     <div className="w-full text-center font-medium mt-5">
@@ -46,6 +55,7 @@ function DealersListeClients({ setAddClient, setEditClient,setDeleteClient }) {
               color="red"
               onClick={handleDelete}
             />
+            <GiPayMoney onClick={reglementyHandle} />
           </h2>
         </div>
         <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">
@@ -61,6 +71,7 @@ function DealersListeClients({ setAddClient, setEditClient,setDeleteClient }) {
               color="red"
               onClick={handleDelete}
             />
+            <GiPayMoney onClick={reglementyHandle} />
           </h2>
         </div>
         <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">

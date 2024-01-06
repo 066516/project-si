@@ -1,16 +1,20 @@
 import { IoMdAdd } from "react-icons/io";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
-
+import { GiPayMoney } from "react-icons/gi";
 function DealersListeFournisseur({
   setAddFournisseur,
   setDeleteFournisseur,
   setEditFournisseur,
+  setreglementFournisseur,
 }) {
   const handleEDit = () => {
     setEditFournisseur(true);
   };
   const handleDelete = () => {
     setDeleteFournisseur(true);
+  };
+  const reglementyHandle = () => {
+    setreglementFournisseur(true);
   };
   return (
     <div className="w-full text-center font-medium mt-5">
@@ -50,6 +54,7 @@ function DealersListeFournisseur({
               color="red"
               onClick={handleDelete}
             />
+            <GiPayMoney onClick={reglementyHandle} />
           </h2>
         </div>
         <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">
@@ -65,6 +70,7 @@ function DealersListeFournisseur({
               color="red"
               onClick={handleDelete}
             />
+            <GiPayMoney onClick={reglementyHandle} />
           </h2>
         </div>
         <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">
