@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
@@ -9,7 +10,26 @@ function AddProduct({ setAddProduct }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({ Catogry, name, price, Count });
+    function postData() {
+      return axios
+        .post("http://localhost:3000/product", {
+          name,
+          price,
+          count: Count,
+          categoryId: Catogry,
+          id_shop: 1,
+        })
+        .then((response) => {
+          // Handle response here
+          console.log("Data posted successfully:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error posting data:", error);
+        });
+    }
+    postData();
     // Add logic to send this data to the server or process it as needed
   };
   return (

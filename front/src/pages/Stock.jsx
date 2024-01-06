@@ -58,6 +58,7 @@ function Stock() {
         <StockListe
           setEditPoductt={setEditPoductt}
           setDeleteProduct={setDeleteProduct}
+          setProduct={setProduct}
         />
       </div>
     </>

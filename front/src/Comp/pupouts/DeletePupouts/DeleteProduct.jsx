@@ -1,12 +1,32 @@
+import axios from "axios";
+import { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function DeleteProduct({ setDeleteProduct, product }) {
   console.log(product);
+  const [loading, setLaoding] = useState(true);
+
   const handleCancelProduct = () => {
     console.log("Product canceled");
     setDeleteProduct(false);
   };
   const handleDeleteProduct = () => {
+    const DeleteProduct = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.delete(
+          `${apiUrl}/product/${product.id_produit}`
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        setLaoding(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+
+    DeleteProduct();
     console.log("Product deleted");
   };
   return (
@@ -17,7 +37,7 @@ function DeleteProduct({ setDeleteProduct, product }) {
           className="absolute top-2 right-2 cursor-pointer "
         />
         <h1 className="uppercase font-bold text-lg">
-          are you sure to delete this Product {product.name}
+          are you sure to delete this Product {product.id_produit}
         </h1>
 
         <div className="mt-5 flex justify-between">
