@@ -91,9 +91,27 @@ exports.getTransfert = async (req, res) => {
 // Get all Transfert entries
 exports.getAllTransferts = async (req, res) => {
   try {
-    const transferts = await Transfert.find();
+    let transferts = await Transfert.find({ id_centre: req.params.idShop });
+    transferts = await Promise.all(
+      transferts.map(async (transfer) => {
+        transfer = transfer.toObject(); // Convert Mongoose document to a plain JavaScript object
+
+        // Fetch product details
+        const product = await Product.findOne({
+          productId: transfer.id_produit,
+        }).select("name categoryId"); // Replace 'idProduct' and 'name' with actual field names in your Product model
+        transfer.productDetails = product || {
+          name: "Unknown Product",
+          categoryId: "not Found",
+        }; // Add product details to transfer
+
+        return transfer;
+      })
+    );
+
     res.status(200).send(transferts);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };

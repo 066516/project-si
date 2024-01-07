@@ -71,7 +71,7 @@ exports.getVente = async (req, res) => {
 // Get all Vente entries
 exports.getAllVentes = async (req, res) => {
   try {
-    let ventes = await Vente.find();
+    let ventes = await Vente.find({ id_shop: req.params.idShop });
     ventes = await Promise.all(
       ventes.map(async (vente) => {
         vente = vente.toObject(); // Convert Mongoose document to a plain JavaScript object
@@ -212,7 +212,12 @@ exports.getTopEntities = async (req, res) => {
     // Top Client
     const topClient = await Vente.aggregate([
       { $match: { id_shop: { $ne: 1 } } },
-      { $group: { _id: "$id_client", totalPurchases: { $sum: "id_client" } } },
+      {
+        $group: {
+          _id: "$id_client",
+          totalPurchases: { $sum: "montant_total_vente" },
+        },
+      },
       { $sort: { totalPurchases: -1 } },
       { $limit: 1 },
     ]);
@@ -236,7 +241,7 @@ exports.getTopEntities = async (req, res) => {
     ]);
 
     // Top Shops (excluding shop 1)
-    const topShops = await Vente.aggregate([
+    const resultArray = await Vente.aggregate([
       { $match: { id_shop: { $ne: 1, $ne: null } } }, // Exclude shop 1 and null shop IDs
       {
         $group: {
@@ -247,6 +252,9 @@ exports.getTopEntities = async (req, res) => {
       { $sort: { totalRevenue: -1 } },
       { $limit: 1 },
     ]);
+
+    // Convert the array result to an object
+    const topShop = resultArray.length > 0 ? resultArray[0] : null;
     let clientDetails = { nom: "Unknown", prenom: "Unknown" };
     if (topClient.length > 0 && topClient[0]._id) {
       const client = await Client.findOne({
@@ -278,7 +286,7 @@ exports.getTopEntities = async (req, res) => {
       topClient: { client: clientDetails },
       topEmployee: { id: topEmployee[0]?._id, name: employeeName },
       topProduct: { id: topProduct[0]?._id, name: productName },
-      topShops,
+      topShop,
     });
   } catch (error) {
     console.error("Error fetching top entities:", error);

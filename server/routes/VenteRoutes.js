@@ -3,8 +3,8 @@ const router = express.Router();
 const venteController = require("../controls/VenteControles"); // Adjust path as necessary
 
 router.post("/ventes", venteController.createVente);
-router.get("/ventes/:id", venteController.getVente);
-router.get("/ventes", venteController.getAllVentes);
+router.get("/vente/:id", venteController.getVente);
+router.get("/ventes/:idShop", venteController.getAllVentes);
 router.get("/ventesRecente/:shopId", venteController.VentesRecente);
 router.get("/tops", venteController.getTopEntities);
 router.put("/ventes/:id", venteController.updateVente);

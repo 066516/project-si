@@ -3,8 +3,8 @@ const router = express.Router();
 const transfertController = require("../controls/transferControls"); // Adjust path as necessary
 
 router.post("/transferts", transfertController.createTransfert);
-router.get("/transferts/:id", transfertController.getTransfert);
-router.get("/transferts", transfertController.getAllTransferts);
+router.get("/transfert/:id", transfertController.getTransfert);
+router.get("/transferts/:idShop", transfertController.getAllTransferts);
 router.get(
   "/transfertsRecente/:shopId",
   transfertController.getRecentTransfers
