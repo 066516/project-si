@@ -8,7 +8,7 @@ function RecentSales() {
         <h2>Count</h2>
         <h2>Amount</h2>
       </div>
-      <div className="w-full bg-gray-200 pr-2">
+      <div className="w-full bg-gray-200 pr-2 ">
         <div className="flex justify-between  px-2 flex text-center py-2">
           <h1 className="font-medium text-red-500">Tomato </h1>
           <h2>200Kg</h2>

@@ -1,8 +1,55 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
-function ShopListeVentes() {
+import { MdDeleteForever, MdEdit } from "react-icons/md";
+function ShopListeVentes({ setInfo, setEditVente, setDeleteVente }) {
+  const [ventesListe, setVentesListe] = useState([]);
+  const [loading, setLaoding] = useState(true);
   
+
+  useEffect(() => {
+    console.log("Fetching ventes...");
+    const fetchVentes = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/ventes/15`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setVentesListe(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        setLaoding(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+
+    fetchVentes();
+  }, []);
+
+  const handleEDit = (vente) => {
+    console.log(vente);
+    setInfo(vente);
+    setEditVente(true);
+  };
+  const handleDelete = (vente) => {
+    console.log(vente);
+    setInfo(vente);
+    setDeleteVente(true);
+  };
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate(); // Gets the day of the month (1-31)
+    const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1
+    const year = date.getFullYear(); // Gets the year (four digits)
+
+    // Format the date as "dd/mm/yyyy"
+    return `${day}/${month}/${year}`;
+  }
+
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
@@ -22,47 +69,53 @@ function ShopListeVentes() {
         <h2 className="">Total Amount</h2>
         <h2>Paiment type</h2>
       </div>
+
       <div className="h-[240px] overflow-y-scroll ">
-        <div className="grid grid-cols-6 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-red-500 ">Tomato</h1>
-          <h2 className="font-medium text-green-500">Nabil ghemam djeridi</h2>
-          <h2 className="hidden md:block">25/10/2023</h2>
-          <h2>20</h2>
-          <h2>200DA</h2>
-          <h2>Parcielment</h2>
-        </div>
-        <div className="grid grid-cols-6 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-red-500 ">Tomato</h1>
-          <h2 className="font-medium text-green-500">Nabil ghemam djeridi</h2>
-          <h2 className="hidden md:block">25/10/2023</h2>
-          <h2>20</h2>
-          <h2>200DA</h2>
-          <h2>Parcielment</h2>
-        </div>
-        <div className="grid grid-cols-6 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-red-500 ">Tomato</h1>
-          <h2 className="font-medium text-green-500">Nabil ghemam djeridi</h2>
-          <h2 className="hidden md:block">25/10/2023</h2>
-          <h2>20</h2>
-          <h2>200DA</h2>
-          <h2>Parcielment</h2>
-        </div>
-        <div className="grid grid-cols-6 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-red-500 ">Tomato</h1>
-          <h2 className="font-medium text-green-500">Nabil ghemam djeridi</h2>
-          <h2 className="hidden md:block">25/10/2023</h2>
-          <h2>20</h2>
-          <h2>200DA</h2>
-          <h2>Parcielment</h2>
-        </div>
-        <div className="grid grid-cols-6 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-red-500 ">Tomato</h1>
-          <h2 className="font-medium text-green-500">Nabil ghemam djeridi</h2>
-          <h2 className="hidden md:block">25/10/2023</h2>
-          <h2>20</h2>
-          <h2>200DA</h2>
-          <h2>Parcielment</h2>
-        </div>
+        {loading
+          ? "loading"
+          : ventesListe.map((vente) => {
+              return (
+                <div
+                  key={vente._id}
+                  className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center"
+                >
+                  <h1 className="font-medium text-red-500 ">
+                    {vente.productDetails.name}
+                  </h1>
+                  <h2 className="font-medium text-green-500">
+                    {vente.clientDetails.nomClient}{" "}
+                    {vente.clientDetails.prenomClient}
+                  </h2>
+                  <h2 className="hidden md:flex">
+                    {formatDate(vente.date_vente)}
+                  </h2>
+                  <h2>{vente.quantite_vendue}</h2>
+                  <h2>{vente.montant_total_vente} </h2>
+                  {vente.statut_paiement_vente ? (
+                    <h2 className="hidden md:flex">Totalment</h2>
+                  ) : (
+                    <h2 className="hidden md:flex">Parcielment</h2>
+                  )}
+
+                  <h2 className="flex justify-evenly">
+                    <MdEdit
+                      fontSize="25px"
+                      color="blue"
+                      onClick={() => {
+                        handleEDit(vente);
+                      }}
+                    />
+                    <MdDeleteForever
+                      fontSize="25px"
+                      color="red"
+                      onClick={() => {
+                        handleDelete(vente);
+                      }}
+                    />
+                  </h2>
+                </div>
+              );
+            })}
       </div>
     </div>
   );

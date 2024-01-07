@@ -64,13 +64,13 @@ function Shops() {
             <div className="bg-blue2  py-2   text-center text-white uppercase font-bold">
               Recently Transfer
             </div>
-            <RecentTransfer />
+            <RecentTransfer idShop={idShop} />
           </div>
           <div className="md:w-1/2">
             <div className="bg-red2 py-2  text-center text-white uppercase font-bold">
               Recently Sales
             </div>
-            <RecentSalesShop />
+            <RecentSalesShop idShop={idShop} />
           </div>
         </div>
       </div>

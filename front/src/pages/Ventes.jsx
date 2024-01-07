@@ -10,15 +10,15 @@ function Ventes() {
   const [newvente, setAddVente] = useState(false);
   const [Editvente, setEditVente] = useState(false);
   const [Deletevente, setDeleteVente] = useState(false);
-  const [ventesListe, setVentesListe] = useState([]);
   const [info, setInfo] = useState({});
+  const [ventesListe, setVentesListe] = useState([]);
   const [loading, setLaoding] = useState(true);
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/ventes`);
+        const response = await axios.get(`${apiUrl}/ventes/15`);
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setVentesListe(response.data); // Directly store the data if it's an array
