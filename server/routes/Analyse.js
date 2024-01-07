@@ -21,5 +21,9 @@ router.get(
   "/analyse/benefice/:idShop",
   analyseController.calculateProfitEvolution
 );
+router.get(
+  "/analyse/tops/:idShop",
+  analyseController.findTopInOneShop
+);
 
 module.exports = router;

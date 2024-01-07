@@ -1,6 +1,11 @@
 const Achat = require("../modles/Achat"); // Adjust the path as necessary
 const Vente = require("../modles/Vente");
-const Transfert = require("../modles/Transfert"); // Adjust the path as necessary
+const Transfert = require("../modles/Transfert");
+const Employe = require("../modles/Employe");
+const Product = require("../modles/product"); // Adjust the path as necessary
+const Client = require("../modles/client");
+
+// Adjust the path as necessary
 exports.analyseTotalMontant = async (req, res) => {
   try {
     const totalPerMonth = await Achat.aggregate([
@@ -179,6 +184,117 @@ exports.findTopClient = async (req, res) => {
 
     res.status(200).send({ topClient });
   } catch (error) {
+    res.status(500).send(error);
+  }
+};
+exports.findTopInOneShop = async (req, res) => {
+  const id = parseInt(req.params.idShop);
+
+  try {
+    // Find Top Client
+    const topClient = await Vente.aggregate([
+      { $match: { id_shop: id } },
+      {
+        $group: {
+          _id: "$id_client",
+          totalPurchases: { $sum: "$montant_total_vente" }, // Corrected to reference field value
+        },
+      },
+      { $sort: { totalPurchases: -1 } },
+      { $limit: 1 },
+    ]);
+
+    // Find Top Employee
+    // const topEmployee = await Employe.aggregate([
+    //   { $match: { workIn: id } },
+    //   {
+    //     $group: {
+    //       _id: "$EmployeID",
+    //       totalSales: { $sum: "$salesAmount" }, // Assuming you have a salesAmount field
+    //     },
+    //   },
+    //   { $sort: { totalSales: -1 } },
+    //   { $limit: 1 },
+    // ]);
+
+    // Find Top Product
+    const topProduct = await Vente.aggregate([
+      { $match: { id_shop: id } },
+      {
+        $group: {
+          _id: "$id_produit",
+          totalSold: { $sum: "$quantite_vendue" }, // Corrected to reference field value
+        },
+      },
+      { $sort: { totalSold: -1 } },
+      { $limit: 1 },
+    ]);
+    const totalSales = await Vente.aggregate([
+      { $match: { id_shop: id } },
+      {
+        $group: {
+          _id: null, // Grouping by null aggregates over the entire result set
+          totalAmount: { $sum: "$montant_total_vente" },
+        },
+      },
+    ]);
+    const totalAmount = totalSales.length > 0 ? totalSales[0].totalAmount : 0;
+
+    // Calculate total expenses
+    const totalExpensesResult = await Transfert.aggregate([
+      { $match: { id_shop: id } },
+      {
+        $group: {
+          _id: null,
+          totalExpenses: { $sum: "$cout_transfert" },
+        },
+      },
+    ]);
+    const totalExpenses = totalExpensesResult[0]
+      ? totalExpensesResult[0].totalExpenses
+      : 0;
+
+    // Calculate profit
+    const profit = totalAmount - totalExpenses;
+    // Additional details for topClient
+    let clientDetails = { nom: "Unknown", prenom: "Unknown" };
+    if (topClient.length > 0 && topClient[0]._id) {
+      const client = await Client.findOne({
+        clientId: topClient[0]._id,
+      }).select("nomClient prenomClient");
+      if (client) {
+        clientDetails = { nom: client.nomClient, prenom: client.prenomClient };
+      }
+    }
+
+    // Additional details for topEmployee
+    // let employeeName = "Unknown";
+    // if (topEmployee.length > 0 && topEmployee[0]._id) {
+    //   const employee = await Employe.findOne({
+    //     EmployeID: topEmployee[0]._id,
+    //   }).select("name");
+    //   if (employee) employeeName = employee.name;
+    // }
+
+    // Additional details for topProduct
+    let productName = "Unknown";
+    if (topProduct.length > 0 && topProduct[0]._id) {
+      const product = await Product.findOne({
+        productId: topProduct[0]._id,
+      }).select("name");
+      if (product) productName = product.name;
+    }
+
+    // Send response
+    res.status(200.0).send({
+      topClient: { client: clientDetails },
+      // topEmployee: { id: topEmployee[0]?._id, name: employeeName },
+      topProduct: { id: topProduct[0]?._id, name: productName },
+      totalAmount,
+      profit,
+    });
+  } catch (error) {
+    console.error("Error fetching top entities:", error);
     res.status(500).send(error);
   }
 };
