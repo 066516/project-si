@@ -130,3 +130,34 @@ exports.deleteTransfert = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+exports.getRecentTransfers = async (req, res) => {
+  try {
+    // Retrieve the shop ID from the request parameters
+    const shopId = req.params.shopId; // Make sure this matches the parameter name in your route
+
+    // Find recent transfers for the specified shop
+    let recentTransfers = await Transfert.find({ id_centre: shopId })
+      .sort({ date_transfert: -1 })
+      .limit(10);
+
+    recentTransfers = await Promise.all(
+      recentTransfers.map(async (transfer) => {
+        transfer = transfer.toObject(); // Convert Mongoose document to a plain JavaScript object
+
+        // Fetch product details
+        const product = await Product.findOne({
+          productId: transfer.id_produit,
+        }).select("name"); // Replace 'idProduct' and 'name' with actual field names in your Product model
+        transfer.productDetails = product || { name: "Unknown Product" }; // Add product details to transfer
+
+        return transfer;
+      })
+    );
+
+    res.status(200).send(recentTransfers);
+  } catch (error) {
+    console.error("Error fetching recent transfers:", error);
+    res.status(500).send(error);
+  }
+};

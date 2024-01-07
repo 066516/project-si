@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 const CounterProduct = require("./Counters/counterProduct");
 const productSchema = new mongoose.Schema({
-  _id: { type: Number },
   productId: { type: Number, index: true, unique: true },
   name: { type: String, required: true },
-  categoryId: String,
+  categoryId: { type: String, default: "" },
   IsRawMaterial: { type: Boolean, default: true },
   price: { type: Number, required: true },
   count: { type: Number, default: 0 },
+  // _id: { type: Number },
 });
 productSchema.pre("save", async function (next) {
   const doc = this;

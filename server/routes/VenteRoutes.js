@@ -5,6 +5,8 @@ const venteController = require("../controls/VenteControles"); // Adjust path as
 router.post("/ventes", venteController.createVente);
 router.get("/ventes/:id", venteController.getVente);
 router.get("/ventes", venteController.getAllVentes);
+router.get("/ventesRecente/:shopId", venteController.VentesRecente);
+router.get("/tops", venteController.getTopEntities);
 router.put("/ventes/:id", venteController.updateVente);
 router.delete("/ventes/:id", venteController.deleteVente);
 router.delete("/ventes", venteController.deleteAllVente);

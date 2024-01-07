@@ -1,9 +1,9 @@
 const Vente = require("../modles/Vente");
 const Client = require("../modles/client"); // Adjust the path as necessary
 const Product = require("../modles/product"); // Adjust the path as necessary
-const Shop = require("../modles/Shop"); // Adjust the path as necessary
 const ProduitStock = require("../modles/ProduitStock"); // Adjust the path as necessary
-
+const Shop = require("../modles/Shop");
+const Employe = require("../modles/Employe");
 exports.createVente = async (req, res) => {
   const {
     id_client,
@@ -168,6 +168,120 @@ exports.deleteAllVente = async (req, res) => {
     const Ventes = await Vente.deleteMany({});
     res.status(200).send({ message: "Vente deleted successfully" });
   } catch (error) {
+    res.status(500).send(error);
+  }
+};
+exports.VentesRecente = async (req, res) => {
+  try {
+    // Get the shop ID from request parameters
+    const shopId = req.params.shopId; // Make sure this matches the parameter name in your route
+
+    let recentVentes = await Vente.find({ id_shop: shopId })
+      .sort({ date_vente: -1 })
+      .limit(10);
+
+    recentVentes = await Promise.all(
+      recentVentes.map(async (vente) => {
+        vente = vente.toObject();
+
+        // Fetch product details
+        const product = await Product.findOne({
+          productId: vente.id_produit,
+        }).select("name");
+        vente.productDetails = product || { name: "Unknown Product" };
+
+        // Fetch shop details
+        // const shop = await Shop.findOne({ shopID: vente.id_shop }).select(
+        //   "name"
+        // );
+        // vente.shopDetails = shop || { name: "Unknown Shop" };
+
+        return vente;
+      })
+    );
+
+    res.status(200).send(recentVentes);
+  } catch (error) {
+    console.error("Error fetching recent ventes:", error);
+    res.status(500).send(error);
+  }
+};
+
+exports.getTopEntities = async (req, res) => {
+  try {
+    // Top Client
+    const topClient = await Vente.aggregate([
+      { $match: { id_shop: { $ne: 1 } } },
+      { $group: { _id: "$id_client", totalPurchases: { $sum: "id_client" } } },
+      { $sort: { totalPurchases: -1 } },
+      { $limit: 1 },
+    ]);
+
+    // Top Employee
+    const topEmployee = await Employe.aggregate([
+      // { $match: { workIn: { $ne: 1 } } },
+      { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
+      { $sort: { totalSales: -1 } },
+      { $limit: 1 },
+    ]);
+
+    // Top Product
+    const topProduct = await Vente.aggregate([
+      { $match: { id_shop: { $ne: 1 } } },
+      {
+        $group: { _id: "$id_produit", totalSold: { $sum: "$quantite_vendue" } },
+      },
+      { $sort: { totalSold: -1 } },
+      { $limit: 1 },
+    ]);
+
+    // Top Shops (excluding shop 1)
+    const topShops = await Vente.aggregate([
+      { $match: { id_shop: { $ne: 1, $ne: null } } }, // Exclude shop 1 and null shop IDs
+      {
+        $group: {
+          _id: "$id_shop",
+          totalRevenue: { $sum: "$montant_total_vente" },
+        },
+      },
+      { $sort: { totalRevenue: -1 } },
+      { $limit: 1 },
+    ]);
+    let clientDetails = { nom: "Unknown", prenom: "Unknown" };
+    if (topClient.length > 0 && topClient[0]._id) {
+      const client = await Client.findOne({
+        clientId: topClient[0]._id,
+      }).select("nomClient prenomClient");
+      if (client) {
+        clientDetails = { nom: client.nomClient, prenom: client.prenomClient };
+      }
+    }
+
+    // Fetch additional details for topEmployee
+    let employeeName = "Unknown";
+    if (topEmployee.length > 0 && topEmployee[0]._id) {
+      const employee = await Employe.findOne({
+        EmployeID: topEmployee[0]._id,
+      }).select("name");
+      if (employee) employeeName = employee.name;
+    }
+
+    // Fetch additional details for topProduct
+    let productName = "Unknown";
+    if (topProduct.length > 0 && topProduct[0]._id) {
+      const product = await Product.findOne({
+        productId: topProduct[0]._id,
+      }).select("name");
+      if (product) productName = product.name;
+    }
+    res.status(200).send({
+      topClient: { client: clientDetails },
+      topEmployee: { id: topEmployee[0]?._id, name: employeeName },
+      topProduct: { id: topProduct[0]?._id, name: productName },
+      topShops,
+    });
+  } catch (error) {
+    console.error("Error fetching top entities:", error);
     res.status(500).send(error);
   }
 };

@@ -5,6 +5,10 @@ const transfertController = require("../controls/transferControls"); // Adjust p
 router.post("/transferts", transfertController.createTransfert);
 router.get("/transferts/:id", transfertController.getTransfert);
 router.get("/transferts", transfertController.getAllTransferts);
+router.get(
+  "/transfertsRecente/:shopId",
+  transfertController.getRecentTransfers
+);
 router.put("/transferts/:id", transfertController.updateTransfert);
 router.delete("/transferts/:id", transfertController.deleteTransfert);
 
