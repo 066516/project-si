@@ -21,6 +21,7 @@ function Shop() {
   const [Editvente, setEditVente] = useState(false);
   const [Deletevente, setDeleteVente] = useState(false);
   const [transfer, setTransft] = useState(null);
+  const [show, setshow] = useState(1);
   const [info, setInfo] = useState({});
   useEffect(() => {
     console.log(idShop);
@@ -66,17 +67,53 @@ function Shop() {
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
       >
-        <ShopHeader />
-        <ShopTransferes
-          setAddTransft={setAddTransft}
-          setdeleteTransfer={setdeleteTransfer}
-          setEditTransfer={setEditTransfer}
-        />
-        <ShopListeVentes
-          setInfo={setInfo}
-          setDeleteVente={setDeleteVente}
-          setEditVente={setAddVente}
-        />
+        <ShopHeader idShop={idShop} />
+        <div className="grid grid-cols-3 mt-3 shadow-r   shadow-b  shadow-t cursor-pointer">
+          <h1
+            className={` text-center shadow-r  ${
+              show == 1 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(1);
+            }}
+          >
+            liste transferts
+          </h1>
+          <h1
+            className={` text-center shadow-r  ${
+              show === 2 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(2);
+            }}
+          >
+            Liste ventes
+          </h1>
+          <h1
+            className={` text-center shadow-r  ${
+              show === 3 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(3);
+            }}
+          >
+            Shop 3
+          </h1>
+        </div>
+        {show == 1 && (
+          <ShopTransferes
+            setAddTransft={setAddTransft}
+            setdeleteTransfer={setdeleteTransfer}
+            setEditTransfer={setEditTransfer}
+          />
+        )}
+        {show == 2 && (
+          <ShopListeVentes
+            setInfo={setInfo}
+            setDeleteVente={setDeleteVente}
+            setEditVente={setAddVente}
+          />
+        )}
       </div>
     </>
   );

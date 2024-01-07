@@ -5,7 +5,6 @@ function HeaderTops() {
   const [loading, setLaoding] = useState(true);
   const [tops, setTops] = useState([]);
   useEffect(() => {
-    console.log("Fetching ventes...");
     const fetchHeadres = async () => {
       const apiUrl = "http://localhost:3000";
       try {
@@ -17,13 +16,11 @@ function HeaderTops() {
         console.error("Error fetching ventes:", error);
       } finally {
         setLaoding(false);
-        console.log("Fetch attempt finished");
       }
     };
 
     fetchHeadres();
   }, []);
-  if (!loading) console.log(tops);
   return (
     <>
       {!loading && (
