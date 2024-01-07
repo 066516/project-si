@@ -36,12 +36,58 @@ function Layout() {
         <div className=" side-bar h-full absolute z-[100] w-full flex flex-col shadow-lg  items-center">
           {!bol ? <img src={img} className=" image1 w-1/3 py-6" /> : ""}
           <div className=" text-black font-medium flex flex-col h-1/2 sm:h-1/3  justify-between mt-20 sm:mt-7">
-            <Link to={{ pathname: "/dashboard" }}>Dashboard</Link>
-            {role === "admin" ? <Link to="/shops">Shops</Link> : ""}
-            <Link to="/ventes">Ventes</Link>
-            <Link to="/achats">Achats</Link>
-            <Link to="/dealers">Dealers</Link>
-            <Link to="/stock">Stock</Link>
+            <Link
+              to="/dashboard"
+              className={`${
+                route.pathname === "/dashboard" ? "text-purple" : "text-black"
+              }`}
+            >
+              Dashboard
+            </Link>
+            {role === "admin" ? (
+              <Link
+                to="/shops"
+                className={`${
+                  route.pathname === "/shops" ? "text-purple" : "text-black"
+                }`}
+              >
+                Shops
+              </Link>
+            ) : (
+              ""
+            )}
+            <Link
+              to="/ventes"
+              className={`${
+                route.pathname === "/ventes" ? "text-purple" : "text-black"
+              }`}
+            >
+              Ventes
+            </Link>
+            <Link
+              to="/achats"
+              className={`${
+                route.pathname === "/achats" ? "text-purple" : "text-black"
+              }`}
+            >
+              Achats
+            </Link>
+            <Link
+              to="/dealers"
+              className={`${
+                route.pathname === "/dealers" ? "text-purple" : "text-black"
+              }`}
+            >
+              Dealers
+            </Link>
+            <Link
+              to="/stock"
+              className={`${
+                route.pathname === "/stock" ? "text-purple" : "text-black"
+              }`}
+            >
+              Stock
+            </Link>
           </div>
           <div className="  fixed bottom-0 p-4 w-full xl:w-1/6 sm:w-1/6 border-t justify-center flex items-center border-t-black ">
             <FaSignOutAlt
