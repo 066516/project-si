@@ -35,7 +35,7 @@ exports.getEmploye = async (req, res) => {
 // Get all employees
 exports.getAllEmployes = async (req, res) => {
   try {
-    const employes = await Employe.find();
+    const employes = await Employe.find({ workIn: req.params.id });
     res.status(200).send(employes);
   } catch (error) {
     res.status(500).send(error);

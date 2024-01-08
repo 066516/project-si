@@ -9,6 +9,7 @@ exports.createClient = async (req, res) => {
       .status(200)
       .send({ message: "Client created successfully", data: newClient });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -29,7 +30,7 @@ exports.getClient = async (req, res) => {
 // Get all clients
 exports.getAllClients = async (req, res) => {
   try {
-    const clients = await Client.find();
+    const clients = await Client.find({ id_shop: req.params.id });
     res.status(200).send(clients);
   } catch (error) {
     res.status(500).send(error);
