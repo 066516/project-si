@@ -1,6 +1,8 @@
 import { IoMdAdd } from "react-icons/io";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
 import { GiPayMoney } from "react-icons/gi";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function DealersListeClients({
   setAddClient,
@@ -8,6 +10,31 @@ function DealersListeClients({
   setDeleteClient,
   setreglementClient,
 }) {
+  const [clientsListe, setclientsListe] = useState([]);
+  const [loading, setLaoding] = useState(true);
+
+  useEffect(() => {
+    console.log("Fetching ...");
+    const fetchVentes = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/clients/1`);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setclientsListe(response.data); // Directly store the data if it's an array
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching :", error);
+      } finally {
+        setLaoding(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+
+    fetchVentes();
+  }, []);
   const handleEDit = () => {
     setEditClient(true);
   };
@@ -35,74 +62,40 @@ function DealersListeClients({
       </div>
       <div className="grid md:grid-cols-6 grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold mt-5">
         <h1>Full Name </h1>
-        <h2>Adresse Fournisseur</h2>
+        <h2>Adresse Client</h2>
         <h2 className="hidden md:flex justify-center">phoneNumber</h2>
         <h2 className=" ">Sold</h2>
         <h2 className="">Total Ventes with his</h2>
         <h2 className="text-red-500">Update Or delete Achat</h2>
       </div>
-      <div>
-        <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-purple ">Nabil ghemam djeridi</h1>
-          <h2 className="font-medium ">hassi khalifa</h2>
-          <h2 className="hidden md:flex justify-center">0665666666</h2>
-          <h2 className="text-red-500">-300000DA</h2>
-          <h2>-20</h2>
-          <h2 className="flex justify-evenly">
-            <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
-            <MdDeleteForever
-              fontSize="25px"
-              color="red"
-              onClick={handleDelete}
-            />
-            <GiPayMoney onClick={reglementyHandle} />
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-purple ">Nabil ghemam djeridi</h1>
-          <h2 className="font-medium ">hassi khalifa</h2>
-          <h2 className="hidden md:flex justify-center">0665666666</h2>
-          <h2 className="text-red-500">-300000DA</h2>
-          <h2>-20</h2>
-          <h2 className="flex justify-evenly">
-            <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
-            <MdDeleteForever
-              fontSize="25px"
-              color="red"
-              onClick={handleDelete}
-            />
-            <GiPayMoney onClick={reglementyHandle} />
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-purple ">Nabil ghemam djeridi</h1>
-          <h2 className="font-medium ">hassi khalifa</h2>
-          <h2 className="hidden md:flex justify-center">0665666666</h2>
-          <h2 className="text-red-500">-300000DA</h2>
-          <h2>-20</h2>
-          <h2 className="flex justify-evenly">
-            <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
-            <MdDeleteForever
-              fontSize="25px"
-              color="red"
-              onClick={handleDelete}
-            />
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-5 grid-cols-4 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-purple ">Nabil ghemam djeridi</h1>
-          <h2 className="font-medium ">hassi khalifa</h2>
-          <h2 className="hidden md:flex justify-center">0665666666</h2>
-          <h2 className="text-red-500">-300000DA</h2>
-          <h2>-20</h2>
-        </div>
-        <div className="grid md:grid-cols-5 grid-cols-4 text-center py-2 px-2 items-center">
-          <h1 className="font-medium text-purple ">Nabil ghemam djeridi</h1>
-          <h2 className="font-medium ">hassi khalifa</h2>
-          <h2 className="hidden md:flex justify-center">0665666666</h2>
-          <h2 className="text-red-500">-300000DA</h2>
-          <h2>-20</h2>
-        </div>
+      <div className="h-[240px] overflow-y-scroll ">
+        {clientsListe.map((client) => {
+          return (
+            <div
+              key={client.clientId}
+              className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center"
+            >
+              <h1 className="font-medium text-purple ">
+                {client.nomClient} {client.prenomClient}{" "}
+              </h1>
+              <h2 className="font-medium ">{client.adresseClient} </h2>
+              <h2 className="hidden md:flex justify-center">
+                {client.telephoneClient}{" "}
+              </h2>
+              <h2 className="text-red-500">{client.creditClient} DA</h2>
+              <h2>-20</h2>
+              <h2 className="flex justify-evenly">
+                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
+                <MdDeleteForever
+                  fontSize="25px"
+                  color="red"
+                  onClick={handleDelete}
+                />
+                <GiPayMoney onClick={reglementyHandle} />
+              </h2>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

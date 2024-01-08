@@ -3,12 +3,13 @@ import { MdEdit, MdDeleteForever, MdOutlineSmartDisplay } from "react-icons/md";
 import { GiPayMoney } from "react-icons/gi";
 import { useEffect, useState } from "react";
 import axios from "axios";
-function DealersListeEmploye  ({
+function ShopListeEmploye({
   setAddEmplye,
   setDeleteEmploye,
   setEditEmploye,
   setpaySalary,
   setAbsence,
+  idShop,
 }) {
   const [employeListe, setemployeListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -18,7 +19,7 @@ function DealersListeEmploye  ({
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/employes/1`);
+        const response = await axios.get(`${apiUrl}/employes/${idShop}`);
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setemployeListe(response.data); // Directly store the data if it's an array
@@ -112,4 +113,4 @@ function DealersListeEmploye  ({
   );
 }
 
-export default DealersListeEmploye;
+export default ShopListeEmploye;

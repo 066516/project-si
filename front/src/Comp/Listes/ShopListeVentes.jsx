@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
-function ShopListeVentes({ setInfo, setEditVente, setDeleteVente }) {
+function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
   const [ventesListe, setVentesListe] = useState([]);
   const [loading, setLaoding] = useState(true);
-  
 
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/ventes/15`);
+        const response = await axios.get(`${apiUrl}/ventes/${idShop}`);
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setVentesListe(response.data); // Directly store the data if it's an array

@@ -11,7 +11,7 @@ function ShopTransferes({
 }) {
   const [loading, setLaoding] = useState(true);
   const [transferts, settransferts] = useState([]);
-  idShop = 1;
+
   useEffect(() => {
     const fetchHeadres = async () => {
       const apiUrl = "http://localhost:3000";

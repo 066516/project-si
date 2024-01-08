@@ -9,6 +9,12 @@ import UpdateTransfer from "../Comp/pupouts/Updates/UpdateTransfer";
 import UpdateVentes from "../Comp/pupouts/Updates/UpdateVentes";
 import DeleteVente from "../Comp/pupouts/DeletePupouts/DeleteVente";
 import AddVente from "../Comp/pupouts/AddPupouts/AddVente";
+import ShopListeEmploye from "../Comp/Listes/ShopListeEmploye";
+import AddEmploye from "../Comp/pupouts/AddPupouts/AddEmploye";
+import UpdateEmploye from "../Comp/pupouts/Updates/UpdateEmploye";
+import DeleteEmploye from "../Comp/pupouts/DeletePupouts/DeleteEmploye";
+import Salary from "../Comp/pupouts/pay/Salary";
+import Absence from "../Comp/pupouts/pay/Absence";
 
 function Shop() {
   const location = useLocation();
@@ -23,6 +29,13 @@ function Shop() {
   const [transfer, setTransft] = useState(null);
   const [show, setshow] = useState(1);
   const [info, setInfo] = useState({});
+  const [absence, setAbsence] = useState(false);
+  const [paySalary, setpaySalary] = useState(false);
+  const [Employe, setEmploye] = useState(null);
+  const [deleteEmploye, setDeleteEmploye] = useState(false);
+  const [EditEmploye, setEditEmploye] = useState(false);
+  const [newEmploye, setAddEmplye] = useState(false);
+
   useEffect(() => {
     console.log(idShop);
   });
@@ -64,6 +77,31 @@ function Shop() {
           <DeleteVente setDeleteVente={setDeleteVente} info={info} />
         </div>
       )}
+      {absence && (
+        <div className="w-screen h-screen">
+          <Absence setAbsence={setAbsence} />
+        </div>
+      )}
+      {paySalary && (
+        <div className="w-screen h-screen">
+          <Salary setpaySalary={setpaySalary} />
+        </div>
+      )}
+      {deleteEmploye && (
+        <div className="w-screen h-screen">
+          <DeleteEmploye setDeleteEmploye={setDeleteEmploye} />
+        </div>
+      )}
+      {EditEmploye && (
+        <div className="w-screen h-screen">
+          <UpdateEmploye setEditEmploye={setEditEmploye} Employe={Employe} />
+        </div>
+      )}
+      {newEmploye && (
+        <div className="w-screen h-screen">
+          <AddEmploye setAddEmplye={setAddEmplye} />
+        </div>
+      )}
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
       >
@@ -97,7 +135,7 @@ function Shop() {
               setshow(3);
             }}
           >
-            Shop 3
+            Employe liste
           </h1>
         </div>
         {show == 1 && (
@@ -105,6 +143,7 @@ function Shop() {
             setAddTransft={setAddTransft}
             setdeleteTransfer={setdeleteTransfer}
             setEditTransfer={setEditTransfer}
+            idShop={idShop}
           />
         )}
         {show == 2 && (
@@ -112,6 +151,18 @@ function Shop() {
             setInfo={setInfo}
             setDeleteVente={setDeleteVente}
             setEditVente={setAddVente}
+            idShop={idShop}
+          />
+        )}
+        {show == 3 && (
+          <ShopListeEmploye
+            setAddEmplye={setAddEmplye}
+            setEditEmploye={setEditEmploye}
+            setDeleteEmploye={setDeleteEmploye}
+            setEmploye={setEmploye}
+            setpaySalary={setpaySalary}
+            setAbsence={setAbsence}
+            idShop={idShop}
           />
         )}
       </div>

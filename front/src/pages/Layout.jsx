@@ -48,7 +48,9 @@ function Layout() {
               <Link
                 to="/shops"
                 className={`${
-                  route.pathname === "/shops" ? "text-purple" : "text-black"
+                  route.pathname === "/shops" || route.pathname === "/shop"
+                    ? "text-purple"
+                    : "text-black"
                 }`}
               >
                 Shops
