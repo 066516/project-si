@@ -1,17 +1,46 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
+import { useLocation } from "react-router-dom";
 
 function AddEmploye({ setAddEmplye }) {
   const [name, setName] = useState("");
   const [LastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
   const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log({ LastName, name, email, phoneNumber });
+    function postData() {
+      return axios
+        .post("http://localhost:3000/employe ", {
+          name: name + LastName,
+          email,
+          phoneNumber,
+          workIn: idShop ? idShop : 1,
+        })
+        .then((response) => {
+          // Handle response here
+          console.log("Data posted successfully:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error posting data:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Correct usage of finally
+        });
+    }
+    postData();
+
     // Add logic to send this data to the server or process it as needed
   };
+  if (!loading) {
+    setAddEmplye(false);
+  }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white text-blue2 relative top-3 p-5 rounded-xl">
@@ -82,7 +111,9 @@ function AddEmploye({ setAddEmplye }) {
             </h1>
             <h1
               className="bg-red-500 w-fit text-white px-5 py-2 cursor-pointer rounded-xl"
-              onClick={()=>{setAddEmplye(false)}}
+              onClick={() => {
+                setAddEmplye(false);
+              }}
             >
               Cancel
             </h1>

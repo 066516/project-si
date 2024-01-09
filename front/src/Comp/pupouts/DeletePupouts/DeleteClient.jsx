@@ -1,14 +1,35 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function DeleteClient({ setDeleteClient, client }) {
-  console.log(client);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {}, []);
   const handleCancelClient = () => {
     console.log("Client canceled");
     setDeleteClient(false);
   };
   const handleCreateClient = () => {
-    console.log("Client deleted");
+    const Deleteclient = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.delete(
+          `${apiUrl}/clients/${client.clientId}`
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching ventes:", error);
+      } finally {
+        setLoading(false);
+        console.log("Fetch attempt finished");
+      }
+    };
+
+    Deleteclient();
   };
+  if (!loading) {
+    setDeleteClient(false);
+  }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white relative top-3 p-5 rounded-xl">
@@ -17,7 +38,7 @@ function DeleteClient({ setDeleteClient, client }) {
           className="absolute top-2 right-2 cursor-pointer "
         />
         <h1 className="uppercase font-bold text-lg">
-          are you sure to delete this Client
+          are you sure to delete Client {client.nomClient}
         </h1>
 
         <div className="mt-5 flex justify-between">

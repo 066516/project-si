@@ -5,7 +5,6 @@ function ShopHeader({ idShop }) {
   const [loading, setLaoding] = useState(true);
   const [tops, setTops] = useState([]);
   useEffect(() => {
-    console.log("Fetching ventes...");
     const fetchHeadres = async () => {
       const apiUrl = "http://localhost:3000";
       try {
@@ -21,9 +20,9 @@ function ShopHeader({ idShop }) {
       }
     };
 
+    if (!loading) console.log(tops);
     fetchHeadres();
   }, []);
-  if (!loading) console.log(tops);
   return (
     <>
       {!loading && (

@@ -35,9 +35,7 @@ function Dealers() {
   const [reglementFournisseur, setreglementFournisseur] = useState(false);
   const [reglementClient, setreglementClient] = useState(false);
   const [absence, setAbsence] = useState(false);
-  useEffect(() => {
-    console.log(typeDealres);
-  });
+  useEffect(() => {}, []);
   return (
     <>
       {newEmploye && (
@@ -80,12 +78,15 @@ function Dealers() {
       )}
       {deleteFournisseur && (
         <div className="w-screen h-screen">
-          <DeleteFournisseur setDeleteFournisseur={setDeleteFournisseur} />
+          <DeleteFournisseur setDeleteFournisseur={setDeleteFournisseur} fournisseur={fournisseur} />
         </div>
       )}
       {deleteEmploye && (
         <div className="w-screen h-screen">
-          <DeleteEmploye setDeleteEmploye={setDeleteEmploye} />
+          <DeleteEmploye
+            setDeleteEmploye={setDeleteEmploye}
+            Employe={Employe}
+          />
         </div>
       )}
       {paySalary && (

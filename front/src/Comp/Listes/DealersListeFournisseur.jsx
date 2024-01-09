@@ -8,12 +8,12 @@ function DealersListeFournisseur({
   setDeleteFournisseur,
   setEditFournisseur,
   setreglementFournisseur,
+  setfournisseur,
 }) {
   const [fournisseursListe, setfournisseursListe] = useState([]);
   const [loading, setLaoding] = useState(true);
 
   useEffect(() => {
-    console.log("Fetching ...");
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
@@ -28,16 +28,18 @@ function DealersListeFournisseur({
         console.error("Error fetching :", error);
       } finally {
         setLaoding(false);
-        console.log("Fetch attempt finished");
       }
     };
 
     fetchVentes();
   }, []);
-  const handleEDit = () => {
+  const handleEDit = (fournisseur) => {
+    setfournisseur(fournisseur);
     setEditFournisseur(true);
   };
-  const handleDelete = () => {
+  const handleDelete = (fournisseur) => {
+    setfournisseur(fournisseur);
+
     setDeleteFournisseur(true);
   };
   const reglementyHandle = () => {
@@ -89,11 +91,15 @@ function DealersListeFournisseur({
               </h2>
               <h2>20</h2>
               <h2 className="flex justify-evenly">
-                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
+                <MdEdit
+                  fontSize="25px"
+                  color="blue"
+                  onClick={() => handleEDit(fournisseur)}
+                />
                 <MdDeleteForever
                   fontSize="25px"
                   color="red"
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(fournisseur)}
                 />
                 <GiPayMoney onClick={reglementyHandle} />
               </h2>

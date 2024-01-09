@@ -1,17 +1,42 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function UpdateClient({ setEditClient, client }) {
-  const [name, setName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [Address, setAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  console.log(client);
+  const [name, setName] = useState(client.nomClient);
+  const [LastName, setLastName] = useState(client.prenomClient);
+  const [Address, setAddress] = useState(client.adresseClient);
+  const [phoneNumber, setPhoneNumber] = useState(client.telephoneClient);
+  const [loading, setLoading] = useState(true);
+
   const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log({ LastName, name, Address, phoneNumber });
+    function postData() {
+      return axios
+        .put(`http://localhost:3000/client/${client.clientId}`, {
+          nomClient: name,
+          prenomClient: LastName,
+          adresseClient: Address,
+          telephoneClient: phoneNumber,
+        })
+        .then((response) => {
+          // Handle response here
+          console.log("Data posted successfully:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error posting data:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Correct usage of finally
+        });
+    }
+    postData();
     // Add logic to send this data to the server or process it as needed
   };
+  if (!loading) {
+    setEditClient(false);
+  }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white text-blue2 relative top-3 p-5 rounded-xl">

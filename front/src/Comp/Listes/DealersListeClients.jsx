@@ -9,12 +9,12 @@ function DealersListeClients({
   setEditClient,
   setDeleteClient,
   setreglementClient,
+  setClient,
 }) {
   const [clientsListe, setclientsListe] = useState([]);
   const [loading, setLaoding] = useState(true);
 
   useEffect(() => {
-    console.log("Fetching ...");
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
@@ -29,16 +29,17 @@ function DealersListeClients({
         console.error("Error fetching :", error);
       } finally {
         setLaoding(false);
-        console.log("Fetch attempt finished");
       }
     };
 
     fetchVentes();
   }, []);
-  const handleEDit = () => {
+  const handleEDit = (client) => {
+    setClient(client);
     setEditClient(true);
   };
-  const handleDelete = () => {
+  const handleDelete = (client) => {
+    setClient(client);
     setDeleteClient(true);
   };
   const reglementyHandle = () => {
@@ -85,11 +86,15 @@ function DealersListeClients({
               <h2 className="text-red-500">{client.creditClient} DA</h2>
               <h2>-20</h2>
               <h2 className="flex justify-evenly">
-                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
+                <MdEdit
+                  fontSize="25px"
+                  color="blue"
+                  onClick={() => handleEDit(client)}
+                />
                 <MdDeleteForever
                   fontSize="25px"
                   color="red"
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(client)}
                 />
                 <GiPayMoney onClick={reglementyHandle} />
               </h2>

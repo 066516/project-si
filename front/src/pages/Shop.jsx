@@ -31,7 +31,7 @@ function Shop() {
   const [info, setInfo] = useState({});
   const [absence, setAbsence] = useState(false);
   const [paySalary, setpaySalary] = useState(false);
-  const [Employe, setEmploye] = useState(null);
+  const [Employe, setEmploye] = useState();
   const [deleteEmploye, setDeleteEmploye] = useState(false);
   const [EditEmploye, setEditEmploye] = useState(false);
   const [newEmploye, setAddEmplye] = useState(false);
@@ -89,7 +89,10 @@ function Shop() {
       )}
       {deleteEmploye && (
         <div className="w-screen h-screen">
-          <DeleteEmploye setDeleteEmploye={setDeleteEmploye} />
+          <DeleteEmploye
+            setDeleteEmploye={setDeleteEmploye}
+            Employe={Employe}
+          />
         </div>
       )}
       {EditEmploye && (
@@ -144,6 +147,7 @@ function Shop() {
             setdeleteTransfer={setdeleteTransfer}
             setEditTransfer={setEditTransfer}
             idShop={idShop}
+            setTransft={setTransft}
           />
         )}
         {show == 2 && (

@@ -10,6 +10,7 @@ function ShopListeEmploye({
   setpaySalary,
   setAbsence,
   idShop,
+  setEmploye,
 }) {
   const [employeListe, setemployeListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -37,10 +38,12 @@ function ShopListeEmploye({
     fetchVentes();
   }, []);
 
-  const handleEDit = () => {
+  const handleEDit = (employe) => {
+    setEmploye(employe);
     setEditEmploye(true);
   };
-  const handleDelete = () => {
+  const handleDelete = (employe) => {
+    setEmploye(employe);
     setDeleteEmploye(true);
   };
   const paysalaryHandle = () => {
@@ -90,11 +93,15 @@ function ShopListeEmploye({
               </h2>
               <h2>20</h2>
               <h2 className="flex justify-evenly cursor-pointer items-center ">
-                <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
+                <MdEdit
+                  fontSize="25px"
+                  color="blue"
+                  onClick={() => handleEDit(employe)}
+                />
                 <MdDeleteForever
                   fontSize="25px"
                   color="red"
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(employe)}
                 />
                 <MdOutlineSmartDisplay fontSize="25px" color="green" />
                 {/* <GiPayMoney onClick={paysalaryHandle} />

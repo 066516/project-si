@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
+import { useLocation } from "react-router-dom";
 function UpdateTransfer({ setEditTransfer, transfer }) {
-  console.log(transfer);
-  const fakeProducts = [
-    { id: 1, name: "Product 1" },
-    { id: 2, name: "Product 2" },
-    { id: 3, name: "Product 3" },
-    // Add more products as needed
-  ];
-
+  const [products, setProducts] = useState([]);
+  // Function to handle selection change
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
+  const fetchProducts = async () => {
+    const apiUrl = "http://localhost:3000";
+    try {
+      const response = await axios.get(`${apiUrl}/produitstocksShop/1`);
+      console.log(response.data);
+      if (Array.isArray(response.data)) {
+        setProducts(response.data); // Directly store the data if it's an array
+      } else {
+        console.error("Expected an array, received:", typeof response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching ventes:", error);
+    } finally {
+      console.log("Fetch attempt finished");
+    }
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   // State to keep track of the selected product
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [count, setCount] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(transfer.id_produit);
+  const [count, setCount] = useState(transfer.quantite_transfert);
   // Function to handle selection change
   const handleSelectChange = (event) => {
     setSelectedProduct(event.target.value);
@@ -21,13 +39,33 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
   };
 
   const handleCreateTransfert = () => {
-    console.log("Updated");
+    function postData() {
+      return axios
+        .put(`http://localhost:3000/transferts/${transfer.id_transfert}`, {
+          id_produit: selectedProduct,
+
+          quantite_transfert: parseInt(count),
+        })
+        .then((response) => {
+          // Handle response here
+          console.log("Data posted successfully:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error posting data:", error);
+        })
+        .finally(() => {
+          // setLaodingPost(false); // Correct usage of finally
+        });
+    }
+    // setAddTransft(false);
+    postData();
   };
   const handleCancelTransfert = () => {
     console.log("canceled");
     setEditTransfer(false);
   };
-  console.log(selectedProduct, count);
   return (
     <div
       className="relative bg-blue2/80 z-[100]   w-screen h-screen flex
@@ -42,19 +80,6 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
           className=" absolute top-2 right-2 cursor-pointer "
         />
         <div>
-          <h1 className="text-lg text-blue2">Choose a Shop</h1>
-          <select
-            value={selectedProduct}
-            onChange={handleSelectChange}
-            className="rounded-xl w-60 border-blue2 border border-1 "
-          >
-            <option value="">Select a product</option>
-            {fakeProducts.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name}
-              </option>
-            ))}
-          </select>
           <h1 className="text-lg text-blue2">Choose a Product</h1>
           <select
             value={selectedProduct}
@@ -62,9 +87,9 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
             className="rounded-xl w-60 border-blue2 border border-1"
           >
             <option value="">Select a product</option>
-            {fakeProducts.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name}
+            {products.map((product) => (
+              <option key={product.id_produit} value={product.id_produit}>
+                {product.productDetails.name}
               </option>
             ))}
           </select>

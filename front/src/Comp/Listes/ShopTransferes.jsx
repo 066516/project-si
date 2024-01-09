@@ -8,6 +8,7 @@ function ShopTransferes({
   setEditTransfer,
   setdeleteTransfer,
   idShop,
+  setTransft,
 }) {
   const [loading, setLaoding] = useState(true);
   const [transferts, settransferts] = useState([]);
@@ -33,10 +34,12 @@ function ShopTransferes({
 
     fetchHeadres();
   }, []);
-  const handleEDit = () => {
+  const handleEDit = (transfer) => {
+    setTransft(transfer);
     setEditTransfer(true);
   };
-  const handleDelete = () => {
+  const handleDelete = (transfer) => {
+    setTransft(transfer);
     setdeleteTransfer(true);
   };
   function formatDate(dateString) {
@@ -93,11 +96,15 @@ function ShopTransferes({
                   {transfer.cout_transfert}
                 </h2>
                 <h2 className="flex justify-evenly">
-                  <MdEdit fontSize="25px" color="blue" onClick={handleEDit} />
+                  <MdEdit
+                    fontSize="25px"
+                    color="blue"
+                    onClick={() => handleEDit(transfer)}
+                  />
                   <MdDeleteForever
                     fontSize="25px"
                     color="red"
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(transfer)}
                   />
                 </h2>
               </div>
