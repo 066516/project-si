@@ -21,7 +21,7 @@ EmployeSchema.pre("save", async function (next) {
     doc.EmployeID = counterDoc.seq;
     next();
   } else {
-    next(); 
+    next();
   }
 });
 

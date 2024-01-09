@@ -5,8 +5,9 @@ const fournisseurSchema = new mongoose.Schema({
   Id_fournisseur: { type: Number, unique: true, index: true },
   Nom_fournisseur: { type: String, required: true },
   Prenom_fournisseur: { type: String, required: true },
-  adresse_fournisseur: { type: String },
+  adresse_fournisseur: { type: String, default: "" },
   telephone_fournisseur: { type: String, required: true },
+  montant_encaisse_vente: { type: Number, default: 0 },
   solde_fournisseur: { type: Number, default: 0 },
 });
 

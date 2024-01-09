@@ -45,8 +45,8 @@ exports.getAllEmployes = async (req, res) => {
 // Update an employee by ID
 exports.updateEmploye = async (req, res) => {
   try {
-    const updatedEmploye = await Employe.findByIdAndUpdate(
-      req.params.id,
+    const updatedEmploye = await Employe.findOneAndUpdate(
+      { EmployeID: req.params.id },
       req.body,
       { new: true }
     );
@@ -65,7 +65,9 @@ exports.updateEmploye = async (req, res) => {
 // Delete an employee by ID
 exports.deleteEmploye = async (req, res) => {
   try {
-    const employe = await Employe.findByIdAndDelete(req.params.id);
+    const employe = await Employe.findOneAndDelete({
+      EmployeID: req.params.id,
+    });
     if (!employe) {
       return res.status(404).send({ message: "Employee not found" });
     }

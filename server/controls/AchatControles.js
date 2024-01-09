@@ -5,8 +5,13 @@ const Product = require("../modles/product");
 const ProduitStock = require("../modles/ProduitStock");
 
 exports.createAchat = async (req, res) => {
-  const { id_fournisseur, id_produit, quantite_achat, statut_paiement_achat } =
-    req.body;
+  const {
+    id_fournisseur,
+    id_produit,
+    quantite_achat,
+    statut_paiement_achat,
+    montant_encaisse_vente,
+  } = req.body;
 
   try {
     // Check if the Fournisseur exists
@@ -47,7 +52,7 @@ exports.createAchat = async (req, res) => {
       });
 
       if (fournisseur) {
-        fournisseur.solde_fournisseur += newAchat.montant_total_achat;
+        fournisseur.solde_fournisseur += newAchat.montant_total_achat -montant_encaisse_vente;
 
         await fournisseur.save();
       } else {

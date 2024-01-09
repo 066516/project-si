@@ -4,9 +4,8 @@ const ShopCenter = require("../modles/Shop"); // Adjust the path as necessary
 const ProduitStock = require("../modles/ProduitStock"); // Adjust the path as necessary
 
 exports.createTransfert = async (req, res) => {
-  const { id_produit, id_centre, quantite_transfert, cout_transfert } =
-    req.body;
-  const originShopId = 13;
+  const { id_produit, id_centre, quantite_transfert } = req.body;
+  const originShopId = 1;
   try {
     // Verify if the Product exists
     const productExists = await Product.findOne({ productId: id_produit });
@@ -21,12 +20,6 @@ exports.createTransfert = async (req, res) => {
     }
 
     // If both exist, create the Transfert
-    const newTransfert = new Transfert({
-      id_produit,
-      id_centre,
-      quantite_transfert,
-    });
-    await newTransfert.save();
 
     // Create the Transfert
 
@@ -35,6 +28,7 @@ exports.createTransfert = async (req, res) => {
       id_produit: id_produit,
       id_shop: originShopId,
     });
+
     if (stockOrigin) {
       if (stockOrigin.quantite_en_stock < quantite_transfert)
         return res
@@ -47,7 +41,12 @@ exports.createTransfert = async (req, res) => {
         .status(404)
         .send({ message: "Stock not found in originating shop" });
     }
-
+    const newTransfert = new Transfert({
+      id_produit,
+      id_centre,
+      quantite_transfert,
+    });
+    await newTransfert.save();
     // Update or create stock in ProduitStock for the destination shop
     const stockDestination = await ProduitStock.findOne({
       id_produit,
@@ -71,6 +70,7 @@ exports.createTransfert = async (req, res) => {
       data: newTransfert,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -119,8 +119,8 @@ exports.getAllTransferts = async (req, res) => {
 // Update a Transfert entry by ID
 exports.updateTransfert = async (req, res) => {
   try {
-    const updatedTransfert = await Transfert.findByIdAndUpdate(
-      req.params.id,
+    const updatedTransfert = await Transfert.findOneAndUpdate(
+      { id_transfert: req.params.id },
       req.body,
       { new: true }
     );
@@ -139,7 +139,9 @@ exports.updateTransfert = async (req, res) => {
 // Delete a Transfert entry by ID
 exports.deleteTransfert = async (req, res) => {
   try {
-    const transfert = await Transfert.findByIdAndDelete(req.params.id);
+    const transfert = await Transfert.findOneAndDelete({
+      id_transfert: req.params.id,
+    });
     if (!transfert) {
       return res.status(404).send({ message: "Transfert not found" });
     }
