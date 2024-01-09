@@ -49,7 +49,7 @@ function UpdateAchat({ setEditacaht, info }) {
     fetchFournisseurs();
     fetchProducts();
   }, []);
-  // State for selected product, supplier, count, price, and payment type
+  // State for selected product, supplier, count, Amount, and payment type
   const [selectedProductId, setSelectedProductId] = useState(info.id_produit);
   const [selectedSupplierId, setSelectedSupplierId] = useState(
     info.id_fournisseur
@@ -59,7 +59,7 @@ function UpdateAchat({ setEditacaht, info }) {
   );
 
   const [count, setCount] = useState(info.quantite_achat);
-  const [price, setPrice] = useState(info.price);
+  const [Amount, setAmount] = useState(info.Amount);
 
   // Event handlers
   const handleProductChange = (event) => {
@@ -71,8 +71,8 @@ function UpdateAchat({ setEditacaht, info }) {
   const handleCountChange = (event) => {
     setCount(event.target.value);
   };
-  const handlePriceChange = (event) => {
-    setPrice(event.target.value);
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
   };
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
@@ -85,6 +85,7 @@ function UpdateAchat({ setEditacaht, info }) {
           id_fournisseur: selectedSupplierId,
           id_produit: selectedProductId,
           quantite_achat: count,
+          montant_encaisse_achat:Amount,
           statut_paiement_achat: selectedTypePay === "Totalment" ? true : false,
         })
         .then((response) => {
@@ -149,12 +150,12 @@ function UpdateAchat({ setEditacaht, info }) {
             className="border-blue2 border border-1 rounded"
           />
 
-          <h1 className="text-lg text-blue2">Enter Price</h1>
+          <h1 className="text-lg text-blue2">Enter Amount</h1>
           <input
             type="number"
-            placeholder="Enter price"
-            value={price}
-            onChange={handlePriceChange}
+            placeholder="Enter Amount"
+            value={Amount}
+            onChange={handleAmountChange}
             className="border-blue2 border border-1 rounded"
           />
 

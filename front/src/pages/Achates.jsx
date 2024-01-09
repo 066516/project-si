@@ -35,7 +35,7 @@ function Achates() {
     };
 
     fetchVentes();
-  }, []);
+  }, );
   console.log("====================================");
   console.log(AchatListe);
   console.log("====================================");

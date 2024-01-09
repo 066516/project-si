@@ -33,7 +33,7 @@ function DealersListeClients({
     };
 
     fetchVentes();
-  }, []);
+  }, );
   const handleEDit = (client) => {
     setClient(client);
     setEditClient(true);

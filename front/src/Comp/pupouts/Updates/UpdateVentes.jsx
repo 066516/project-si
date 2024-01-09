@@ -7,7 +7,7 @@ function UpdateVentes({ setEditVente, info }) {
   const [products, setProducts] = useState([]);
   const [clients, setClients] = useState([]);
 
-  // State for selected product, client, count, and price
+  // State for selected product, client, count, and Amount
   const [selectedProductId, setSelectedProductId] = useState(info.id_produit);
   const [selectedClientId, setSelectedClientId] = useState(info.id_client);
   const [selectedTypePay, setSelectedTypePay] = useState(
@@ -16,7 +16,7 @@ function UpdateVentes({ setEditVente, info }) {
   const [loading, setLaoding] = useState(true);
 
   const [count, setCount] = useState(info.quantite_vendue);
-  const [price, setPrice] = useState(info.prix_unitaire_vente);
+  const [Amount, setAmount] = useState(info.prix_unitaire_vente);
 
   useEffect(() => {
     console.log("Fetching ventes...");
@@ -65,8 +65,8 @@ function UpdateVentes({ setEditVente, info }) {
   const handleCountChange = (event) => {
     setCount(event.target.value);
   };
-  const handlePriceChange = (event) => {
-    setPrice(event.target.value);
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
   };
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
@@ -78,6 +78,7 @@ function UpdateVentes({ setEditVente, info }) {
           id_client: selectedClientId,
           id_produit: selectedProductId,
           quantite_vendue: count,
+          montant_encaisse_vente: Amount,
           statut_paiement_vente: selectedTypePay === "Totalment" ? true : false,
         })
         .then((response) => {
@@ -88,7 +89,7 @@ function UpdateVentes({ setEditVente, info }) {
           console.error("Error updating date:", error);
         });
     }
-    setEditVente(false)
+    setEditVente(false);
     updateDate();
   };
   const handleCancelVente = () => {
@@ -142,12 +143,12 @@ function UpdateVentes({ setEditVente, info }) {
             className="border-blue2 border border-1 rounded"
           />
 
-          <h1 className="text-lg text-blue2">Enter Price</h1>
+          <h1 className="text-lg text-blue2">Enter Amount</h1>
           <input
             type="number"
-            placeholder="Enter price"
-            value={price}
-            onChange={handlePriceChange}
+            placeholder="Enter Amount"
+            value={Amount}
+            onChange={handleAmountChange}
             className="border-blue2 border border-1 rounded"
           />
           <h1 className="text-lg text-blue2">how you want to pay</h1>

@@ -32,7 +32,7 @@ function DealersListeFournisseur({
     };
 
     fetchVentes();
-  }, []);
+  }, );
   const handleEDit = (fournisseur) => {
     setfournisseur(fournisseur);
     setEditFournisseur(true);

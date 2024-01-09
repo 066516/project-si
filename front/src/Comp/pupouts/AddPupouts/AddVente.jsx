@@ -5,7 +5,7 @@ import { ImCancelCircle } from "react-icons/im";
 function AddVente({ setAddVente }) {
   const [products, setProducts] = useState([]);
   const [clients, setClients] = useState([]);
-  // State for selected product, client, count, and price
+  // State for selected product, client, count, and Amount
   const [selectedProductId, setSelectedProductId] = useState("");
   const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedTypePay, setSelectedTypePay] = useState();
@@ -13,7 +13,7 @@ function AddVente({ setAddVente }) {
   const [loadingPost, setLaodingPost] = useState(true);
 
   const [count, setCount] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [Amount, setAmount] = useState(0);
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
@@ -63,8 +63,8 @@ function AddVente({ setAddVente }) {
   const handleCountChange = (event) => {
     setCount(event.target.value);
   };
-  const handlePriceChange = (event) => {
-    setPrice(event.target.value);
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
   };
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
@@ -76,6 +76,7 @@ function AddVente({ setAddVente }) {
           id_client: selectedClientId,
           id_produit: selectedProductId,
           quantite_vendue: count,
+          montant_encaisse_vente: Amount,
           statut_paiement_vente: selectedTypePay === "Totalment" ? true : false,
         })
         .then((response) => {
@@ -145,12 +146,12 @@ function AddVente({ setAddVente }) {
             className="border-blue2 border border-1 rounded"
           />
 
-          <h1 className="text-lg text-blue2">Enter Price</h1>
+          <h1 className="text-lg text-blue2">Enter Amount</h1>
           <input
             type="number"
-            placeholder="Enter price"
-            value={price}
-            onChange={handlePriceChange}
+            placeholder="Enter Amount"
+            value={Amount}
+            onChange={handleAmountChange}
             className="border-blue2 border border-1 rounded"
           />
           <h1 className="text-lg text-blue2">how you want to pay</h1>

@@ -27,7 +27,7 @@ function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
     };
 
     fetchVentes();
-  }, []);
+  }, );
 
   const handleEDit = (vente) => {
     console.log(vente);

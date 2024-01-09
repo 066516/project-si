@@ -8,6 +8,8 @@ function AddTransfer({ setAddTransft }) {
   const [count, setCount] = useState(0);
   const [products, setProducts] = useState([]);
   // Function to handle selection change
+  const [loading, setLoading] = useState(true);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const idShop = queryParams.get("idShop");
@@ -55,7 +57,7 @@ function AddTransfer({ setAddTransft }) {
           console.error("Error posting data:", error);
         })
         .finally(() => {
-          // setLaodingPost(false); // Correct usage of finally
+          setLoading(false); // Correct usage of finally
         });
     }
     // setAddTransft(false);
@@ -65,6 +67,9 @@ function AddTransfer({ setAddTransft }) {
     console.log("canceled");
     setAddTransft(false);
   };
+  if (!loading) {
+    setAddTransft(false);
+  }
   console.log(selectedProduct, count);
   return (
     <div

@@ -31,6 +31,8 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
   const [selectedProduct, setSelectedProduct] = useState(transfer.id_produit);
   const [count, setCount] = useState(transfer.quantite_transfert);
   // Function to handle selection change
+  const [loading, setLoading] = useState(true);
+
   const handleSelectChange = (event) => {
     setSelectedProduct(event.target.value);
   };
@@ -56,7 +58,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
           console.error("Error posting data:", error);
         })
         .finally(() => {
-          // setLaodingPost(false); // Correct usage of finally
+          setLoading(false); // Correct usage of finally
         });
     }
     // setAddTransft(false);
@@ -66,13 +68,16 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
     console.log("canceled");
     setEditTransfer(false);
   };
+  if (!loading) {
+    setEditTransfer(false);
+  }
   return (
     <div
       className="relative bg-blue2/80 z-[100]   w-screen h-screen flex
     justify-center items-start"
     >
       <div className="bg-white relative top-3 p-5 rounded-xl">
-        <h1 className="uppercase font-semibold">new Transfer</h1>
+        <h1 className="uppercase font-semibold">Update Transfer</h1>
         <ImCancelCircle
           onClick={() => {
             setEditTransfer(false);

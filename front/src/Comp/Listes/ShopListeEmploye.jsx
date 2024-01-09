@@ -36,7 +36,7 @@ function ShopListeEmploye({
     };
 
     fetchVentes();
-  }, []);
+  }, );
 
   const handleEDit = (employe) => {
     setEmploye(employe);

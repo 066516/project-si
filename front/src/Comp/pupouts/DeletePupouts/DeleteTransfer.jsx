@@ -28,6 +28,9 @@ function DeleteTransfer({ setdeleteTransfer, transfer }) {
 
     Deletetransfer();
   };
+  if (!loading) {
+    setdeleteTransfer(false);
+  }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white relative top-3 p-5 rounded-xl">

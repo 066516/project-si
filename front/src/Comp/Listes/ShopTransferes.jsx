@@ -33,7 +33,7 @@ function ShopTransferes({
     };
 
     fetchHeadres();
-  }, []);
+  },);
   const handleEDit = (transfer) => {
     setTransft(transfer);
     setEditTransfer(true);
