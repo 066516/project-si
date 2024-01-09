@@ -32,7 +32,7 @@ exports.getFournisseur = async (req, res) => {
 // Get all fournisseurs
 exports.getAllFournisseurs = async (req, res) => {
   try {
-    const fournisseurs = await Fournisseur.find();
+    const fournisseurs = await Fournisseur.find({ trash: false });
     res.status(200).send(fournisseurs);
   } catch (error) {
     res.status(500).send(error);
@@ -69,9 +69,12 @@ exports.updateFournisseur = async (req, res) => {
 // Delete a fournisseur by ID
 exports.deleteFournisseur = async (req, res) => {
   try {
-    const fournisseur = await Fournisseur.findOneAndDelete({
+    const fournisseur = await Fournisseur.findOne({
       Id_fournisseur: req.params.id,
+      trash: false,
     });
+    fournisseur.trash = true;
+    fournisseur.save();
     if (!fournisseur) {
       return res.status(404).send({ message: "Fournisseur not found" });
     }

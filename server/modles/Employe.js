@@ -8,6 +8,7 @@ const EmployeSchema = new mongoose.Schema({
   phoneNumber: { type: String, required: true },
   workIn: { type: Number, ref: "Shop", index: true },
   salary: { type: Number, default: 0 },
+  trash: { type: Boolean, default: false },
 });
 
 EmployeSchema.pre("save", async function (next) {

@@ -10,6 +10,7 @@ const achatSchema = new mongoose.Schema({
   montant_total_achat: { type: Number },
   reste: { type: Number, default: 0 },
   date_achat: { type: Date, default: Date.now },
+  montant_encaisse_achat: { type: Number, default: 0 },
   statut_paiement_achat: { type: Boolean, required: true, default: true },
 });
 

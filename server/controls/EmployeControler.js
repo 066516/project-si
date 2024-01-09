@@ -35,7 +35,10 @@ exports.getEmploye = async (req, res) => {
 // Get all employees
 exports.getAllEmployes = async (req, res) => {
   try {
-    const employes = await Employe.find({ workIn: req.params.id });
+    const employes = await Employe.find({
+      workIn: req.params.id,
+      trash: false,
+    });
     res.status(200).send(employes);
   } catch (error) {
     res.status(500).send(error);
@@ -65,9 +68,12 @@ exports.updateEmploye = async (req, res) => {
 // Delete an employee by ID
 exports.deleteEmploye = async (req, res) => {
   try {
-    const employe = await Employe.findOneAndDelete({
+    const employe = await Employe.findOne({
       EmployeID: req.params.id,
+      trash: false,
     });
+    employe.trash = true;
+    employe.save();
     if (!employe) {
       return res.status(404).send({ message: "Employee not found" });
     }

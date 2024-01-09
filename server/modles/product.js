@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema({
   IsRawMaterial: { type: Boolean, default: true },
   price: { type: Number, required: true },
   count: { type: Number, default: 0 },
+  trash: { type: Boolean, default: false },
   // _id: { type: Number },
 });
 productSchema.pre("save", async function (next) {

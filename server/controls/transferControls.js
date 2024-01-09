@@ -119,19 +119,58 @@ exports.getAllTransferts = async (req, res) => {
 // Update a Transfert entry by ID
 exports.updateTransfert = async (req, res) => {
   try {
+    // Find the existing transfer
+    const existingTransfert = await Transfert.findOne({
+      id_transfert: req.params.id,
+    });
+    if (!existingTransfert) {
+      return res.status(404).send({ message: "Transfert not found" });
+    }
+
+    // Calculate the quantity difference
+    const quantityDifference =
+      req.body.quantite_transfert - existingTransfert.quantite_transfert;
+
+    // Update the transfer
     const updatedTransfert = await Transfert.findOneAndUpdate(
       { id_transfert: req.params.id },
       req.body,
       { new: true }
     );
-    if (!updatedTransfert) {
-      return res.status(404).send({ message: "Transfert not found" });
+
+    // Update stock in origin shop
+    const stockOrigin = await ProduitStock.findOne({
+      id_produit: updatedTransfert.id_produit,
+      id_shop: existingTransfert.id_centre_origin, // Assuming this field exists
+    });
+
+    if (stockOrigin) {
+      stockOrigin.quantite_en_stock -= quantityDifference;
+      await stockOrigin.save();
+    } else {
+      // Handle error if stock does not exist
     }
+
+    // Update stock in destination shop
+    const stockDestination = await ProduitStock.findOne({
+      id_produit: updatedTransfert.id_produit,
+      id_shop: updatedTransfert.id_centre,
+    });
+
+    if (stockDestination) {
+      stockDestination.quantite_en_stock += quantityDifference;
+      await stockDestination.save();
+    } else {
+      // Handle error if stock does not exist
+    }
+
+    // Send response
     res.status(200).send({
       message: "Transfert updated successfully",
       data: updatedTransfert,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -139,17 +178,48 @@ exports.updateTransfert = async (req, res) => {
 // Delete a Transfert entry by ID
 exports.deleteTransfert = async (req, res) => {
   try {
-    const transfert = await Transfert.findOneAndDelete({
-      id_transfert: req.params.id,
-    });
+    // Find the transfer without deleting it yet
+    const transfert = await Transfert.findOne({ id_transfert: req.params.id });
     if (!transfert) {
       return res.status(404).send({ message: "Transfert not found" });
     }
+
+    // Update stock in origin shop
+    const stockOrigin = await ProduitStock.findOne({
+      id_produit: transfert.id_produit,
+      id_shop: transfert.id_centre_origin, // Assuming this field exists
+    });
+
+    if (stockOrigin) {
+      stockOrigin.quantite_en_stock += transfert.quantite_transfert;
+      await stockOrigin.save();
+    } else {
+      // Handle error if stock does not exist
+    }
+
+    // Update stock in destination shop
+    const stockDestination = await ProduitStock.findOne({
+      id_produit: transfert.id_produit,
+      id_shop: transfert.id_centre,
+    });
+
+    if (stockDestination) {
+      stockDestination.quantite_en_stock -= transfert.quantite_transfert;
+      await stockDestination.save();
+    } else {
+      // Handle error if stock does not exist
+    }
+
+    // Now delete the transfer
+    await Transfert.findOneAndDelete({ id_transfert: req.params.id });
+
+    // Send response
     res.status(200).send({ message: "Transfert deleted successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
-};
+};  
 
 exports.getRecentTransfers = async (req, res) => {
   try {

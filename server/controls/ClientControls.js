@@ -30,7 +30,7 @@ exports.getClient = async (req, res) => {
 // Get all clients
 exports.getAllClients = async (req, res) => {
   try {
-    const clients = await Client.find({ id_shop: req.params.id });
+    const clients = await Client.find({ id_shop: req.params.id, trash: false });
     res.status(200).send(clients);
   } catch (error) {
     res.status(500).send(error);
@@ -59,7 +59,12 @@ exports.updateClient = async (req, res) => {
 // Delete a client by ID
 exports.deleteClient = async (req, res) => {
   try {
-    const client = await Client.findOneAndDelete({ clientId: req.params.id });
+    const client = await Client.findOne({
+      clientId: req.params.id,
+      trash: false,
+    });
+    client.trash = true;
+
     if (!client) {
       return res.status(404).send({ message: "Client not found !!!!!" });
     }

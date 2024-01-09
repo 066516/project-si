@@ -10,7 +10,7 @@ exports.createAchat = async (req, res) => {
     id_produit,
     quantite_achat,
     statut_paiement_achat,
-    montant_encaisse_vente,
+    montant_encaisse_achat,
   } = req.body;
 
   try {
@@ -52,7 +52,8 @@ exports.createAchat = async (req, res) => {
       });
 
       if (fournisseur) {
-        fournisseur.solde_fournisseur += newAchat.montant_total_achat -montant_encaisse_vente;
+        fournisseur.solde_fournisseur +=
+          newAchat.montant_total_achat - montant_encaisse_achat;
 
         await fournisseur.save();
       } else {
@@ -123,6 +124,7 @@ exports.updateAchat = async (req, res) => {
     }
 
     const oldQuantiteAchat = existingAchat.quantite_achat;
+    const oldMontantEncaisse = existingAchat.montant_encaisse_achat;
 
     // Update the Achat
     const updatedAchat = await Achat.findOneAndUpdate(
@@ -136,6 +138,7 @@ exports.updateAchat = async (req, res) => {
     }
 
     const newQuantiteAchat = updatedAchat.quantite_achat;
+    const newMontantEncaisse = updatedAchat.montant_encaisse_achat;
 
     // Adjust the stock if the quantity purchased has changed
     if (oldQuantiteAchat !== newQuantiteAchat) {
@@ -143,9 +146,24 @@ exports.updateAchat = async (req, res) => {
         id_produit: updatedAchat.id_produit,
       });
       if (stockItem) {
-        // Adjust the stock based on the difference in quantities
         stockItem.quantite_en_stock -= newQuantiteAchat - oldQuantiteAchat;
         await stockItem.save();
+      }
+    }
+
+    // Update the solde_fournisseur if montant_encaisse_achat has changed
+    if (oldMontantEncaisse !== newMontantEncaisse) {
+      // Assuming you have a model for Fournisseur and a reference in Achat
+      const fournisseur = await Fournisseur.findOne({
+        Id_fournisseur: updatedAchat.id_fournisseur,
+      });
+      if (fournisseur) {
+        // Adjust the solde_fournisseur based on the difference in montant_encaisse_achat
+        fournisseur.solde_fournisseur +=
+          newMontantEncaisse - oldMontantEncaisse;
+        await fournisseur.save();
+      } else {
+        // Handle cases where the fournisseur is not found
       }
     }
 
@@ -161,15 +179,13 @@ exports.updateAchat = async (req, res) => {
 exports.deleteAchat = async (req, res) => {
   try {
     // Retrieve the achat to get its details before deletion
-    const achat = await Achat.findOneAndDelete({ id_achat: req.params.id });
+    const achat = await Achat.findOne({ id_achat: req.params.id });
     if (!achat) {
       return res.status(404).send({ message: "Achat not found" });
     }
 
-    // Store the quantity purchased and product ID before deleting the achat
-    const { quantite_achat, id_produit } = achat;
-
-    // Delete the achat
+    // Store the quantity purchased, product ID, and montant_encaisse_achat before deleting the achat
+    const { quantite_achat, id_produit, montant_encaisse_achat } = achat;
 
     // Update the stock
     const stockItem = await ProduitStock.findOne({ id_produit });
@@ -177,6 +193,20 @@ exports.deleteAchat = async (req, res) => {
       stockItem.quantite_en_stock += quantite_achat; // Add back the quantity to the stock
       await stockItem.save();
     }
+
+    // Update the sold fournisseur (supplier's balance)
+    // Assuming you have a model to represent suppliers, for example Fournisseur
+    const fournisseur = await Fournisseur.findOne({
+      /* appropriate query to find the supplier */
+    });
+    if (fournisseur) {
+      // Adjust the supplier's balance
+      fournisseur.sold -= montant_encaisse_achat;
+      await fournisseur.save();
+    }
+
+    // Delete the achat
+    await Achat.findOneAndDelete({ id_achat: req.params.id });
 
     res.status(200).send({ message: "Achat deleted successfully" });
   } catch (error) {

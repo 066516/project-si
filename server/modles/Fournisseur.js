@@ -9,6 +9,7 @@ const fournisseurSchema = new mongoose.Schema({
   telephone_fournisseur: { type: String, required: true },
   montant_encaisse_vente: { type: Number, default: 0 },
   solde_fournisseur: { type: Number, default: 0 },
+  trash: { type: Boolean, default: false },
 });
 
 fournisseurSchema.pre("save", async function (next) {

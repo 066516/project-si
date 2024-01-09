@@ -15,7 +15,6 @@ exports.createMasrouf = async (req, res) => {
 
     // Check if employe's salary is sufficient for the deduction
 
-
     // Deduct montant_masrouf from the employe's salary
     employe.salary -= montant_masrouf;
     await employe.save();
@@ -54,15 +53,25 @@ exports.getAllMasroufs = async (req, res) => {
 
 // Update
 exports.updateMasrouf = async (req, res) => {
+  const { id_employe } = req.body;
   try {
-    const updatedMasrouf = await Masrouf.findByIdAndUpdate(
-      req.params.id,
+    const oldMasrouf = await Masrouf.findOne({ id_masrouf: req.params.id });
+
+    const updatedMasrouf = await Masrouf.findOneAndUpdate(
+      { id_masrouf: req.params.id },
       req.body,
       { new: true }
     );
     if (!updatedMasrouf) {
       return res.status(404).send({ message: "Masrouf not found" });
     }
+    const employe = await Employe.findOne({ EmployeID: id_employe });
+    if (!employe) {
+      return res.status(404).send({ message: "Employe not found" });
+    }
+    employe.salary -=
+      oldMasrouf.montant_masrouf + updatedMasrouf.montant_masrouf;
+    await employe.save();
     res.status(200).send(updatedMasrouf);
   } catch (error) {
     res.status(500).send(error);
@@ -71,11 +80,20 @@ exports.updateMasrouf = async (req, res) => {
 
 // Delete
 exports.deleteMasrouf = async (req, res) => {
+  const { id_employe } = req.body;
   try {
-    const masrouf = await Masrouf.findByIdAndDelete(req.params.id);
+    const masrouf = await Masrouf.findOneAndDelete({
+      id_masrouf: req.params.id,
+    });
     if (!masrouf) {
       return res.status(404).send({ message: "Masrouf not found" });
     }
+    const employe = await Employe.findOne({ EmployeID: id_employe });
+    if (!employe) {
+      return res.status(404).send({ message: "Employe not found" });
+    }
+    employe.salary -= masrouf.montant_masrouf;
+    await employe.save();
     res.status(200).send({ message: "Masrouf deleted successfully" });
   } catch (error) {
     res.status(500).send(error);

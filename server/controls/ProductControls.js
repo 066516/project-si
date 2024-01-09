@@ -51,7 +51,7 @@ exports.getProduct = async (req, res) => {
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({ trash: false });
     res.status(200).send(products);
   } catch (error) {
     res.status(500).send(error);
@@ -97,9 +97,12 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findOneAndDelete({
+    const product = await Product.findOne({
       productId: req.params.id,
+      trash: false,
     });
+    product.trash = true;
+    product.save();
     const stock = await ProduitStock.findOneAndDelete({
       id_produit: req.params.id,
     });
