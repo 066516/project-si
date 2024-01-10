@@ -31,7 +31,7 @@ exports.getProduitStock = async (req, res) => {
 // Get all ProduitStock entries
 exports.getAllProduitStocks = async (req, res) => {
   try {
-    let produitStocks = await ProduitStock.find({ id_shop:req.params.shop });
+    let produitStocks = await ProduitStock.find({ id_shop: req.params.shop });
     produitStocks = await Promise.all(
       produitStocks.map(async (stock) => {
         stock = stock.toObject(); // Convert Mongoose document to a plain JavaScript object
@@ -92,6 +92,52 @@ exports.deleteAllProduitStock = async (req, res) => {
 
     res.status(200).send({ message: " deleted successfully" });
   } catch (error) {
+    res.status(500).send(error);
+  }
+};
+// Replace with the actual path
+
+exports.getProductStockInfo = async (req, res) => {
+  try {
+    const aggregateResult = await ProduitStock.aggregate([
+      { $match: { id_shop: 1 } },
+      {
+        $group: {
+          _id: "$id_produit",
+          totalUnits: { $sum: "$quantite_en_stock" }, // Summing up quantities for each product
+        },
+      },
+      { $sort: { totalUnits: -1 } }, // Sorting by total units in descending order
+      { $limit: 1 }, // Limiting to the top product
+      {
+        $lookup: {
+          from: "products", // Make sure this matches your products collection name
+          localField: "_id", // 'id_produit' in 'ProduitStock' collection
+          foreignField: "productId", // 'productId' in 'Product' collection
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" }, // Unwind for easier access to product details
+    ]);
+
+    // Also calculate the total number of products and total units in a separate query
+    const totalStats = await ProduitStock.aggregate([
+      { $match: { id_shop: 1 } },
+      {
+        $group: {
+          _id: null,
+          totalProducts: { $sum: 1 },
+          totalUnits: { $sum: "$quantite_en_stock" },
+        },
+      },
+    ]);
+
+    res.status(200).send({
+      topProduct: aggregateResult[0] ? aggregateResult[0] : null,
+      totalStats: totalStats[0] ? totalStats[0] : null,
+    });
+  } catch (error) {
+    console.error("Error getting product stock info:", error);
     res.status(500).send(error);
   }
 };
