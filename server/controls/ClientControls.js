@@ -64,6 +64,7 @@ exports.deleteClient = async (req, res) => {
       trash: false,
     });
     client.trash = true;
+    client.save();
 
     if (!client) {
       return res.status(404).send({ message: "Client not found !!!!!" });

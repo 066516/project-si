@@ -20,7 +20,7 @@ function AddVente({ setAddVente }) {
       const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/products`);
-        console.log(response.data);
+        console.log("products", response.data);
         if (Array.isArray(response.data)) {
           setProducts(response.data); // Directly store the data if it's an array
         } else {
@@ -35,8 +35,8 @@ function AddVente({ setAddVente }) {
     const fetchClients = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/clients`);
-        console.log(response.data);
+        const response = await axios.get(`${apiUrl}/clients/1`);
+        console.log("clients:", response.data);
         if (Array.isArray(response.data)) {
           setClients(response.data); // Directly store the data if it's an array
         } else {
@@ -77,6 +77,7 @@ function AddVente({ setAddVente }) {
           id_produit: selectedProductId,
           quantite_vendue: count,
           montant_encaisse_vente: Amount,
+          id_shop: 1,
           statut_paiement_vente: selectedTypePay === "Totalment" ? true : false,
         })
         .then((response) => {

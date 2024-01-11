@@ -27,8 +27,14 @@ function HeaderTopsDealers() {
           <div className=" border rounded-xl text-center bg-blue2 text-white py-2 font-medium uppercase ">
             <h1>Top Fournisseur</h1>
             <h2>
-              {tops.topFournisseur[0].fournisseurDetails.Nom_fournisseur}{" "}
-              {tops.topFournisseur[0].fournisseurDetails.Prenom_fournisseur}{" "}
+              {tops.topFournisseur[0] == null ? (
+                "no one "
+              ) : (
+                <>
+                  {tops.topFournisseur[0].fournisseurDetails.Nom_fournisseur}{" "}
+                  {tops.topFournisseur[0].fournisseurDetails.Prenom_fournisseur}
+                </>
+              )}
             </h2>
           </div>
           <div className=" border rounded-xl text-center bg-blue2 text-white py-2 font-medium uppercase">

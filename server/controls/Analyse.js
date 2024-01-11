@@ -8,30 +8,37 @@ const Client = require("../modles/client");
 // Adjust the path as necessary
 exports.analyseTotalMontant = async (req, res) => {
   try {
+    const currentYear = new Date().getFullYear(); // Get the current year
+
     const totalPerMonth = await Achat.aggregate([
       {
-        $group: {
-          _id: {
-            year: { $: "$date_achat" },
-            month: { $yearmonth: "$date_achat" },
+        $match: {
+          date_achat: {
+            $gte: new Date(`${currentYear}-01-01`), // Greater than or equal to the first day of the current year
+            $lt: new Date(`${currentYear + 1}-01-01`), // Less than the first day of the next year
           },
-          totalMontant: { $sum: "$montant_total_achat" },
         },
       },
       {
-        $sort: { "_id.year": 1, "_id.month": 1 },
+        $group: {
+          _id: { month: { $month: "$date_achat" } }, // Group by month
+          totalMontant: { $sum: "$montant_total_achat" }, // Sum the 'montant_total_achat' for each group
+        },
+      },
+      {
+        $sort: { "_id.month": 1 }, // Sort by month in ascending order
       },
     ]);
 
     // Formatting the result for better readability
     const formattedResult = totalPerMonth.map((group) => ({
-      year: group._id.year,
       month: group._id.month,
       totalMontant: group.totalMontant,
     }));
 
     res.status(200).send(formattedResult);
   } catch (error) {
+    console.error("Error in analyseTotalMontant:", error);
     res.status(500).send(error);
   }
 };

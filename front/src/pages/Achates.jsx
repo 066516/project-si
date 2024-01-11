@@ -112,7 +112,7 @@ function Achates() {
                     className="grid  md:grid-cols-7  grid-cols-5 text-center py-2 px-2 items-center"
                   >
                     <h1 className="font-medium text-green-500">
-                      {achat.productDetails.name}
+                        {achat.productDetails.name}
                     </h1>
                     <h2 className="font-medium text-blue-500">
                       {achat.fournisseurDetails.Nom_fournisseur}{" "}

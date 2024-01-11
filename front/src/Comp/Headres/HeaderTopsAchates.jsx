@@ -28,8 +28,14 @@ function HeaderTopsAchates() {
           <div className=" border rounded-xl text-center bg-purple text-white py-2 font-medium uppercase ">
             <h1>Top Fournisseur</h1>
             <h2>
-              {tops.topFournisseur[0].fournisseurDetails.Nom_fournisseur}{" "}
-              {tops.topFournisseur[0].fournisseurDetails.Prenom_fournisseur}{" "}
+              {tops.topFournisseur[0] == null ? (
+                "no one "
+              ) : (
+                <>
+                  {tops.topFournisseur[0].fournisseurDetails.Nom_fournisseur}{" "}
+                  {tops.topFournisseur[0].fournisseurDetails.Prenom_fournisseur}
+                </>
+              )}
             </h2>
           </div>
           <div className=" border rounded-xl text-center bg-purple text-white py-2 font-medium uppercase">
@@ -38,7 +44,7 @@ function HeaderTopsAchates() {
           </div>
           <div className=" border rounded-xl text-center bg-purple text-white py-2 font-medium uppercase">
             <h1>Top product</h1>
-            <h2>  {tops.topProduct[0].productDetails.name}</h2>
+            {/* <h2>  {tops.topProduct[0].productDetails.name}</h2> */}
           </div>
         </div>
       )}

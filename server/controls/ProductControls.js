@@ -97,16 +97,34 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findOne({
-      productId: req.params.id,
-      trash: false,
-    });
-    product.trash = true;
-    product.save();
-    const stock = await ProduitStock.findOneAndDelete({
-      id_produit: req.params.id,
-    });
-    if (!product || !stock) {
+    const updatedProduct = await Product.findOneAndUpdate(
+      {
+        productId: req.params.id,
+        trash: false,
+      },
+      {
+        $set: { trash: true },
+      },
+      {
+        new: true, // Returns the updated document
+      }
+    );
+
+    const stock = await ProduitStock.findOneAndUpdate(
+      {
+        id_produit: req.params.id,
+        trash: false,
+      },
+      {
+        $set: { trash: true },
+      },
+      {
+        new: true, // Returns the updated document
+      }
+    );
+    stock.trash = true;
+    stock.save();
+    if (!updatedProduct || !stock) {
       return res.status(404).send({ message: "Product and Stock not found" });
     }
     res

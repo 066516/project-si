@@ -6,6 +6,7 @@ const produitStockSchema = new mongoose.Schema({
   id_produit: { type: Number, ref: "Product", required: true },
   id_shop: { type: Number, ref: "Shop", required: true, default: 1 },
   quantite_en_stock: { type: Number, required: true, default: 0 },
+  trash: { type: Boolean, default: false },
 });
 produitStockSchema.pre("save", async function (next) {
   if (this.isNew) {

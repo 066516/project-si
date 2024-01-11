@@ -31,7 +31,10 @@ exports.getProduitStock = async (req, res) => {
 // Get all ProduitStock entries
 exports.getAllProduitStocks = async (req, res) => {
   try {
-    let produitStocks = await ProduitStock.find({ id_shop: req.params.shop });
+    let produitStocks = await ProduitStock.find({
+      id_shop: req.params.shop,
+      trash: false,
+    });
     produitStocks = await Promise.all(
       produitStocks.map(async (stock) => {
         stock = stock.toObject(); // Convert Mongoose document to a plain JavaScript object
@@ -75,7 +78,12 @@ exports.updateProduitStock = async (req, res) => {
 // Delete a ProduitStock entry by ID
 exports.deleteProduitStock = async (req, res) => {
   try {
-    const produitStock = await ProduitStock.findByIdAndDelete(req.params.id);
+    const produitStock = await ProduitStock.findOne({
+      stockId: req.params.id,
+      trash: false,
+    });
+    produitStock.trash = true;
+    produitStock.save();
     if (!produitStock) {
       return res.status(404).send({ message: "ProduitStock entry not found" });
     }
@@ -100,7 +108,7 @@ exports.deleteAllProduitStock = async (req, res) => {
 exports.getProductStockInfo = async (req, res) => {
   try {
     const aggregateResult = await ProduitStock.aggregate([
-      { $match: { id_shop: 1 } },
+      { $match: { id_shop: 1, trash: false } },
       {
         $group: {
           _id: "$id_produit",
@@ -122,7 +130,7 @@ exports.getProductStockInfo = async (req, res) => {
 
     // Also calculate the total number of products and total units in a separate query
     const totalStats = await ProduitStock.aggregate([
-      { $match: { id_shop: 1 } },
+      { $match: { id_shop: 1, trash: false } },
       {
         $group: {
           _id: null,

@@ -18,7 +18,7 @@ function Ventes() {
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/ventes/15`);
+        const response = await axios.get(`${apiUrl}/ventes/1`);
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setVentesListe(response.data); // Directly store the data if it's an array

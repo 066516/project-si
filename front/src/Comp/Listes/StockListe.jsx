@@ -27,7 +27,7 @@ function StockListe({ setDeleteProduct, setEditPoductt, setProduct }) {
     };
 
     fetchVentes();
-  }, []);
+  }, );
   const handleEDit = (product) => {
     setProduct(product);
     setEditPoductt(true);
