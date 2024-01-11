@@ -68,12 +68,18 @@ exports.updateEmploye = async (req, res) => {
 // Delete an employee by ID
 exports.deleteEmploye = async (req, res) => {
   try {
-    const employe = await Employe.findOne({
-      EmployeID: req.params.id,
-      trash: false,
-    });
-    employe.trash = true;
-    employe.save();
+    const employe = await Employe.findOneAndUpdate(
+      {
+        EmployeID: req.params.id,
+        trash: false,
+      },
+      {
+        $set: { trash: true },
+      },
+      {
+        new: true, // Returns the updated document
+      }
+    );
     if (!employe) {
       return res.status(404).send({ message: "Employee not found" });
     }

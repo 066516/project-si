@@ -69,12 +69,18 @@ exports.updateFournisseur = async (req, res) => {
 // Delete a fournisseur by ID
 exports.deleteFournisseur = async (req, res) => {
   try {
-    const fournisseur = await Fournisseur.findOne({
-      Id_fournisseur: req.params.id,
-      trash: false,
-    });
-    fournisseur.trash = true;
-    fournisseur.save();
+    const fournisseur = await Fournisseur.findOneAndUpdate(
+      {
+        Id_fournisseur: req.params.id,
+        trash: false,
+      },
+      {
+        $set: { trash: true },
+      },
+      {
+        new: true, // Returns the updated document
+      }
+    );
     if (!fournisseur) {
       return res.status(404).send({ message: "Fournisseur not found" });
     }

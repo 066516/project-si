@@ -23,19 +23,34 @@ function HeaderStock() {
   }, []);
   return (
     <>
-      {!loading && (
+      {!loading && tops.totalStats != null && (
         <div className="grid md:grid-cols-3 gap-2">
           <div className=" border rounded-xl text-center bg-red-500 text-white py-2 font-medium uppercase ">
             <h1>Number product Stock</h1>
-            <h2> {tops.totalStats.totalProducts}</h2>
+            <h2>
+              {" "}
+              {tops.totalStats.totalProducts == null
+                ? 0
+                : tops.totalStats.totalProducts}
+            </h2>
           </div>
           <div className=" border rounded-xl text-center bg-red-500 text-white py-2 font-medium uppercase">
             <h1>Number unite</h1>
-            <h2> {tops.totalStats.totalUnits}</h2>
+            <h2>
+              {" "}
+              {tops.totalStats.totalUnits == null
+                ? 0
+                : tops.totalStats.totalUnits}
+            </h2>
           </div>
           <div className=" border rounded-xl text-center bg-red-500 text-white py-2 font-medium uppercase">
             <h1>Grand product Stock</h1>
-            <h2> {tops.topProduct.productDetails.name}</h2>
+            <h2>
+              {" "}
+              {tops.topProduct.productDetails.name != null
+                ? tops.topProduct.productDetails.name
+                : null}
+            </h2>
           </div>
         </div>
       )}
