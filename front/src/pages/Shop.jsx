@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import ShopHeader from "../Comp/Headres/ShopHeader";
 import ShopTransferes from "../Comp/Listes/ShopTransferes";
 import ShopListeVentes from "../Comp/Listes/ShopListeVentes";
+import DealersListeClients from "../Comp/Listes/DealersListeClients";
+import StockListe from "../Comp/Listes/StockListe";
 import AddTransfer from "../Comp/pupouts/AddPupouts/AddTransfer";
 import DeleteTransfer from "../Comp/pupouts/DeletePupouts/DeleteTransfer";
 import UpdateTransfer from "../Comp/pupouts/Updates/UpdateTransfer";
@@ -15,6 +17,12 @@ import UpdateEmploye from "../Comp/pupouts/Updates/UpdateEmploye";
 import DeleteEmploye from "../Comp/pupouts/DeletePupouts/DeleteEmploye";
 import Salary from "../Comp/pupouts/pay/Salary";
 import Absence from "../Comp/pupouts/pay/Absence";
+import AddClient from "../Comp/pupouts/AddPupouts/AddClient";
+import DeleteClient from "../Comp/pupouts/DeletePupouts/DeleteClient";
+import UpdateClient from "../Comp/pupouts/Updates/UpdateClient";
+import AddProduct from "../Comp/pupouts/AddPupouts/AddProduct";
+import UpdateProduct from "../Comp/pupouts/Updates/UpdatePtoduct";
+import DeleteProduct from "../Comp/pupouts/DeletePupouts/DeleteProduct";
 
 function Shop() {
   const location = useLocation();
@@ -35,7 +43,19 @@ function Shop() {
   const [deleteEmploye, setDeleteEmploye] = useState(false);
   const [EditEmploye, setEditEmploye] = useState(false);
   const [newEmploye, setAddEmplye] = useState(false);
-
+  const [newClient, setAddClient] = useState(false);
+  const [deleteClient, setDeleteClient] = useState(false);
+  const [client, setClient] = useState(null);
+  const [EditClient, setEditClient] = useState(false);
+  const [newPoduct, setAddProduct] = useState(false);
+  const [EditPoduct, setEditPoductt] = useState(false);
+  const [deletePoduct, setDeleteProduct] = useState(false);
+  const [product, setProduct] = useState({
+    name: "toamto",
+    catogry: "hh",
+    count: 22,
+    price: 34,
+  });
   useEffect(() => {
     console.log(idShop);
   });
@@ -105,6 +125,40 @@ function Shop() {
           <AddEmploye setAddEmplye={setAddEmplye} />
         </div>
       )}
+      {newClient && (
+        <div className="w-screen h-screen">
+          <AddClient setAddClient={setAddClient} />
+        </div>
+      )}
+      {deleteClient && (
+        <div className="w-screen h-screen">
+          <DeleteClient setDeleteClient={setDeleteClient} client={client} />
+        </div>
+      )}
+      {EditClient && (
+        <div className="w-screen h-screen">
+          <UpdateClient setEditClient={setEditClient} client={client} />
+        </div>
+      )}
+      {newPoduct && (
+        <div className="w-screen h-screen">
+          <AddProduct setAddProduct={setAddProduct} />
+        </div>
+      )}
+      {EditPoduct && (
+        <div className="w-screen h-screen">
+          <UpdateProduct setEditPoductt={setEditPoductt} product={product} />
+        </div>
+      )}
+      {deletePoduct && (
+        <div className="w-screen h-screen">
+          <DeleteProduct
+            setDeleteProduct={setDeleteProduct}
+            product={product}
+          />
+        </div>
+      )}
+
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
       >
@@ -140,6 +194,36 @@ function Shop() {
           >
             Employe liste
           </h1>
+          <h1
+            className={` text-center shadow-r  ${
+              show === 4 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(4);
+            }}
+          >
+            Client liste
+          </h1>
+          <h1
+            className={` text-center shadow-r  ${
+              show === 5 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(5);
+            }}
+          >
+            stock liste
+          </h1>
+          <h1
+            className={` text-center shadow-r  ${
+              show === 6 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(6);
+            }}
+          >
+            pv liste
+          </h1>
         </div>
         {show == 1 && (
           <ShopTransferes
@@ -154,8 +238,9 @@ function Shop() {
           <ShopListeVentes
             setInfo={setInfo}
             setDeleteVente={setDeleteVente}
-            setEditVente={setAddVente}
+            setEditVente={setEditVente}
             idShop={idShop}
+            setAddVente={setAddVente}
           />
         )}
         {show == 3 && (
@@ -167,6 +252,22 @@ function Shop() {
             setpaySalary={setpaySalary}
             setAbsence={setAbsence}
             idShop={idShop}
+          />
+        )}
+        {show == 4 && (
+          <DealersListeClients
+            setAddClient={setAddClient}
+            setDeleteClient={setDeleteClient}
+            setClient={setClient}
+            setEditClient={setEditClient}
+          />
+        )}
+        {show == 5 && (
+          <StockListe
+            setEditPoductt={setEditPoductt}
+            setDeleteProduct={setDeleteProduct}
+            setProduct={setProduct}
+            setAddProduct={setAddProduct}
           />
         )}
       </div>

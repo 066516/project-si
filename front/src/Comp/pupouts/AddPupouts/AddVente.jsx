@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
+import { useLocation } from "react-router-dom";
 
 function AddVente({ setAddVente }) {
   const [products, setProducts] = useState([]);
@@ -11,7 +12,9 @@ function AddVente({ setAddVente }) {
   const [selectedTypePay, setSelectedTypePay] = useState();
   const [loading, setLaoding] = useState(true);
   const [loadingPost, setLaodingPost] = useState(true);
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
   const [count, setCount] = useState(0);
   const [Amount, setAmount] = useState(0);
   useEffect(() => {
@@ -35,7 +38,9 @@ function AddVente({ setAddVente }) {
     const fetchClients = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/clients/1`);
+        const response = await axios.get(
+          `${apiUrl}/clients/${idShop == null ? 1 : parseInt(idShop)}`
+        );
         console.log("clients:", response.data);
         if (Array.isArray(response.data)) {
           setClients(response.data); // Directly store the data if it's an array
@@ -77,7 +82,7 @@ function AddVente({ setAddVente }) {
           id_produit: selectedProductId,
           quantite_vendue: count,
           montant_encaisse_vente: Amount,
-          id_shop: 1,
+          id_shop: idShop == null ? 1 : parseInt(idShop),
           statut_paiement_vente: selectedTypePay === "Totalment" ? true : false,
         })
         .then((response) => {

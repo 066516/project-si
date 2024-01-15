@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
+import { useLocation } from "react-router-dom";
 
 function UpdateVentes({ setEditVente, info }) {
   // Sample data for products and clients
@@ -17,7 +18,9 @@ function UpdateVentes({ setEditVente, info }) {
 
   const [count, setCount] = useState(info.quantite_vendue);
   const [Amount, setAmount] = useState(info.prix_unitaire_vente);
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
@@ -39,7 +42,9 @@ function UpdateVentes({ setEditVente, info }) {
     const fetchClients = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/clients`);
+        const response = await axios.get(
+          `${apiUrl}/clients/${idShop == null ? 1 : parseInt(idShop)}`
+        );
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setClients(response.data); // Directly store the data if it's an array

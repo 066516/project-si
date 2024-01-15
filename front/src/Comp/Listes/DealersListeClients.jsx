@@ -3,6 +3,7 @@ import { MdEdit, MdDeleteForever } from "react-icons/md";
 import { GiPayMoney } from "react-icons/gi";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function DealersListeClients({
   setAddClient,
@@ -13,12 +14,16 @@ function DealersListeClients({
 }) {
   const [clientsListe, setclientsListe] = useState([]);
   const [loading, setLaoding] = useState(true);
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
   useEffect(() => {
     const fetchVentes = async () => {
       const apiUrl = "http://localhost:3000";
       try {
-        const response = await axios.get(`${apiUrl}/clients/1`);
+        const response = await axios.get(
+          `${apiUrl}/clients/${idShop == null ? 1 : idShop}`
+        );
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setclientsListe(response.data); // Directly store the data if it's an array
@@ -33,7 +38,7 @@ function DealersListeClients({
     };
 
     fetchVentes();
-  }, );
+  });
   const handleEDit = (client) => {
     setClient(client);
     setEditClient(true);

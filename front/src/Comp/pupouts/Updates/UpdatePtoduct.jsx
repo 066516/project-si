@@ -3,16 +3,12 @@ import React, { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function UpdateProduct({ setEditPoductt, product }) {
-  console.log('====================================');
-  console.log(product);
-  console.log('====================================');
   const [name, setName] = useState(product.productDetails.name);
   const [Catogry, setCatogry] = useState(product.productDetails.categoryId);
   const [price, setPrice] = useState(product.productDetails.price);
   const [Count, setCount] = useState(product.quantite_en_stock);
 
   const handleSubmit = (event) => {
-    event.preventDefault();
     function updateDate() {
       return axios
         .put(`http://localhost:3000/product/${product.id_produit}`, {

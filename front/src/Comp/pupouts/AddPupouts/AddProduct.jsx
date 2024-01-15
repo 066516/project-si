@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
+import { useLocation } from "react-router-dom";
 
 function AddProduct({ setAddProduct }) {
   const [name, setName] = useState("");
   const [Catogry, setCatogry] = useState("");
   const [price, setPrice] = useState("");
   const [Count, setCount] = useState("");
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
   const handleSubmit = (event) => {
-    event.preventDefault();
     function postData() {
       return axios
         .post("http://localhost:3000/product", {
@@ -17,7 +19,7 @@ function AddProduct({ setAddProduct }) {
           price,
           count: Count,
           categoryId: Catogry,
-          id_shop: 1,
+          id_shop: idShop == null ? 1 : parseInt(idShop),
         })
         .then((response) => {
           // Handle response here

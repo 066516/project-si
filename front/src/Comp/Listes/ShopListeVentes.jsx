@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
-import { IoMdSearch } from "react-icons/io";
+import { IoMdAdd, IoMdSearch } from "react-icons/io";
 import axios from "axios";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
-function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
+function ShopListeVentes({
+  setInfo,
+  setEditVente,
+  setDeleteVente,
+  idShop,
+  setAddVente,
+}) {
   const [ventesListe, setVentesListe] = useState([]);
   const [loading, setLaoding] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState("client"); // Default search type
+
+  const [filteredData, setFilteredData] = useState([]); // Data to display
 
   useEffect(() => {
     console.log("Fetching ventes...");
@@ -14,7 +24,10 @@ function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
         const response = await axios.get(`${apiUrl}/ventes/${idShop}`);
         console.log(response.data);
         if (Array.isArray(response.data)) {
-          setVentesListe(response.data); // Directly store the data if it's an array
+          setVentesListe(response.data);
+          setFilteredData(response.data);
+
+          // Directly store the data if it's an array
         } else {
           console.error("Expected an array, received:", typeof response.data);
         }
@@ -27,7 +40,7 @@ function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
     };
 
     fetchVentes();
-  }, );
+  }, [ventesListe.length]);
 
   const handleEDit = (vente) => {
     console.log(vente);
@@ -48,6 +61,38 @@ function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
     // Format the date as "dd/mm/yyyy"
     return `${day}/${month}/${year}`;
   }
+  const handleSearch = (searchValue, searchType) => {
+    setSearchTerm(searchValue);
+    let filtered;
+    switch (searchType) {
+      case "client":
+        // Filter logic for client
+        filtered = ventesListe.filter((item) =>
+          `${item.clientDetails.nomClient} ${item.clientDetails.prenomClient}`
+            .toLowerCase()
+            .includes(searchValue.toLowerCase())
+        );
+        break;
+      case "product":
+        // Filter logic for product
+        filtered = ventesListe.filter(
+          (item) =>
+            item.productDetails.name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) // Adjust if necessary
+        );
+        break;
+      case "date":
+        // Filter logic for date
+        filtered = ventesListe.filter(
+          (item) => formatDate(item.date_vente) === formatDate(searchValue)  // Adjust the property to match your date format
+        );
+        break;
+      default:
+        filtered = ventesListe;
+    }
+    setFilteredData(filtered);
+  };
 
   return (
     <div className="w-full text-center font-medium mt-5">
@@ -57,22 +102,46 @@ function ShopListeVentes({ setInfo, setEditVente, setDeleteVente, idShop }) {
         </h1>
         <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-red-500 text-red-500 rounded-xl border-[2px]">
           Search Vente
-          <IoMdSearch fontSize="25px" />
+          <IoMdAdd
+            fontSize="25px"
+            onClick={() => {
+              setAddVente(true);
+            }}
+          />
         </h1>
       </div>
-      <div className="grid grid-cols-6 text-center bg-gray-300 px-2 py-2 font-semibold mt-5">
+      <div>
+        <select
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
+        >
+          <option value="client">Client</option>
+          <option value="product">Product</option>
+          <option value="date">Date</option>
+        </select>
+        <input
+          type={searchType === "date" ? "date" : "text"}
+          placeholder={`Search by ${searchType}...`}
+          value={searchTerm}
+          onChange={(event) => handleSearch(event.target.value, searchType)}
+        />
+        {/* Render filteredData */}
+      </div>
+
+      <div className="grid grid-cols-7 text-center bg-gray-300 px-2 py-2 font-semibold mt-5">
         <h1>Produit </h1>
         <h2>Client</h2>
         <h2 className="hidden md:flex">Date</h2>
         <h2 className=" ">Count</h2>
         <h2 className="">Total Amount</h2>
         <h2>Paiment type</h2>
+        <h2 className="text-red-500">Update Or delete Vente</h2>
       </div>
 
       <div className="h-[240px] overflow-y-scroll ">
         {loading
           ? "loading"
-          : ventesListe.map((vente) => {
+          : filteredData.map((vente) => {
               return (
                 <div
                   key={vente._id}
