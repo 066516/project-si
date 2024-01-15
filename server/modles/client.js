@@ -9,7 +9,7 @@ const clientSchema = new Schema({
   prenomClient: { type: String, required: true }, // varchar equivalent
   adresseClient: { type: String, required: true }, // varchar equivalent
   telephoneClient: { type: String, required: true }, // varchar equivalent
-  creditClient: { type: Number },
+  creditClient: { type: Number, default: 0 },
   trash: { type: Boolean, default: false },
   // Decimal equivalent
 });
