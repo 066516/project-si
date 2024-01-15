@@ -23,6 +23,10 @@ import UpdateClient from "../Comp/pupouts/Updates/UpdateClient";
 import AddProduct from "../Comp/pupouts/AddPupouts/AddProduct";
 import UpdateProduct from "../Comp/pupouts/Updates/UpdatePtoduct";
 import DeleteProduct from "../Comp/pupouts/DeletePupouts/DeleteProduct";
+import PrintEmploye from "../Comp/pupouts/printPupouts/PrintEmploye";
+import PrintClient from "../Comp/pupouts/printPupouts/PrintClient";
+import PrintFournisseur from "../Comp/pupouts/printPupouts/PrintFournisseur";
+import PrintVente from "../Comp/pupouts/printPupouts/PrintVente";
 
 function Shop() {
   const location = useLocation();
@@ -50,6 +54,9 @@ function Shop() {
   const [newPoduct, setAddProduct] = useState(false);
   const [EditPoduct, setEditPoductt] = useState(false);
   const [deletePoduct, setDeleteProduct] = useState(false);
+  const [printEmploye, setPrintEmploye] = useState(false);
+  const [printClient, setPrintClient] = useState(false);
+  const [printVente, setPrintVente] = useState(false);
   const [product, setProduct] = useState({
     name: "toamto",
     catogry: "hh",
@@ -158,6 +165,21 @@ function Shop() {
           />
         </div>
       )}
+      {printEmploye && (
+        <div className="w-screen h-screen">
+          <PrintEmploye setPrintEmploye={setPrintEmploye} Employe={Employe} />
+        </div>
+      )}
+      {printClient && (
+        <div className="w-screen h-screen">
+          <PrintClient setPrintClient={setPrintClient} Client={client} />
+        </div>
+      )}
+      {printVente && (
+        <div className="w-screen h-screen">
+          <PrintVente setPrintVente={setPrintVente} vente={info} />
+        </div>
+      )}
 
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
@@ -241,6 +263,7 @@ function Shop() {
             setEditVente={setEditVente}
             idShop={idShop}
             setAddVente={setAddVente}
+            setPrintVente={setPrintVente}
           />
         )}
         {show == 3 && (
@@ -252,6 +275,7 @@ function Shop() {
             setpaySalary={setpaySalary}
             setAbsence={setAbsence}
             idShop={idShop}
+            setPrintEmploye={setPrintEmploye}
           />
         )}
         {show == 4 && (
@@ -260,6 +284,7 @@ function Shop() {
             setDeleteClient={setDeleteClient}
             setClient={setClient}
             setEditClient={setEditClient}
+            setPrintClient={setPrintClient}
           />
         )}
         {show == 5 && (

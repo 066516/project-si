@@ -16,6 +16,7 @@ import Salary from "../Comp/pupouts/pay/Salary";
 import ReglementFournisseur from "../Comp/pupouts/pay/ReglementFournisseur";
 import ReglementClient from "../Comp/pupouts/pay/ReglementClient";
 import Absence from "../Comp/pupouts/pay/Absence";
+import PrintFournisseur from "../Comp/pupouts/printPupouts/PrintFournisseur";
 
 function Dealers() {
   const [typeDealres, setIdtypeDealres] = useState(1);
@@ -35,6 +36,8 @@ function Dealers() {
   const [reglementFournisseur, setreglementFournisseur] = useState(false);
   const [reglementClient, setreglementClient] = useState(false);
   const [absence, setAbsence] = useState(false);
+  const [printFournisseur, setPrintFournisseur] = useState(false);
+
   useEffect(() => {}, []);
   return (
     <>
@@ -78,7 +81,10 @@ function Dealers() {
       )}
       {deleteFournisseur && (
         <div className="w-screen h-screen">
-          <DeleteFournisseur setDeleteFournisseur={setDeleteFournisseur} fournisseur={fournisseur} />
+          <DeleteFournisseur
+            setDeleteFournisseur={setDeleteFournisseur}
+            fournisseur={fournisseur}
+          />
         </div>
       )}
       {deleteEmploye && (
@@ -109,6 +115,14 @@ function Dealers() {
       {absence && (
         <div className="w-screen h-screen">
           <Absence setAbsence={setAbsence} />
+        </div>
+      )}
+      {printFournisseur && (
+        <div className="w-screen h-screen">
+          <PrintFournisseur
+            setPrintFournisseur={setPrintFournisseur}
+            fournisseur={fournisseur}
+          />
         </div>
       )}
       <div
@@ -164,6 +178,7 @@ function Dealers() {
             setDeleteFournisseur={setDeleteFournisseur}
             setfournisseur={setfournisseur}
             setreglementFournisseur={setreglementFournisseur}
+            setPrintFournisseur={setPrintFournisseur}
           />
         )}
         {typeDealres == 3 && (

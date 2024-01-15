@@ -9,6 +9,7 @@ function DealersListeFournisseur({
   setEditFournisseur,
   setreglementFournisseur,
   setfournisseur,
+  setPrintFournisseur
 }) {
   const [fournisseursListe, setfournisseursListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -36,6 +37,10 @@ function DealersListeFournisseur({
   const handleEDit = (fournisseur) => {
     setfournisseur(fournisseur);
     setEditFournisseur(true);
+  };
+  const handlePrint = (fournisseur) => {
+    setfournisseur(fournisseur);
+    setPrintFournisseur(true);
   };
   const handleDelete = (fournisseur) => {
     setfournisseur(fournisseur);
@@ -76,7 +81,7 @@ function DealersListeFournisseur({
               key={fournisseur.Id_fournisseur}
               className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center"
             >
-              <h1 className="font-medium text-smaoy ">
+              <h1 className="font-medium text-smaoy cursor-pointer " onClick={()=>handlePrint(fournisseur)} >
                 {" "}
                 {fournisseur.Nom_fournisseur} {fournisseur.Prenom_fournisseur}{" "}
               </h1>

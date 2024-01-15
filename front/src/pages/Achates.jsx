@@ -14,6 +14,10 @@ function Achates() {
   const [AchatListe, setAchatListe] = useState([]);
   const [info, setInfo] = useState({});
   const [loading, setLaoding] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState("Fournisseur"); // Default search type
+
+  const [filteredData, setFilteredData] = useState([]); // Data to display
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchVentes = async () => {
@@ -22,7 +26,9 @@ function Achates() {
         const response = await axios.get(`${apiUrl}/achats`);
         console.log(response.data);
         if (Array.isArray(response.data)) {
-          setAchatListe(response.data); // Directly store the data if it's an array
+          setAchatListe(response.data);
+          setFilteredData(response.data);
+          // Directly store the data if it's an array
         } else {
           console.error("Expected an array, received:", typeof response.data);
         }
@@ -35,7 +41,7 @@ function Achates() {
     };
 
     fetchVentes();
-  }, );
+  },[]);
   console.log("====================================");
   console.log(AchatListe);
   console.log("====================================");
@@ -57,6 +63,41 @@ function Achates() {
     // Format the date as "dd/mm/yyyy"
     return `${day}/${month}/${year}`;
   }
+  const handleSearch = (searchValue, searchType) => {
+    setSearchTerm(searchValue);
+   
+    let filtered;
+    switch (searchType) {
+      case "Fournisseur":
+        // Filter logic for Fournisseur
+        filtered = AchatListe.filter((item) =>
+          `${item.fournisseurDetails.Nom_fournisseur} ${item.fournisseurDetails.Prenom_fournisseur}`
+            .toLowerCase()
+            .includes(searchValue.toLowerCase())
+        );
+        break;
+      case "product":
+        // Filter logic for product
+        filtered = AchatListe.filter(
+          (item) =>
+            item.productDetails.name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) // Adjust if necessary
+        );
+        break;
+      case "date":
+        // Filter logic for date
+        filtered = AchatListe.filter(
+          (item) => formatDate(item.date_achat) === formatDate(searchValue)
+          // Adjust the property to match your date format
+        );
+        break;
+      default:
+        filtered = AchatListe;
+    }
+    setFilteredData(filtered);
+  };
+  console.log();
   return (
     <>
       {Achat && (
@@ -92,7 +133,25 @@ function Achates() {
             />
           </h1>
         </div>
-
+        <div className="w-full flex justify-between py-3">
+          <select
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+            className="rounded-xl border border-red-500 p-2"
+          >
+            <option value="Fournisseur">Fournisseur</option>
+            <option value="product">Product</option>
+            <option value="date">Date</option>
+          </select>
+          <input
+            type={searchType === "date" ? "date" : "text"}
+            placeholder={`Search by ${searchType}...`}
+            value={searchTerm}
+            onChange={(event) => handleSearch(event.target.value, searchType)}
+            className="rounded-xl border border-red-500 p-2"
+          />
+          {/* Render filteredData */}
+        </div>
         <div className="w-full text-center font-medium mt-5">
           <div className="grid md:grid-cols-7  grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold">
             <h2>Produit</h2>
@@ -105,21 +164,20 @@ function Achates() {
           </div>
           {loading
             ? "loading"
-            : AchatListe.map((achat) => {
+            : filteredData.map((achat) => {
                 return (
                   <div
                     key={achat.id_achat}
                     className="grid  md:grid-cols-7  grid-cols-5 text-center py-2 px-2 items-center"
                   >
                     <h1 className="font-medium text-green-500">
-                        {achat.productDetails.name}
+                      {achat.productDetails.name}
                     </h1>
                     <h2 className="font-medium text-blue-500">
                       {achat.fournisseurDetails.Nom_fournisseur}{" "}
                       {achat.fournisseurDetails.Prenom_fournisseur}
                     </h2>
                     <h2 className="hidden md:block">
-                      {" "}
                       {formatDate(achat.date_achat)}
                     </h2>
                     <h2>{achat.quantite_achat} </h2>

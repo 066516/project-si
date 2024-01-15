@@ -11,6 +11,7 @@ function DealersListeClients({
   setDeleteClient,
   setreglementClient,
   setClient,
+  setPrintClient,
 }) {
   const [clientsListe, setclientsListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -47,6 +48,10 @@ function DealersListeClients({
     setClient(client);
     setDeleteClient(true);
   };
+  const handlePrint = (client) => {
+    setClient(client);
+    setPrintClient(true);
+  };
   const reglementyHandle = () => {
     setreglementClient(true);
   };
@@ -81,7 +86,10 @@ function DealersListeClients({
               key={client.clientId}
               className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center"
             >
-              <h1 className="font-medium text-purple ">
+              <h1
+                className="font-medium text-purple "
+                onClick={() => handlePrint(client)}
+              >
                 {client.nomClient} {client.prenomClient}{" "}
               </h1>
               <h2 className="font-medium ">{client.adresseClient} </h2>

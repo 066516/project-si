@@ -11,6 +11,7 @@ function ShopListeEmploye({
   setAbsence,
   idShop,
   setEmploye,
+  setPrintEmploye,
 }) {
   const [employeListe, setemployeListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -36,7 +37,7 @@ function ShopListeEmploye({
     };
 
     fetchVentes();
-  }, );
+  });
 
   const handleEDit = (employe) => {
     setEmploye(employe);
@@ -45,6 +46,10 @@ function ShopListeEmploye({
   const handleDelete = (employe) => {
     setEmploye(employe);
     setDeleteEmploye(true);
+  };
+  const handlePrint = (employe) => {
+    setEmploye(employe);
+    setPrintEmploye(true);
   };
   const paysalaryHandle = () => {
     setpaySalary(true);
@@ -82,8 +87,14 @@ function ShopListeEmploye({
             <div
               key={employe.EmployeID}
               className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center"
+             
             >
-              <h1 className="font-medium text-red-500 ">{employe.name}</h1>
+              <h1
+                className="font-medium text-red-500 cursor-pointer "
+                onClick={() => handlePrint(employe)}
+              >
+                {employe.name}
+              </h1>
               <h2 className="font-medium "> {employe.email}</h2>
               <h2 className="hidden md:flex justify-center">
                 {employe.phoneNumber}

@@ -8,6 +8,7 @@ function ShopListeVentes({
   setDeleteVente,
   idShop,
   setAddVente,
+  setPrintVente,
 }) {
   const [ventesListe, setVentesListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -47,6 +48,11 @@ function ShopListeVentes({
     setInfo(vente);
     setEditVente(true);
   };
+  const handlePrint = (vente) => {
+    console.log(vente);
+    setInfo(vente);
+    setPrintVente(true);
+  };
   const handleDelete = (vente) => {
     console.log(vente);
     setInfo(vente);
@@ -85,7 +91,7 @@ function ShopListeVentes({
       case "date":
         // Filter logic for date
         filtered = ventesListe.filter(
-          (item) => formatDate(item.date_vente) === formatDate(searchValue)  // Adjust the property to match your date format
+          (item) => formatDate(item.date_vente) === formatDate(searchValue) // Adjust the property to match your date format
         );
         break;
       default:
@@ -101,7 +107,7 @@ function ShopListeVentes({
           Liste Transfers
         </h1>
         <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-red-500 text-red-500 rounded-xl border-[2px]">
-          Search Vente
+          Add Vente
           <IoMdAdd
             fontSize="25px"
             onClick={() => {
@@ -110,10 +116,11 @@ function ShopListeVentes({
           />
         </h1>
       </div>
-      <div>
+      <div className="w-full flex justify-between py-3">
         <select
           value={searchType}
           onChange={(e) => setSearchType(e.target.value)}
+          className="rounded-xl border border-red-500 p-2"
         >
           <option value="client">Client</option>
           <option value="product">Product</option>
@@ -124,6 +131,7 @@ function ShopListeVentes({
           placeholder={`Search by ${searchType}...`}
           value={searchTerm}
           onChange={(event) => handleSearch(event.target.value, searchType)}
+          className="rounded-xl border border-red-500 p-2"
         />
         {/* Render filteredData */}
       </div>
@@ -147,7 +155,10 @@ function ShopListeVentes({
                   key={vente._id}
                   className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center"
                 >
-                  <h1 className="font-medium text-red-500 ">
+                  <h1
+                    className="font-medium text-red-500 "
+                    onClick={() => handlePrint(vente)}
+                  >
                     {vente.productDetails.name}
                   </h1>
                   <h2 className="font-medium text-green-500">
