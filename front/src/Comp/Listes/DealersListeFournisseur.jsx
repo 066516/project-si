@@ -7,7 +7,6 @@ function DealersListeFournisseur({
   setAddFournisseur,
   setDeleteFournisseur,
   setEditFournisseur,
-  setreglementFournisseur,
   setfournisseur,
   setPrintFournisseur
 }) {
@@ -47,9 +46,7 @@ function DealersListeFournisseur({
 
     setDeleteFournisseur(true);
   };
-  const reglementyHandle = () => {
-    setreglementFournisseur(true);
-  };
+ 
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
@@ -106,7 +103,6 @@ function DealersListeFournisseur({
                   color="red"
                   onClick={() => handleDelete(fournisseur)}
                 />
-                <GiPayMoney onClick={reglementyHandle} />
               </h2>
             </div>
           );

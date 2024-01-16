@@ -6,6 +6,7 @@ import { MdEdit, MdDeleteForever } from "react-icons/md";
 import DeleteAchat from "../Comp/pupouts/DeletePupouts/DeleteAchat";
 import UpdateAchat from "../Comp/pupouts/Updates/UpdateAchat";
 import axios from "axios";
+import PrintAchat from "../Comp/pupouts/printPupouts/PrintAchat";
 
 function Achates() {
   const [Achat, setAddAchat] = useState(false);
@@ -16,7 +17,7 @@ function Achates() {
   const [loading, setLaoding] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("Fournisseur"); // Default search type
-
+  const [printAchat, setPrintAchat] = useState(false);
   const [filteredData, setFilteredData] = useState([]); // Data to display
   useEffect(() => {
     console.log("Fetching ventes...");
@@ -41,7 +42,7 @@ function Achates() {
     };
 
     fetchVentes();
-  },[]);
+  }, []);
   console.log("====================================");
   console.log(AchatListe);
   console.log("====================================");
@@ -49,6 +50,10 @@ function Achates() {
   const handleEDit = (achat) => {
     setInfo(achat);
     setEditacaht(true);
+  };
+  const handlePrint = (achat) => {
+    setInfo(achat);
+    setPrintAchat(true);
   };
   const handleDelete = (achat) => {
     setInfo(achat);
@@ -65,7 +70,7 @@ function Achates() {
   }
   const handleSearch = (searchValue, searchType) => {
     setSearchTerm(searchValue);
-   
+
     let filtered;
     switch (searchType) {
       case "Fournisseur":
@@ -113,6 +118,11 @@ function Achates() {
       {Deleteacaht && (
         <div className="w-screen h-screen">
           <DeleteAchat setDeleteacaht={setDeleteacaht} info={info} />
+        </div>
+      )}
+      {printAchat && (
+        <div className="w-screen h-screen">
+          <PrintAchat setPrintAchat={setPrintAchat} achat={info} />
         </div>
       )}
       <div
@@ -170,7 +180,10 @@ function Achates() {
                     key={achat.id_achat}
                     className="grid  md:grid-cols-7  grid-cols-5 text-center py-2 px-2 items-center"
                   >
-                    <h1 className="font-medium text-green-500">
+                    <h1
+                      className="font-medium text-green-500"
+                      onClick={() => handlePrint(achat)}
+                    >
                       {achat.productDetails.name}
                     </h1>
                     <h2 className="font-medium text-blue-500">

@@ -17,6 +17,7 @@ import ReglementFournisseur from "../Comp/pupouts/pay/ReglementFournisseur";
 import ReglementClient from "../Comp/pupouts/pay/ReglementClient";
 import Absence from "../Comp/pupouts/pay/Absence";
 import PrintFournisseur from "../Comp/pupouts/printPupouts/PrintFournisseur";
+import PrintClient from "../Comp/pupouts/printPupouts/PrintClient";
 
 function Dealers() {
   const [typeDealres, setIdtypeDealres] = useState(1);
@@ -37,6 +38,7 @@ function Dealers() {
   const [reglementClient, setreglementClient] = useState(false);
   const [absence, setAbsence] = useState(false);
   const [printFournisseur, setPrintFournisseur] = useState(false);
+  const [printClient, setPrintClient] = useState(false);
 
   useEffect(() => {}, []);
   return (
@@ -125,6 +127,11 @@ function Dealers() {
           />
         </div>
       )}
+      {printClient && (
+        <div className="w-screen h-screen">
+          <PrintClient setPrintClient={setPrintClient} Client={client} />
+        </div>
+      )}
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
       >
@@ -188,6 +195,7 @@ function Dealers() {
             setDeleteClient={setDeleteClient}
             setClient={setClient}
             setreglementClient={setreglementClient}
+            setPrintClient={setPrintClient}
           />
         )}
       </div>

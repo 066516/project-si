@@ -4,7 +4,7 @@ const Fournisseur = require("../modles/Fournisseur"); // Adjust the path as nece
 const Vente = require("../modles/Achat"); // Adjust the path as necessary
 
 exports.createReglement = async (req, res) => {
-  const { id_fournisseur, id_vente, montant_reglement } = req.body;
+  const { id_fournisseur, montant_reglement } = req.body;
 
   try {
     // Check if the Fournisseur exists
@@ -16,25 +16,24 @@ exports.createReglement = async (req, res) => {
     }
 
     // Check if the Vente exists
-    const venteExists = await Vente.findOne({ id_achat: id_vente });
-    if (!venteExists) {
-      return res.status(404).send({ message: "Vente not found" });
-    }
+    // const venteExists = await Vente.findOne({ id_achat: id_vente });
+    // if (!venteExists) {
+    //   return res.status(404).send({ message: "Vente not found" });
+    // }
 
     // If both exist, create the Reglement
-    const newReglement = new Reglement({
+    const newReglement = await Reglement.create({
       id_fournisseur,
-      id_vente,
       montant_reglement,
-      date_reglement: new Date(), // Set the date here, or it will be set by default
+      // Set the date here, or it will be set by default
     });
-    await newReglement.save();
+
     fournisseurExists.solde_fournisseur -= montant_reglement;
     await fournisseurExists.save();
 
     // Update Vente's reste
-    venteExists.reste -= montant_reglement;
-    await venteExists.save();
+    // venteExists.reste -= montant_reglement;
+    // await venteExists.save();
 
     res.status(201).send({
       message: "Reglement created successfully",
@@ -60,8 +59,9 @@ exports.getReglement = async (req, res) => {
 
 // Get all Reglement entries
 exports.getAllReglements = async (req, res) => {
+  const id = req.params.id;
   try {
-    const reglements = await Reglement.find();
+    const reglements = await Reglement.find({ id_fournisseur: id });
     res.status(200).send(reglements);
   } catch (error) {
     res.status(500).send(error);

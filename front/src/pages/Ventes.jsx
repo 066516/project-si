@@ -6,6 +6,7 @@ import { MdEdit, MdDeleteForever } from "react-icons/md";
 import UpdateVentes from "../Comp/pupouts/Updates/UpdateVentes";
 import DeleteVente from "../Comp/pupouts/DeletePupouts/DeleteVente";
 import axios from "axios";
+import PrintVente from "../Comp/pupouts/printPupouts/PrintVente";
 function Ventes() {
   const [newvente, setAddVente] = useState(false);
   const [Editvente, setEditVente] = useState(false);
@@ -15,6 +16,7 @@ function Ventes() {
   const [loading, setLaoding] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("client"); // Default search type
+  const [printVente, setPrintVente] = useState(false);
 
   const [filteredData, setFilteredData] = useState([]); // Data to display
   useEffect(() => {
@@ -54,6 +56,11 @@ function Ventes() {
     console.log(vente);
     setInfo(vente);
     setEditVente(true);
+  };
+  const handlePrint = (vente) => {
+    console.log(vente);
+    setInfo(vente);
+    setPrintVente(true);
   };
   const handleDelete = (vente) => {
     console.log(vente);
@@ -119,6 +126,11 @@ function Ventes() {
           <DeleteVente setDeleteVente={setDeleteVente} info={info} />
         </div>
       )}
+      {printVente && (
+        <div className="w-screen h-screen">
+          <PrintVente setPrintVente={setPrintVente} vente={info} />
+        </div>
+      )}
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
       >
@@ -176,7 +188,10 @@ function Ventes() {
                       key={vente._id}
                       className="grid md:grid-cols-7 grid-cols-5 text-center py-2 px-2 items-center"
                     >
-                      <h1 className="font-medium text-red-500 ">
+                      <h1
+                        className="font-medium text-red-500 "
+                        onClick={() => handlePrint(vente)}
+                      >
                         {vente.productDetails.name}
                       </h1>
                       <h2 className="font-medium text-green-500">
