@@ -7,7 +7,6 @@ import Achates from "./pages/Achates";
 import Dealers from "./pages/Dealers";
 import Stock from "./pages/Stock";
 import Shop from "./pages/Shop";
-import Main from "./pages/Main";
 
 function App() {
   return (
