@@ -40,9 +40,10 @@ function Achates() {
         console.log("Fetch attempt finished");
       }
     };
-
-    fetchVentes();
-  }, []);
+    if (searchTerm === "") {
+      fetchVentes();
+    }
+  });
   console.log("====================================");
   console.log(AchatListe);
   console.log("====================================");

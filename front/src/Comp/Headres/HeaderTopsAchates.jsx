@@ -44,7 +44,7 @@ function HeaderTopsAchates() {
           </div>
           <div className=" border rounded-xl text-center bg-purple text-white py-2 font-medium uppercase">
             <h1>Top product</h1>
-            {/* <h2>  {tops.topProduct[0].productDetails.name}</h2> */}
+            <h2>  {tops.topProduct[0].productDetails.name}</h2>
           </div>
         </div>
       )}

@@ -17,6 +17,7 @@ function Ventes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("client"); // Default search type
   const [printVente, setPrintVente] = useState(false);
+  const [operationPerformed, setOperationPerformed] = useState(false);
 
   const [filteredData, setFilteredData] = useState([]); // Data to display
   useEffect(() => {
@@ -28,7 +29,7 @@ function Ventes() {
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setVentesListe(response.data);
-          // setFilteredData(response.data);
+          setFilteredData(response.data);
           // Directly store the data if it's an array
         } else {
           console.error("Expected an array, received:", typeof response.data);
@@ -37,12 +38,13 @@ function Ventes() {
         console.error("Error fetching ventes:", error);
       } finally {
         setLaoding(false);
-        setFilteredData(ventesListe);
+        // setFilteredData(ventesListe);
         console.log("Fetch attempt finished");
       }
     };
-
-    fetchVentes();
+    if (searchTerm === "") {
+      fetchVentes();
+    }
   });
 
   // Use useEffect to log the ventesListe whenever it changes
@@ -59,6 +61,9 @@ function Ventes() {
     setInfo(vente);
     setEditVente(true);
   };
+  // if (!loading) {
+  //   setOperationPerformed((prev) => !prev); // Toggle the state to trigger useEffect
+  // }
   const handlePrint = (vente) => {
     console.log(vente);
     setInfo(vente);
@@ -68,6 +73,7 @@ function Ventes() {
     console.log(vente);
     setInfo(vente);
     setDeleteVente(true);
+    setOperationPerformed((prev) => !prev); // Toggle the state to trigger useEffect
   };
 
   function formatDate(dateString) {
