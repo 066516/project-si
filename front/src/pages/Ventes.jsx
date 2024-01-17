@@ -28,7 +28,7 @@ function Ventes() {
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setVentesListe(response.data);
-          setFilteredData(response.data);
+          // setFilteredData(response.data);
           // Directly store the data if it's an array
         } else {
           console.error("Expected an array, received:", typeof response.data);
@@ -37,19 +37,21 @@ function Ventes() {
         console.error("Error fetching ventes:", error);
       } finally {
         setLaoding(false);
+        setFilteredData(ventesListe);
         console.log("Fetch attempt finished");
       }
     };
 
     fetchVentes();
-  }, [printVente, Editvente, newvente, deletevente]);
+  });
 
   // Use useEffect to log the ventesListe whenever it changes
   // useEffect(() => {
-  //   if (ventesListe) {
-  //     console.log("liste:", JSON.stringify(ventesListe, null, 2));
-  //   }
-  // }, [ventesListe]);
+  //   // if (ventesListe) {
+  //   //   console.log("liste:", JSON.stringify(ventesListe, null, 2));
+  //   // }
+  //   setFilteredData(ventesListe);
+  // }, [printVente, Editvente, newvente, deletevente]);
   console.log("liste", ventesListe);
 
   const handleEDit = (vente) => {

@@ -7,6 +7,7 @@ import Achates from "./pages/Achates";
 import Dealers from "./pages/Dealers";
 import Stock from "./pages/Stock";
 import Shop from "./pages/Shop";
+import Main from "./pages/Main";
 
 function App() {
   return (
@@ -14,7 +15,17 @@ function App() {
       <div className="flex flex-col sm:flex-row w-screen h-screen  overflow-hidden">
         <Router>
           <Routes>
-            <Route path="/" />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Layout />
+                  <Routes>
+                    <Route path="/" element={<Dashbord />} />
+                  </Routes>
+                </>
+              }
+            />
             <Route
               path="/*"
               element={
