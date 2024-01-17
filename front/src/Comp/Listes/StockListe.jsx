@@ -18,7 +18,7 @@ function StockListe({
   useEffect(() => {
     console.log("Fetching stock...");
     const fetchVentes = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(
           `${apiUrl}/produitstocksShop/${idShop == null ? 1 : parseInt(idShop)}`

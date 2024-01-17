@@ -24,7 +24,7 @@ function UpdateVentes({ setEditVente, info }) {
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/products`);
         console.log(response.data);
@@ -40,7 +40,7 @@ function UpdateVentes({ setEditVente, info }) {
       }
     };
     const fetchClients = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(
           `${apiUrl}/clients/${idShop == null ? 1 : parseInt(idShop)}`
@@ -79,7 +79,7 @@ function UpdateVentes({ setEditVente, info }) {
   const handleUpdateVente = () => {
     function updateDate() {
       return axios
-        .put(`http://localhost:3000/ventes/${info.id_vente}`, {
+        .put(`https://project-si.onrender.com/ventes/${info.id_vente}`, {
           id_client: selectedClientId,
           id_produit: selectedProductId,
           quantite_vendue: count,

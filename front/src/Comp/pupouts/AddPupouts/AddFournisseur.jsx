@@ -16,7 +16,7 @@ function AddFournisseur({ setAddFournisseur }) {
   const handleSubmit = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/fournisseurs ", {
+        .post("https://project-si.onrender.com/fournisseurs ", {
           Nom_fournisseur: name,
           Prenom_fournisseur: LastName,
           adresse_fournisseur: Address,

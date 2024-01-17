@@ -15,7 +15,7 @@ function AddClient({ setAddClient }) {
   const handleSubmit = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/client ", {
+        .post("https://project-si.onrender.com/client ", {
           nomClient: name,
           prenomClient: LastName,
           adresseClient: Address,

@@ -12,7 +12,7 @@ function DeleteFournisseur({ setDeleteFournisseur, fournisseur }) {
   };
   const handledeltefournisseur = () => {
     const DeleteEmploye = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.delete(
           `${apiUrl}/fournisseurs/${fournisseur.Id_fournisseur}`

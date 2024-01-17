@@ -15,7 +15,7 @@ function UpdateFournisseur({ setEditFournisseur, fournisseur }) {
     function postData() {
       return axios
         .put(
-          `http://localhost:3000/fournisseurs/${fournisseur.Id_fournisseur} `,
+          `https://project-si.onrender.com/fournisseurs/${fournisseur.Id_fournisseur} `,
           {
             Nom_fournisseur: name,
             Prenom_fournisseur: LastName,

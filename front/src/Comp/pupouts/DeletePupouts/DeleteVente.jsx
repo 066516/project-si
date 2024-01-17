@@ -13,7 +13,7 @@ function DeleteVente({ setDeleteVente, info }) {
   };
   const handleDelteVente = () => {
     const fetchVentes = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.delete(
           `${apiUrl}/ventes/${info.id_vente}`

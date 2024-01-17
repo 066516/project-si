@@ -22,7 +22,7 @@ function Ventes() {
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchVentes = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/ventes/1`);
         console.log(response.data);

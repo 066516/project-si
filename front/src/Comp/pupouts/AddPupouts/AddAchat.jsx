@@ -11,7 +11,7 @@ function AddAchat({ setAddAchat }) {
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/products`);
         console.log(response.data);
@@ -27,7 +27,7 @@ function AddAchat({ setAddAchat }) {
       }
     };
     const fetchFournisseurs = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/fournisseurs`);
         console.log(response.data);
@@ -72,7 +72,7 @@ function AddAchat({ setAddAchat }) {
   const handleCreateAchat = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/achat", {
+        .post("https://project-si.onrender.com/achat", {
           id_fournisseur: selectedSupplierId,
           id_produit: selectedProductId,
           quantite_achat: count,

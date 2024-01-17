@@ -12,7 +12,7 @@ function UpdateClient({ setEditClient, client }) {
   const handleSubmit = (event) => {
     function postData() {
       return axios
-        .put(`http://localhost:3000/client/${client.clientId}`, {
+        .put(`https://project-si.onrender.com/client/${client.clientId}`, {
           nomClient: name,
           prenomClient: LastName,
           adresseClient: Address,

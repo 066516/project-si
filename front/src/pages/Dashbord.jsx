@@ -11,7 +11,7 @@ function Dashbord() {
   const [tops, setTops] = useState([]);
   useEffect(() => {
     const fetchHeadres = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/tops`);
         // console.log(response.data);

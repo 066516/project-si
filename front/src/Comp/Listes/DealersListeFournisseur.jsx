@@ -15,7 +15,7 @@ function DealersListeFournisseur({
 
   useEffect(() => {
     const fetchVentes = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/fournisseurs`);
         console.log(response.data);

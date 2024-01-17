@@ -13,7 +13,7 @@ function DeleteAchat({ setDeleteacaht, info }) {
   };
   const handleDeleteAchat = () => {
     const DeleteAchat = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.delete(
           `${apiUrl}/achats/${info.id_achat}`

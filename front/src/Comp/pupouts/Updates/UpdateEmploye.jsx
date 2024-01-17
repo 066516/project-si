@@ -12,7 +12,7 @@ function UpdateEmploye({ setEditEmploye, Employe }) {
   const handleSubmit = () => {
     function postData() {
       return axios
-        .put(`http://localhost:3000/employe/${Employe.EmployeID}`, {
+        .put(`https://project-si.onrender.com/employe/${Employe.EmployeID}`, {
           name: name,
           email,
           phoneNumber,

@@ -20,7 +20,7 @@ function AddVente({ setAddVente }) {
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/products`);
         console.log("products", response.data);
@@ -36,7 +36,7 @@ function AddVente({ setAddVente }) {
       }
     };
     const fetchClients = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(
           `${apiUrl}/clients/${idShop == null ? 1 : parseInt(idShop)}`
@@ -77,7 +77,7 @@ function AddVente({ setAddVente }) {
   const handleCreateVente = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/ventes", {
+        .post("https://project-si.onrender.com/ventes", {
           id_client: selectedClientId,
           id_produit: selectedProductId,
           quantite_vendue: count,

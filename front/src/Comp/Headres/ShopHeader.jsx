@@ -6,7 +6,7 @@ function ShopHeader({ idShop }) {
   const [tops, setTops] = useState([]);
   useEffect(() => {
     const fetchHeadres = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(`${apiUrl}/analyse/tops/${idShop}`);
         // console.log(response.data);
