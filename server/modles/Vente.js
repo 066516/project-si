@@ -11,6 +11,7 @@ const venteSchema = new mongoose.Schema({
   date_vente: { type: Date, default: Date.now },
   montant_total_vente: { type: Number, default: 0 },
   montant_encaisse_vente: { type: Number, default: 0 },
+  reste: { type: Number, default: 0 },
   statut_paiement_vente: { type: Boolean, required: true },
 });
 

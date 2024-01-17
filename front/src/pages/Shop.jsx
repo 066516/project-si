@@ -27,6 +27,12 @@ import PrintEmploye from "../Comp/pupouts/printPupouts/PrintEmploye";
 import PrintClient from "../Comp/pupouts/printPupouts/PrintClient";
 import PrintFournisseur from "../Comp/pupouts/printPupouts/PrintFournisseur";
 import PrintVente from "../Comp/pupouts/printPupouts/PrintVente";
+import PrintTransfer from "../Comp/pupouts/printPupouts/PrintTransfer";
+import PvListe from "../Comp/Listes/PvListe";
+import AddPv from "../Comp/pupouts/AddPupouts/AddPv";
+import DeletePv from "../Comp/pupouts/DeletePupouts/DeletePv";
+import PrintPv from "../Comp/pupouts/printPupouts/PrintPv";
+import UpdatePv from "../Comp/pupouts/Updates/UpdatePv";
 
 function Shop() {
   const location = useLocation();
@@ -57,6 +63,12 @@ function Shop() {
   const [printEmploye, setPrintEmploye] = useState(false);
   const [printClient, setPrintClient] = useState(false);
   const [printVente, setPrintVente] = useState(false);
+  const [printTransfer, setPrintTransfer] = useState(false);
+  const [newPv, setAddPv] = useState(false);
+  const [editPv, setEditPv] = useState(false);
+  const [deletePv, setDeletePv] = useState(false);
+  const [printPv, setPrintPv] = useState(false);
+  const [pv, setPv] = useState();
   const [product, setProduct] = useState({
     name: "toamto",
     catogry: "hh",
@@ -180,6 +192,34 @@ function Shop() {
           <PrintVente setPrintVente={setPrintVente} vente={info} />
         </div>
       )}
+      {printTransfer && (
+        <div className="w-screen h-screen">
+          <PrintTransfer
+            setPrintTransfer={setPrintTransfer}
+            transfer={transfer}
+          />
+        </div>
+      )}
+      {newPv && (
+        <div className="w-screen h-screen">
+          <AddPv setAddPv={setAddPv} />
+        </div>
+      )}
+      {deletePv && (
+        <div className="w-screen h-screen">
+          <DeletePv setDeletePv={setDeletePv} pv={pv} />
+        </div>
+      )}
+      {printPv && (
+        <div className="w-screen h-screen">
+          <PrintPv setPrintPv={setPrintPv} pv={pv} />
+        </div>
+      )}
+      {editPv && (
+        <div className="w-screen h-screen">
+          <UpdatePv setUpdatePv={setEditPv} pv={pv} />
+        </div>
+      )}
 
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
@@ -254,6 +294,7 @@ function Shop() {
             setEditTransfer={setEditTransfer}
             idShop={idShop}
             setTransft={setTransft}
+            setPrintTransfer={setPrintTransfer}
           />
         )}
         {show == 2 && (
@@ -293,6 +334,15 @@ function Shop() {
             setDeleteProduct={setDeleteProduct}
             setProduct={setProduct}
             setAddProduct={setAddProduct}
+          />
+        )}
+        {show == 6 && (
+          <PvListe
+            setAddPv={setAddPv}
+            setDeletePv={setDeletePv}
+            setPv={setPv}
+            setEditPv={setEditPv}
+            setPrintPv={setPrintPv}
           />
         )}
       </div>

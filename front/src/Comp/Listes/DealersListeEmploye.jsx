@@ -7,8 +7,7 @@ function DealersListeEmploye({
   setAddEmplye,
   setDeleteEmploye,
   setEditEmploye,
-  setpaySalary,
-  setAbsence,
+  setPrintEmploye,
   setEmploye,
 }) {
   const [employeListe, setemployeListe] = useState([]);
@@ -35,22 +34,21 @@ function DealersListeEmploye({
     };
 
     fetchVentes();
-  }, );
+  });
 
   const handleEDit = (employe) => {
     setEmploye(employe);
     setEditEmploye(true);
   };
+  const handlePrint = (employe) => {
+    setEmploye(employe);
+    setPrintEmploye(true);
+  };
   const handleDelete = (employe) => {
     setEmploye(employe);
     setDeleteEmploye(true);
   };
-  const paysalaryHandle = () => {
-    setpaySalary(true);
-  };
-  const AbsenceHandle = () => {
-    setAbsence(true);
-  };
+
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5 text-red-500">
@@ -82,7 +80,12 @@ function DealersListeEmploye({
               key={employe.EmployeID}
               className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center"
             >
-              <h1 className="font-medium text-red-500 ">{employe.name}</h1>
+              <h1
+                className="font-medium text-red-500 cursor-pointer"
+                onClick={() => handlePrint(employe)}
+              >
+                {employe.name}
+              </h1>
               <h2 className="font-medium "> {employe.email}</h2>
               <h2 className="hidden md:flex justify-center">
                 {employe.phoneNumber}

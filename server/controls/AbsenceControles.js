@@ -31,6 +31,8 @@ exports.createAbsence = async (req, res) => {
     // Create the Absence
     const newAbsence = new AbsenceEmploye({ id_employe, date_absence });
     await newAbsence.save();
+    employeExists.nbAbsence += 1;
+    employeExists.save();
     res.status(201).send(newAbsence);
   } catch (error) {
     res.status(500).send(error);

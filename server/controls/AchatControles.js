@@ -97,14 +97,14 @@ exports.getAllAchats = async (req, res) => {
         // Fetch fournisseur details
         const fournisseur = await Fournisseur.findOne({
           Id_fournisseur: achat.id_fournisseur,
-        }).select("Nom_fournisseur Prenom_fournisseur"); // Adjust the field name as per your Fournisseur model
+        }).select("Nom_fournisseur Prenom_fournisseur Id_fournisseur"); // Adjust the field name as per your Fournisseur model
         achat.fournisseurDetails = fournisseur; // Add fournisseur details to achat
 
         // Fetch product details
         const product = await Product.findOne({
           productId: achat.id_produit,
         }).select("name"); // Replace 'productId' and 'name' with actual field names in your Product model
-        achat.productDetails = product||{name:" noproduct"}; // Add product details to achat
+        achat.productDetails = product || { name: " noproduct" }; // Add product details to achat
 
         return achat;
       })

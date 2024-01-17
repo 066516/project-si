@@ -4,14 +4,14 @@ const Centre = require("../modles/Shop"); // Adjust the path as necessary
 const sendEmail = require("../middalware/SendEmail");
 const generatePDF = require("../middalware/generatePdf");
 exports.createPvQuotidien = async (req, res) => {
-  const { id_centre, id_employe, date_pv, Pv_content } = req.body;
+  const { id_centre, Pv_content } = req.body;
   // const date_pv = Date.now();
   try {
     // Verify if the Employe exists
-    const employeExists = await Employe.findOne({ EmployeID: id_employe });
-    if (!employeExists) {
-      return res.status(404).send({ message: "Employe not found" });
-    }
+    // const employeExists = await Employe.findOne({ EmployeID: id_employe });
+    // if (!employeExists) {
+    //   return res.status(404).send({ message: "Employe not found" });
+    // }
 
     // Verify if the Centre exists
     const centreExists = await Centre.findOne({ shopID: id_centre });
@@ -23,8 +23,8 @@ exports.createPvQuotidien = async (req, res) => {
     const existingPv = await PvQuotidien.findOne({
       id_centre: id_centre,
       date_pv: {
-        $gte: new Date(date_pv).setHours(0, 0, 0, 0),
-        $lt: new Date(date_pv).setHours(23, 59, 59, 999),
+        $gte: new Date(Date.now()).setHours(0, 0, 0, 0),
+        $lt: new Date(Date.now()).setHours(23, 59, 59, 999),
       },
     });
     if (existingPv) {
@@ -69,7 +69,7 @@ exports.getPvQuotidien = async (req, res) => {
 // Get all Pv_quotidien entries
 exports.getAllpvs = async (req, res) => {
   try {
-    const pvQuotidiens = await PvQuotidien.find();
+    const pvQuotidiens = await PvQuotidien.find({ id_centre: req.params.id });
     res.status(200).send(pvQuotidiens);
   } catch (error) {
     res.status(500).send(error);
@@ -79,8 +79,8 @@ exports.getAllpvs = async (req, res) => {
 // Update a Pv_quotidien entry by ID
 exports.updatePvQuotidien = async (req, res) => {
   try {
-    const updatedPvQuotidien = await PvQuotidien.findByIdAndUpdate(
-      req.params.id,
+    const updatedPvQuotidien = await PvQuotidien.findOneAndUpdate(
+      { id_pv: req.params.id },
       req.body,
       { new: true }
     );
@@ -99,7 +99,9 @@ exports.updatePvQuotidien = async (req, res) => {
 // Delete a Pv_quotidien entry by ID
 exports.deletePvQuotidien = async (req, res) => {
   try {
-    const pvQuotidien = await PvQuotidien.findByIdAndDelete(req.params.id);
+    const pvQuotidien = await PvQuotidien.findOneAndDelete({
+      id_pv: req.params.id,
+    });
     if (!pvQuotidien) {
       return res.status(404).send({ message: "Pv_quotidien not found" });
     }

@@ -11,21 +11,22 @@ exports.createVente = async (req, res) => {
     id_shop,
     quantite_vendue,
     prix_unitaire_vente,
+    montant_encaisse_vente,
     statut_paiement_vente,
   } = req.body;
 
   try {
     // Verify if the Client exists
-    // const clientExists = await Client.findOne({ clientId: id_client });
-    // if (!clientExists) {
-    //   return res.status(404).send({ message: "Client not found" });
-    // }
+    const clientExists = await Client.findOne({ clientId: id_client });
+    if (!clientExists) {
+      return res.status(404).send({ message: "Client not found" });
+    }
 
     // Verify if the Product exists
-    // const productExists = await Product.findOne({ productId: id_produit });
-    // if (!productExists) {
-    //   return res.status(404).send({ message: "Product not found" });
-    // }
+    const productExists = await Product.findOne({ productId: id_produit });
+    if (!productExists) {
+      return res.status(404).send({ message: "Product not found" });
+    }
 
     // const stockItem = await ProduitStock.findOne({ id_produit, id_shop });
     // if (!stockItem || stockItem.quantite_en_stock < quantite_vendue) {
@@ -40,10 +41,27 @@ exports.createVente = async (req, res) => {
       id_shop,
       quantite_vendue,
       prix_unitaire_vente,
+      montant_encaisse_vente,
       date_vente: new Date(),
       statut_paiement_vente, // or based on your business logic
     });
     await newVente.save();
+    if (!statut_paiement_vente) {
+      const client = await Client.findOne({
+        clientId: id_client,
+      });
+
+      if (client) {
+        client.creditClient +=
+          newVente.montant_total_vente - montant_encaisse_vente;
+
+        await client.save();
+      } else {
+        throw new Error("client not found");
+      }
+      newVente.reste = newVente.montant_total_vente - montant_encaisse_vente;
+      await newVente.save();
+    }
     // stockItem.quantite_en_stock -= quantite_vendue;
     // await stockItem.save();
     res.status(201).send({
@@ -51,6 +69,7 @@ exports.createVente = async (req, res) => {
       data: newVente,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -64,6 +83,7 @@ exports.getVente = async (req, res) => {
     }
     res.status(200).send(vente);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };

@@ -3,7 +3,7 @@ const CounterPv = require("./Counters/PvCounter"); // Adjust the path as necessa
 const pvQuotidienSchema = new mongoose.Schema({
   id_pv: { type: Number, unique: true, index: true },
   id_centre: { type: Number, ref: "Centre" }, // Adjust 'Centre' to your Centre model
-  id_employe: { type: Number, ref: "Employe" },
+  // id_employe: { type: Number, ref: "Employe" },
   Pv_content: { type: String }, // Adjust 'Centre' to your Centre model
   date_pv: { type: Date, default: Date.now },
 });

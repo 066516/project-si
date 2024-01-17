@@ -4,8 +4,8 @@ const salaryController = require("../controls/SalaryControles"); // Adjust the p
 
 router.post("/salaries", salaryController.createSalary);
 router.get("/salaries/total", salaryController.calculateTotalSalaries);
-router.get("/salaries/:id", salaryController.getSalary);
-router.get("/salaries", salaryController.getAllSalaries);
+router.get("/salarie/:id", salaryController.getSalary);
+router.get("/salaries/:id", salaryController.getAllSalaries);
 router.put("/salaries/:id", salaryController.updateSalary);
 router.delete("/salaries/:id", salaryController.deleteSalary);
 

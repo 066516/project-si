@@ -10,7 +10,7 @@ import PrintVente from "../Comp/pupouts/printPupouts/PrintVente";
 function Ventes() {
   const [newvente, setAddVente] = useState(false);
   const [Editvente, setEditVente] = useState(false);
-  const [Deletevente, setDeleteVente] = useState(false);
+  const [deletevente, setDeleteVente] = useState(false);
   const [info, setInfo] = useState({});
   const [ventesListe, setVentesListe] = useState([]);
   const [loading, setLaoding] = useState(true);
@@ -42,7 +42,7 @@ function Ventes() {
     };
 
     fetchVentes();
-  }, []);
+  }, [printVente, Editvente, newvente, deletevente]);
 
   // Use useEffect to log the ventesListe whenever it changes
   // useEffect(() => {
@@ -121,7 +121,7 @@ function Ventes() {
           <UpdateVentes setEditVente={setEditVente} info={info} />
         </div>
       )}
-      {Deletevente && (
+      {deletevente && (
         <div className="w-screen h-screen">
           <DeleteVente setDeleteVente={setDeleteVente} info={info} />
         </div>

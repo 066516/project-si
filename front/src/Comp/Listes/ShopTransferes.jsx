@@ -9,6 +9,7 @@ function ShopTransferes({
   setdeleteTransfer,
   idShop,
   setTransft,
+  setPrintTransfer,
 }) {
   const [loading, setLaoding] = useState(true);
   const [transferts, settransferts] = useState([]);
@@ -33,10 +34,14 @@ function ShopTransferes({
     };
 
     fetchHeadres();
-  },);
+  });
   const handleEDit = (transfer) => {
     setTransft(transfer);
     setEditTransfer(true);
+  };
+  const handlePrint = (transfer) => {
+    setTransft(transfer);
+    setPrintTransfer(true);
   };
   const handleDelete = (transfer) => {
     setTransft(transfer);
@@ -84,7 +89,7 @@ function ShopTransferes({
                 key={transfer.id_transfert}
                 className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center"
               >
-                <h1 className="font-medium text-smaoy ">
+                <h1 className="font-medium text-smaoy " onClick={()=>handlePrint(transfer)}>
                   {transfer.productDetails.name}
                 </h1>
                 <h2 className="hidden md:flex justify-center">

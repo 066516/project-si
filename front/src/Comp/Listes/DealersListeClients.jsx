@@ -87,7 +87,7 @@ function DealersListeClients({
               className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center"
             >
               <h1
-                className="font-medium text-purple "
+                className="font-medium text-purple cursor-pointer "
                 onClick={() => handlePrint(client)}
               >
                 {client.nomClient} {client.prenomClient}{" "}

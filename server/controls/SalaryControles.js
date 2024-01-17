@@ -3,7 +3,7 @@ const Employe = require("../modles/Employe"); // Adjust the path as necessary
 
 // Create
 exports.createSalary = async (req, res) => {
-  const { id_centre, id_employe, amount } = req.body;
+  const { id_employe } = req.body;
 
   try {
     const currentYear = new Date().getFullYear();
@@ -34,21 +34,19 @@ exports.createSalary = async (req, res) => {
       });
     }
 
+    const amount = (26 - employeExists.nbAbsence) * employeExists.salaireJour;
     // Update the employee's salary only if no salary for this month exists
     employeExists.salary += amount; // Ensure this logic aligns with your application's requirements
     await employeExists.save();
 
     // Create the new salary entry
-    const newSalary = new Salary({
-      id_centre,
+    const newSalary = await Salary.create({
       id_employe,
-      amount,
-      date: new Date(),
     }); // Add the current date
-    await newSalary.save();
 
     res.status(201).send(newSalary);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -68,7 +66,7 @@ exports.getSalary = async (req, res) => {
 // Read (all)
 exports.getAllSalaries = async (req, res) => {
   try {
-    const salaries = await Salary.find();
+    const salaries = await Salary.find({ id_employe: req.params.id });
     res.status(200).send(salaries);
   } catch (error) {
     res.status(500).send(error);

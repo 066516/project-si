@@ -18,6 +18,7 @@ import ReglementClient from "../Comp/pupouts/pay/ReglementClient";
 import Absence from "../Comp/pupouts/pay/Absence";
 import PrintFournisseur from "../Comp/pupouts/printPupouts/PrintFournisseur";
 import PrintClient from "../Comp/pupouts/printPupouts/PrintClient";
+import PrintEmploye from "../Comp/pupouts/printPupouts/PrintEmploye";
 
 function Dealers() {
   const [typeDealres, setIdtypeDealres] = useState(1);
@@ -33,10 +34,8 @@ function Dealers() {
   const [client, setClient] = useState(null);
   const [Employe, setEmploye] = useState(null);
   const [fournisseur, setfournisseur] = useState(null);
-  const [paySalary, setpaySalary] = useState(false);
-  const [reglementFournisseur, setreglementFournisseur] = useState(false);
-  const [reglementClient, setreglementClient] = useState(false);
-  const [absence, setAbsence] = useState(false);
+  const [printEmploye, setPrintEmploye] = useState(false);
+
   const [printFournisseur, setPrintFournisseur] = useState(false);
   const [printClient, setPrintClient] = useState(false);
 
@@ -97,28 +96,7 @@ function Dealers() {
           />
         </div>
       )}
-      {paySalary && (
-        <div className="w-screen h-screen">
-          <Salary setpaySalary={setpaySalary} />
-        </div>
-      )}
-      {reglementFournisseur && (
-        <div className="w-screen h-screen">
-          <ReglementFournisseur
-            setreglementFournisseur={setreglementFournisseur}
-          />
-        </div>
-      )}
-      {reglementClient && (
-        <div className="w-screen h-screen">
-          <ReglementClient setreglementClient={setreglementClient} />
-        </div>
-      )}
-      {absence && (
-        <div className="w-screen h-screen">
-          <Absence setAbsence={setAbsence} />
-        </div>
-      )}
+
       {printFournisseur && (
         <div className="w-screen h-screen">
           <PrintFournisseur
@@ -130,6 +108,11 @@ function Dealers() {
       {printClient && (
         <div className="w-screen h-screen">
           <PrintClient setPrintClient={setPrintClient} Client={client} />
+        </div>
+      )}
+      {printEmploye && (
+        <div className="w-screen h-screen">
+          <PrintEmploye setPrintEmploye={setPrintEmploye} Employe={Employe} />
         </div>
       )}
       <div
@@ -174,8 +157,7 @@ function Dealers() {
             setEditEmploye={setEditEmploye}
             setDeleteEmploye={setDeleteEmploye}
             setEmploye={setEmploye}
-            setpaySalary={setpaySalary}
-            setAbsence={setAbsence}
+            setPrintEmploye={setPrintEmploye}
           />
         )}
         {typeDealres == 2 && (
@@ -184,7 +166,6 @@ function Dealers() {
             setEditFournisseur={setEditFournisseur}
             setDeleteFournisseur={setDeleteFournisseur}
             setfournisseur={setfournisseur}
-            setreglementFournisseur={setreglementFournisseur}
             setPrintFournisseur={setPrintFournisseur}
           />
         )}
@@ -194,7 +175,6 @@ function Dealers() {
             setEditClient={setEditClient}
             setDeleteClient={setDeleteClient}
             setClient={setClient}
-            setreglementClient={setreglementClient}
             setPrintClient={setPrintClient}
           />
         )}

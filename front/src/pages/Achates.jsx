@@ -181,7 +181,7 @@ function Achates() {
                     className="grid  md:grid-cols-7  grid-cols-5 text-center py-2 px-2 items-center"
                   >
                     <h1
-                      className="font-medium text-green-500"
+                      className="font-medium text-green-500 cursor-pointer "
                       onClick={() => handlePrint(achat)}
                     >
                       {achat.productDetails.name}
