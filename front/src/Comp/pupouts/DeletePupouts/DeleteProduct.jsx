@@ -12,7 +12,7 @@ function DeleteProduct({ setDeleteProduct, product }) {
   };
   const handleDeleteProduct = () => {
     const DeleteProduct = async () => {
-      const apiUrl = "http://localhost:3000";
+      const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.delete(
           `${apiUrl}/product/${product.id_produit}`

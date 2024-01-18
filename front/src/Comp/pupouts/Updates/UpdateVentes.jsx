@@ -15,6 +15,7 @@ function UpdateVentes({ setEditVente, info }) {
     info.statut_paiement_vente ? "Totalment" : "Parcielment"
   );
   const [loading, setLaoding] = useState(true);
+  const [countinsf, setCountinsf] = useState(false);
 
   const [count, setCount] = useState(info.quantite_vendue);
   const [Amount, setAmount] = useState(info.prix_unitaire_vente);
@@ -26,7 +27,9 @@ function UpdateVentes({ setEditVente, info }) {
     const fetchProducts = async () => {
       const apiUrl = "https://project-si.onrender.com";
       try {
-        const response = await axios.get(`${apiUrl}/products`);
+        const response = await axios.get(
+          `${apiUrl}/produitstocksShop/${idShop == null ? 1 : parseInt(idShop)}`
+        );
         console.log(response.data);
         if (Array.isArray(response.data)) {
           setProducts(response.data); // Directly store the data if it's an array
@@ -36,6 +39,7 @@ function UpdateVentes({ setEditVente, info }) {
       } catch (error) {
         console.error("Error fetching ventes:", error);
       } finally {
+        setLaoding(false);
         console.log("Fetch attempt finished");
       }
     };
@@ -54,7 +58,6 @@ function UpdateVentes({ setEditVente, info }) {
       } catch (error) {
         console.error("Error fetching ventes:", error);
       } finally {
-        setLaoding(false);
         console.log("Fetch attempt finished");
       }
     };
@@ -94,14 +97,31 @@ function UpdateVentes({ setEditVente, info }) {
           console.error("Error updating date:", error);
         });
     }
-    setEditVente(false);
-    updateDate();
+    if (countinsf) {
+      console.log("error");
+    } else {
+      setEditVente(false);
+      updateDate();
+    }
   };
   const handleCancelVente = () => {
     console.log("Vente canceled");
     setEditVente(false);
   };
-
+  var product;
+  if (selectedProductId != 0 && !loading) {
+    product = products.find(
+      (product) => product.id_produit === parseInt(selectedProductId)
+    );
+    if (product && count > product.quantite_en_stock && !countinsf) {
+      setCountinsf(true);
+    }
+    if (product && count < product.quantite_en_stock && countinsf) {
+      setCountinsf(false);
+    }
+    console.log(product);
+  }
+  console.log(selectedProductId); // This will log the product with id 2
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white relative top-3 p-5 rounded-xl">
@@ -119,11 +139,39 @@ function UpdateVentes({ setEditVente, info }) {
           >
             <option value="">Select a product</option>
             {products.map((product) => (
-              <option key={product.id} value={product.productId}>
-                {product.name}
+              <option key={product.id} value={product.id_produit}>
+                {product.productDetails.name}
               </option>
             ))}
           </select>
+          {selectedProductId != 0 && (
+            <>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  price
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product && product.productDetails.price}
+                  {/* {products[selectedProductId - 1].productDetails.name} */}
+                </div>
+              </div>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  quantite in Stock
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product && product.quantite_en_stock}
+                  {/* {products[selectedProductId - 1].productDetails.name} */}
+                </div>
+              </div>
+
+              <div className=" text-red-500 rounded p-2 w-full">
+                {product && count > product.quantite_en_stock
+                  ? " Insufficient stock for transfer"
+                  : ""}
+              </div>
+            </>
+          )}
 
           <h1 className="text-lg text-blue2">Choose a Client</h1>
           <select

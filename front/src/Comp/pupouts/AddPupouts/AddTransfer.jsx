@@ -4,11 +4,12 @@ import { ImCancelCircle } from "react-icons/im";
 import { useLocation } from "react-router-dom";
 function AddTransfer({ setAddTransft }) {
   // State to keep track of the selected product
-  const [selectedProduct, setSelectedProduct] = useState();
+  const [selectedProduct, setSelectedProduct] = useState(0);
   const [count, setCount] = useState(0);
   const [products, setProducts] = useState([]);
   // Function to handle selection change
   const [loading, setLoading] = useState(true);
+  const [countinsf, setCountinsf] = useState(false);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -60,13 +61,31 @@ function AddTransfer({ setAddTransft }) {
           setLoading(false); // Correct usage of finally
         });
     }
-    // setAddTransft(false);
-    postData();
+    if (countinsf) {
+      console.log("error");
+    } else {
+      postData();
+      setAddTransft(false);
+    }
   };
   const handleCancelTransfert = () => {
     console.log("canceled");
     setAddTransft(false);
   };
+  var product;
+  if (selectedProduct != 0) {
+    product = products.find(
+      (product) => product.id_produit === parseInt(selectedProduct)
+    );
+    if (count > product.quantite_en_stock && !countinsf) {
+      setCountinsf(true);
+    }
+    if (count < product.quantite_en_stock && countinsf) {
+      setCountinsf(false);
+    }
+    console.log(product); // This will log the product with id 2
+  }
+  console.log(countinsf);
   if (!loading) {
     setAddTransft(false);
   }
@@ -98,6 +117,28 @@ function AddTransfer({ setAddTransft }) {
               </option>
             ))}
           </select>
+          {selectedProduct != 0 && (
+            <>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  price
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product.productDetails.price}
+                  {/* {products[selectedProduct - 1].productDetails.name} */}
+                </div>
+              </div>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  quantite in Stock
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product.quantite_en_stock}
+                  {/* {products[selectedProduct - 1].productDetails.name} */}
+                </div>
+              </div>
+            </>
+          )}
           <h1 className="text-lg text-blue2">Choose a Count</h1>
           <input
             type="number"
@@ -106,6 +147,13 @@ function AddTransfer({ setAddTransft }) {
             onChange={handleCountChange}
             className="border-blue2 border border-1 rounded"
           />
+          {selectedProduct != 0 && (
+            <div className=" text-red-500 rounded p-2 w-full">
+              {count > product.quantite_en_stock
+                ? " Insufficient stock for transfer"
+                : ""}
+            </div>
+          )}
 
           <div className="mt-5 flex justify-between">
             <h1

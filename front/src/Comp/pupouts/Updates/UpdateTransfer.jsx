@@ -14,6 +14,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
       const response = await axios.get(`${apiUrl}/produitstocksShop/1`);
       console.log(response.data);
       if (Array.isArray(response.data)) {
+        console.log(response.data);
         setProducts(response.data); // Directly store the data if it's an array
       } else {
         console.error("Expected an array, received:", typeof response.data);
@@ -21,6 +22,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
     } catch (error) {
       console.error("Error fetching ventes:", error);
     } finally {
+      setLoading(false);
       console.log("Fetch attempt finished");
     }
   };
@@ -32,7 +34,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
   const [count, setCount] = useState(transfer.quantite_transfert);
   // Function to handle selection change
   const [loading, setLoading] = useState(true);
-
+  const [countinsf, setCountinsf] = useState(false);
   const handleSelectChange = (event) => {
     setSelectedProduct(event.target.value);
   };
@@ -43,11 +45,14 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
   const handleCreateTransfert = () => {
     function postData() {
       return axios
-        .put(`https://project-si.onrender.com/transferts/${transfer.id_transfert}`, {
-          id_produit: selectedProduct,
+        .put(
+          `https://project-si.onrender.com/transferts/${transfer.id_transfert}`,
+          {
+            id_produit: selectedProduct,
 
-          quantite_transfert: parseInt(count),
-        })
+            quantite_transfert: parseInt(count),
+          }
+        )
         .then((response) => {
           // Handle response here
           console.log("Data posted successfully:", response.data);
@@ -58,18 +63,33 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
           console.error("Error posting data:", error);
         })
         .finally(() => {
-          setLoading(false); // Correct usage of finally
+          // Correct usage of finally
         });
     }
-    // setAddTransft(false);
-    postData();
+    if (countinsf) {
+      console.log("error");
+    } else {
+      setEditTransfer(false);
+      postData();
+    }
   };
   const handleCancelTransfert = () => {
     console.log("canceled");
     setEditTransfer(false);
   };
-  if (!loading) {
-    setEditTransfer(false);
+
+  var product;
+  if (selectedProduct != 0 && !loading) {
+    product = products.find(
+      (product) => product.id_produit === parseInt(selectedProduct)
+    );
+    if (product && count > product.quantite_en_stock && !countinsf) {
+      setCountinsf(true);
+    }
+    if (product && count < product.quantite_en_stock && countinsf) {
+      setCountinsf(false);
+    }
+    console.log(product);
   }
   return (
     <div
@@ -106,7 +126,34 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
             onChange={handleCountChange}
             className="border-blue2 border border-1 rounded"
           />
+          {selectedProduct != 0 && (
+            <>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  price
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product && product.productDetails.price}
+                  {/* {products[selectedProduct - 1].productDetails.name} */}
+                </div>
+              </div>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  quantite in Stock
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product && product.quantite_en_stock}
+                  {/* {products[selectedProduct - 1].productDetails.name} */}
+                </div>
+              </div>
 
+              <div className=" text-red-500 rounded p-2 w-full">
+                {product && count > product.quantite_en_stock
+                  ? " Insufficient stock for transfer"
+                  : ""}
+              </div>
+            </>
+          )}
           <div className="mt-5 flex justify-between">
             <h1
               className="bg-blue2 w-fit text-white px-5 py-2 cursor-pointer rounded-xl"

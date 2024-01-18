@@ -7,7 +7,7 @@ function AddVente({ setAddVente }) {
   const [products, setProducts] = useState([]);
   const [clients, setClients] = useState([]);
   // State for selected product, client, count, and Amount
-  const [selectedProductId, setSelectedProductId] = useState("");
+  const [selectedProductId, setSelectedProductId] = useState(0);
   const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedTypePay, setSelectedTypePay] = useState();
   const [loading, setLaoding] = useState(true);
@@ -17,12 +17,16 @@ function AddVente({ setAddVente }) {
   const idShop = queryParams.get("idShop");
   const [count, setCount] = useState(0);
   const [Amount, setAmount] = useState(0);
+  const [countinsf, setCountinsf] = useState(false);
+
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
       const apiUrl = "https://project-si.onrender.com";
       try {
-        const response = await axios.get(`${apiUrl}/products`);
+        const response = await axios.get(
+          `${apiUrl}/produitstocksShop/${idShop == null ? 1 : parseInt(idShop)}`
+        );
         console.log("products", response.data);
         if (Array.isArray(response.data)) {
           setProducts(response.data); // Directly store the data if it's an array
@@ -58,6 +62,7 @@ function AddVente({ setAddVente }) {
     fetchProducts();
   }, []);
   console.log(clients, products);
+
   // Event handlers
   const handleProductChange = (event) => {
     setSelectedProductId(event.target.value);
@@ -105,7 +110,19 @@ function AddVente({ setAddVente }) {
     console.log("Vente canceled");
     setAddVente(false);
   };
-
+  var product;
+  if (selectedProductId != 0) {
+    product = products.find(
+      (product) => product.id_produit === parseInt(selectedProductId)
+    );
+    if (count > product.quantite_en_stock && !countinsf) {
+      setCountinsf(true);
+    }
+    if (count < product.quantite_en_stock && countinsf) {
+      setCountinsf(false);
+    }
+    console.log(product); // This will log the product with id 2
+  }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white relative top-3 p-5 rounded-xl">
@@ -123,12 +140,39 @@ function AddVente({ setAddVente }) {
           >
             <option value="">Select a product</option>
             {products.map((product) => (
-              <option key={product.id} value={product.productId}>
-                {product.name}
+              <option key={product.id} value={product.id_produit}>
+                {product.productDetails.name}
               </option>
             ))}
           </select>
+          {selectedProductId != 0 && (
+            <>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  price
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product.productDetails.price}
+                  {/* {products[selectedProductId - 1].productDetails.name} */}
+                </div>
+              </div>
+              <div className="mb-3 uppercase">
+                <label htmlFor="email" className="block text-blue2 my-2">
+                  quantite in Stock
+                </label>
+                <div className="border border-gray-300 rounded p-2 w-full">
+                  {product.quantite_en_stock}
+                  {/* {products[selectedProductId - 1].productDetails.name} */}
+                </div>
+              </div>
 
+              <div className=" text-red-500 rounded p-2 w-full">
+                {count > product.quantite_en_stock
+                  ? " Insufficient stock for transfer"
+                  : ""}
+              </div>
+            </>
+          )}
           <h1 className="text-lg text-blue2">Choose a Client</h1>
           <select
             value={selectedClientId}
@@ -166,7 +210,7 @@ function AddVente({ setAddVente }) {
             onChange={handleTypePayChange}
             className="rounded-xl w-60 border-blue2 border border-1 "
           >
-            <option value="">Select a product</option>
+            <option value="">Select a method payment</option>
             <option value="Totalment">Totalment</option>
             <option value="Parcielment">Parcielment</option>
           </select>
