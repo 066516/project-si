@@ -1,7 +1,7 @@
 const Achat = require("../modles/Achat"); // Adjust the path as necessary
 const Vente = require("../modles/Vente");
 const Transfert = require("../modles/Transfert");
-const Employe = require("../modles/Employe");
+const ProduitStock = require("../modles/ProduitStock");
 const Product = require("../modles/product"); // Adjust the path as necessary
 const Client = require("../modles/client");
 
@@ -30,15 +30,52 @@ exports.analyseTotalMontant = async (req, res) => {
       },
     ]);
 
-    // Formatting the result for better readability
-    const formattedResult = totalPerMonth.map((group) => ({
-      month: group._id.month,
-      totalMontant: group.totalMontant,
-    }));
+    // Map the results to an array of numbers representing the total amount for each month
+    const montantArray = totalPerMonth.map((group) => group.totalMontant);
 
-    res.status(200).send(formattedResult);
+    res.status(200).send(montantArray);
   } catch (error) {
     console.error("Error in analyseTotalMontant:", error);
+    res.status(500).send(error);
+  }
+};
+
+exports.getAllProductsAndQuantities = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    console.log(id);
+    const result = await ProduitStock.aggregate([
+      { $match: { trash: false, id_shop: id } },
+      {
+        $lookup: {
+          from: "products", // Assuming 'products' is the collection name for Product model
+          localField: "id_produit",
+          foreignField: "productId",
+          as: "productDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$productDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          productName: "$productDetails.name",
+          quantite_en_stock: 1,
+        },
+      },
+    ]);
+
+    // Extracting product names and quantities into separate arrays
+    const productNames = result.map((p) => p.productName);
+    const quantities = result.map((p) => p.quantite_en_stock);
+
+    res.status(200).send({ productNames, quantities });
+  } catch (error) {
+    console.error("Error fetching product stock data:", error);
     res.status(500).send(error);
   }
 };
@@ -93,33 +130,37 @@ exports.findTopFournisseurForMonth = async (req, res) => {
 
 exports.calculateMonthlyTotalSales = async (req, res) => {
   const idShop = parseInt(req.params.idShop); // Extract idShop from request parameters
+  const currentYear = new Date().getFullYear(); // Get the current year
 
   try {
     const monthlyTotals = await Vente.aggregate([
-      { $match: { id_shop: idShop } },
+      {
+        $match: {
+          id_shop: idShop,
+          date_vente: {
+            $gte: new Date(`${currentYear}-01-01`),
+            $lt: new Date(`${currentYear + 1}-01-01`),
+          },
+        },
+      },
       {
         $group: {
-          _id: {
-            year: { $year: "$date_vente" },
-            month: { $month: "$date_vente" },
-          },
+          _id: { month: { $month: "$date_vente" } },
           totalMontantVente: { $sum: "$montant_total_vente" },
         },
       },
-      { $sort: { "_id.year": 1, "_id.month": 1 } },
+      { $sort: { "_id.month": 1 } },
     ]);
 
-    const formattedResult = monthlyTotals.map((group) => ({
-      year: group._id.year,
-      month: group._id.month,
-      totalMontantVente: group.totalMontantVente,
-    }));
+    // Map the results to an array of numbers representing total sales amount for each month
+    const salesAmounts = monthlyTotals.map((group) => group.totalMontantVente);
 
-    res.status(200).send(formattedResult);
+    res.status(200).send(salesAmounts);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+
 exports.findTopClientForMonth = async (req, res) => {
   const year = parseInt(req.query.year);
   const month = parseInt(req.query.month);

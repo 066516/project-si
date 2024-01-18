@@ -388,3 +388,38 @@ exports.getTops2 = async (req, res) => {
     res.status(500).send(error);
   }
 };
+exports.AchatsRecente = async (req, res) => {
+  try {
+    // Get the shop ID from request parameters
+    const shopId = req.params.shopId; // Make sure this matches the parameter name in your route
+
+    let recentAchats = await Achat.find({ id_shop: shopId })
+      .sort({ date_achat: -1 })
+      .limit(10);
+
+    recentAchats = await Promise.all(
+      recentAchats.map(async (Achat) => {
+        Achat = Achat.toObject();
+
+        // Fetch product details
+        const product = await Product.findOne({
+          productId: Achat.id_produit,
+        }).select("name");
+        Achat.productDetails = product || { name: "Unknown Product" };
+
+        // Fetch shop details
+        // const shop = await Shop.findOne({ shopID: Achat.id_shop }).select(
+        //   "name"
+        // );
+        // Achat.shopDetails = shop || { name: "Unknown Shop" };
+
+        return Achat;
+      })
+    );
+
+    res.status(200).send(recentAchats);
+  } catch (error) {
+    console.error("Error fetching recent Achats:", error);
+    res.status(500).send(error);
+  }
+};

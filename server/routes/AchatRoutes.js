@@ -5,6 +5,7 @@ const achatController = require("../controls/AchatControles"); // Adjust the pat
 router.post("/achat", achatController.createAchat);
 router.get("/achat/:id", achatController.getAchat);
 router.get("/achats", achatController.getAllAchats);
+router.get("/recentAchats", achatController.AchatsRecente);
 router.get("/achats/tops", achatController.getTops);
 router.get("/achats/tops2", achatController.getTops2);
 router.put("/achats/:id", achatController.updateAchat);

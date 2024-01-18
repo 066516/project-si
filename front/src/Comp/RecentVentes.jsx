@@ -30,42 +30,26 @@ function RecentVentes() {
   console.log("====================================");
   return (
     <div className="w-full text-center">
-      <div className="flex justify-between font-semibold px-[2px] bg-gray-300">
+      <div className="grid grid-cols-3 font-semibold px-[2px] bg-gray-300">
         <h1>Produit </h1>
         <h2>Count</h2>
         <h2>Amount</h2>
       </div>
       <div className="w-full h-60 bg-gray-200 pr-2 overflow-y-scroll">
-        <div className=" justify-between  px-2 flex text-center py-2">
-          <h1 className="font-medium text-red-500">Tomato </h1>
-          <h2>200Kg</h2>
-          <h2>200DA</h2>
-        </div>
-        <div className="flex justify-between  px-2 flex text-center py-2">
-          <h1 className="font-medium text-red-500">Tomato </h1>
-          <h2>200Kg</h2>
-          <h2>200DA</h2>
-        </div>
-        <div className="flex justify-between  px-2 flex text-center py-2">
-          <h1 className="font-medium text-red-500">Tomato </h1>
-          <h2>200Kg</h2>
-          <h2>200DA</h2>
-        </div>
-        <div className="flex justify-between  px-2 flex text-center py-2">
-          <h1 className="font-medium text-red-500">Tomato </h1>
-          <h2>200Kg</h2>
-          <h2>200DA</h2>
-        </div>
-        <div className="flex justify-between  px-2 flex text-center py-2">
-          <h1 className="font-medium text-red-500">Tomato </h1>
-          <h2>200Kg</h2>
-          <h2>200DA</h2>
-        </div>
-        <div className="flex justify-between  px-2 flex text-center py-2">
-          <h1 className="font-medium text-red-500">Tomato </h1>
-          <h2>200Kg</h2>
-          <h2>200DA</h2>
-        </div>
+        {recentSalesShop.map((sale) => {
+          return (
+            <div
+              key={sale.id_vente}
+              className="w-full grid grid-cols-3 text-center  px-2 flex text-center py-2"
+            >
+              <h1 className="font-medium text-red-500">
+                {sale.productDetails.name}
+              </h1>
+              <h2 className="text-center">{sale.quantite_vendue}</h2>
+              <h2>{sale.montant_total_vente}DA</h2>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

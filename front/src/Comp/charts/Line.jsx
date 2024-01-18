@@ -1,16 +1,32 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import axios from "axios";
 
 const LineChart = () => {
   const chartRef = useRef(null);
+  const [salesData, setSalesData] = useState([]);
 
   useEffect(() => {
-    // Sales data for each month
-    const salesData = [
-      1000, 1200, 800, 1500, 2000, 1800, 2200, 2500, 1700, 1300, 1600, 1900,
-    ];
+    const fetchSalesmontant = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(`${apiUrl}/analyse/totalMontantAchat`);
+        if (Array.isArray(response.data)) {
+          setSalesData(response.data);
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching:", error);
+      }
+    };
 
-    // Labels for each month
+    fetchSalesmontant();
+  }, []);
+
+  useEffect(() => {
+    if (!chartRef.current) return; // Check if the ref is defined
+
     const months = [
       "January",
       "February",
@@ -26,15 +42,12 @@ const LineChart = () => {
       "December",
     ];
 
-    // Get the canvas element
     const ctx = chartRef.current.getContext("2d");
 
-    // Destroy any existing chart on the canvas
     if (chartRef.current.chart) {
       chartRef.current.chart.destroy();
     }
 
-    // Create the line chart
     chartRef.current.chart = new Chart(ctx, {
       type: "line",
       data: {
@@ -50,6 +63,8 @@ const LineChart = () => {
         ],
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false, // Add this line
         scales: {
           y: {
             beginAtZero: true,
@@ -61,7 +76,7 @@ const LineChart = () => {
         },
       },
     });
-  }, []);
+  }, [salesData]); // Add salesData to the dependency array
 
   return (
     <div style={{ width: "auto", height: "auto" }}>

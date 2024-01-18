@@ -1,17 +1,38 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const SalesChart = () => {
   const chartRef = useRef(null);
+  const [salesData, setSalesData] = useState([]);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idShop = queryParams.get("idShop");
 
   useEffect(() => {
-    // Sales data for each month
-    const salesData = [
-      1000, 1200, 800, 1500, 2000, 1800, 2200, 2500, 1700, 1300, 1600, 1900,
-      2000, 255,
-    ];
+    const fetchSalesmontant = async () => {
+      const apiUrl = "http://localhost:3000";
+      try {
+        const response = await axios.get(
+          `${apiUrl}/analyse/totalMontantVente/${idShop == null ? 1 : idShop}`
+        );
+        if (Array.isArray(response.data)) {
+          setSalesData(response.data);
+        } else {
+          console.error("Expected an array, received:", typeof response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching :", error);
+      }
+    };
 
-    // Labels for each month
+    fetchSalesmontant();
+  }, [idShop]);
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+
     const months = [
       "January",
       "February",
@@ -27,15 +48,12 @@ const SalesChart = () => {
       "December",
     ];
 
-    // Get the canvas element
     const ctx = chartRef.current.getContext("2d");
 
-    // Destroy any existing chart on the canvas
     if (chartRef.current.chart) {
       chartRef.current.chart.destroy();
     }
 
-    // Create the sales chart
     chartRef.current.chart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -43,7 +61,6 @@ const SalesChart = () => {
         datasets: [
           {
             label: "Sales in USD",
-
             data: salesData,
             backgroundColor: "red",
             borderColor: "rgba(75, 192, 192, 1)",
@@ -63,13 +80,10 @@ const SalesChart = () => {
         },
       },
     });
-  }, []);
+  }, [salesData]);
 
   return (
-    <div
-      style={{ width: "100%" }}
-      className="flex items center justify-center "
-    >
+    <div style={{ width: "100%" }} className="flex items-center justify-center">
       <canvas id="salesChart" ref={chartRef}></canvas>
     </div>
   );
