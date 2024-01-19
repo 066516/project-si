@@ -49,7 +49,7 @@ function StockListe({
   };
   function downloadExcelFile() {
     fetch(
-      `http://localhost:3000/export/${idShop == null ? 1 : parseInt(idShop)}`
+      `https://project-si.onrender.com/export/${idShop == null ? 1 : parseInt(idShop)}`
     ) // Adjust the URL as per your server configuration
       .then((response) => {
         if (!response.ok) {

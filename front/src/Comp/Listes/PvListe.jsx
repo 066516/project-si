@@ -56,7 +56,7 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
     return `${day}/${month}/${year}`;
   }
   function downloadPdf(id) {
-    fetch(`http://localhost:3000/api/pvs/download/${id}`)
+    fetch(`https://project-si.onrender.com/api/pvs/download/${id}`)
       .then((response) => response.blob())
       .then((blob) => {
         // Create a URL for the blob
