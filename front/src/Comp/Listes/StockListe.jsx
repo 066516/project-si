@@ -47,6 +47,36 @@ function StockListe({
     setProduct(product);
     setDeleteProduct(true);
   };
+  function downloadExcelFile() {
+    fetch(
+      `http://localhost:3000/export/${idShop == null ? 1 : parseInt(idShop)}`
+    ) // Adjust the URL as per your server configuration
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create an anchor element and click it to start the download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `stock_center_${
+          idShop == null ? 1 : parseInt(idShop)
+        }.xlsx`; // Set the file name for the download
+        a.click();
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the file: ", error);
+      });
+  }
+
   return (
     <>
       <div className="w-full flex justify-between mt-5">
@@ -63,6 +93,15 @@ function StockListe({
           <IoMdAdd fontSize="25px" />
         </h1>
       </div>
+      <div className="w-full flex justify-end mt-5">
+        <h1
+          className="py-2 px-5 uppercase text-center cursor-pointer flex items-center gap-1 font-bold border border-blue2  text-blue2  rounded-xl border-[2px] "
+          onClick={downloadExcelFile}
+        >
+          download liste stock
+        </h1>
+      </div>
+
       <div className="w-full text-center font-medium mt-5">
         <div className="grid md:grid-cols-6 grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold ">
           <h1>Product Name </h1>

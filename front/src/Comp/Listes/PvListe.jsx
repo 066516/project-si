@@ -55,6 +55,30 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
     // Format the date as "dd/mm/yyyy"
     return `${day}/${month}/${year}`;
   }
+  function downloadPdf(id) {
+    fetch(`http://localhost:3000/api/pvs/download/${id}`)
+      .then((response) => response.blob())
+      .then((blob) => {
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a new anchor element
+        const a = document.createElement("a");
+
+        // Set the href and download attributes for the anchor element
+        a.href = url;
+        a.download = `pv${id}.pdf`;
+
+        // Append the anchor to the body, click it, and then remove it
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Clean up the URL
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => console.error("Error:", error));
+  }
   return (
     <>
       <div className="w-full flex justify-between mt-5">
@@ -72,10 +96,11 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
         </h1>
       </div>
       <div className="w-full text-center font-medium mt-5">
-        <div className="grid md:grid-cols-3 grid-cols-3 text-center bg-gray-300 px-2 py-2 font-semibold ">
+        <div className="grid md:grid-cols-4 grid-cols-4 text-center bg-gray-300 px-2 py-2 font-semibold ">
           <h1> date </h1>
           <h2 className="">content</h2>
           <h2 className="text-red-500">Update Or delete Achat</h2>
+          <h2>pdf</h2>
         </div>
         <div className="h-60 overflow-y-scroll">
           {loading
@@ -84,7 +109,7 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
                 return (
                   <div
                     key={pv.date_pv}
-                    className="grid md:grid-cols-3 grid-cols-3 text-center py-2 px-2 items-center"
+                    className="grid md:grid-cols-4 grid-cols-4 text-center py-2 px-2 items-center"
                   >
                     <h1 className="font-medium text-smaoy ">
                       {formatDate(pv.date_pv)}{" "}
@@ -111,6 +136,14 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
                         onClick={() => handleDelete(pv)}
                       />
                     </h2>
+                    {
+                      <button
+                        onClick={() => downloadPdf(pv.id_pv)}
+                        className="text-blue2"
+                      >
+                        Download{" "}
+                      </button>
+                    }
                   </div>
                 );
               })}

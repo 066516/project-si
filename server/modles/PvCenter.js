@@ -6,6 +6,7 @@ const pvQuotidienSchema = new mongoose.Schema({
   // id_employe: { type: Number, ref: "Employe" },
   Pv_content: { type: String }, // Adjust 'Centre' to your Centre model
   date_pv: { type: Date, default: Date.now },
+  pdfPath: { type: String },
 });
 
 pvQuotidienSchema.pre("save", async function (next) {

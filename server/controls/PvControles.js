@@ -33,12 +33,14 @@ exports.createPvQuotidien = async (req, res) => {
           "A PvQuotidien has already been created for this centre on the this date",
       });
     }
+    const newPvQuotidien = await PvQuotidien.create({ ...req.body });
+    const title = "pv" + newPvQuotidien.id_pv;
+    const filePath = await generatePDF(title, Pv_content);
 
     // Create the PvQuotidien
-    const newPvQuotidien = new PvQuotidien(req.body);
+    newPvQuotidien.pdfPath = filePath;
     await newPvQuotidien.save();
-    const title = "pv" + newPvQuotidien.id_pv;
-    generatePDF(title, Pv_content);
+    // console.log(`PDF created at: ${filePath}`);
 
     sendEmail(title);
     res.status(201).send({
@@ -52,6 +54,7 @@ exports.createPvQuotidien = async (req, res) => {
     res.status(500).send(error);
   }
 };
+// Endpoint to download a specific PV
 
 // Get a single Pv_quotidien entry by ID
 exports.getPvQuotidien = async (req, res) => {
