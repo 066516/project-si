@@ -76,7 +76,7 @@ function PrintVente({ setPrintVente, vente }) {
   const handlesend = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/sendvente", {
+        .post("https://project-si.onrender.com/sendvente", {
           to: email,
           id: vente.id_vente,
         })

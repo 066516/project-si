@@ -76,7 +76,7 @@ function PrintAchat({ setPrintAchat, achat }) {
   const handlesend = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/sendAchat", {
+        .post("https://project-si.onrender.com/sendAchat", {
           to: email,
           id: achat.id_achat,
         })

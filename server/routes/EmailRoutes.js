@@ -54,7 +54,6 @@ router.post("/sendAchat", async (req, res) => {
     // Combine achat and fournisseur data as needed
     // Note: This approach does not automatically merge the fournisseur data into the achat object
 
-    console.log(achat);
     // Further processing with achat
 
     const htmlContent = `
@@ -142,7 +141,6 @@ router.post("/sendvente", async (req, res) => {
     // Combine vente and cleint data as needed
     // Note: This approach does not automatically merge the cleint data into the vente object
 
-    console.log(vente);
     // Further processing with vente
 
     const htmlContent = `
