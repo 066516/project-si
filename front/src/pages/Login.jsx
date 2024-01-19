@@ -3,6 +3,7 @@ import img from "../assets/agg.png";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,17 +40,20 @@ function Login() {
     setIsLoading(true);
     // API call to backend using Axios
     try {
-      const response = await axios.post("https://project-si.onrender.com/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://project-si.onrender.com/login",
+        {
+          email,
+          password,
+        }
+      );
 
       // Handle successful login
       Cookies.set("authToken", response.data.token, { expires: 7, path: "" });
 
       // Store token or session data as needed
       // Redirect to dashboard or another page
-      window.location.href = "/dashboard";
+      return navigate("/dashboard");
     } catch (error) {
       // Handle errors
       if (error.response) {
@@ -70,12 +74,13 @@ function Login() {
       setIsLoading(false);
     }
   };
+  const navigate = useNavigate();
 
   var myCookieValue = null;
   useEffect(() => {
     myCookieValue = Cookies.get("authToken"); // 'myValue'
     if (myCookieValue) {
-      window.location.href = "/dashboard";
+      return navigate("/dashboard");
     }
   });
   const Spinner = () => (

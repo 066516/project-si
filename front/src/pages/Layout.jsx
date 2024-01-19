@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import img from "../assets/stock.png";
 import { FaSignOutAlt, FaBell, FaBars, FaTimes } from "react-icons/fa";
 import { IoIosNotificationsOutline } from "react-icons/io";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 // import NotificationPopOut from "../components/popOuts/NotificationPopOut";
 import Cookies from "js-cookie";
 function Layout() {
@@ -10,11 +10,12 @@ function Layout() {
   const [notifVisible, setNotifVisible] = useState(false);
   const role = "admin";
   var route = useLocation();
+  const navigate = useNavigate();
   console.log(route.pathname);
   const logOutHandler = async () => {
     Cookies.remove("authToken");
     console.log("yes");
-    window.location.href = "/login";
+    return navigate("/login");
   };
 
   const showNotif = () => {

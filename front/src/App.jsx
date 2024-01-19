@@ -1,4 +1,9 @@
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  BrowserRouter as Router,
+  useNavigate,
+} from "react-router-dom";
 import Layout from "./pages/Layout";
 import Dashbord from "./pages/Dashbord";
 import Shops from "./pages/Shops";
@@ -10,13 +15,17 @@ import Shop from "./pages/Shop";
 import Login from "./pages/Login";
 import Cookies from "js-cookie";
 import Main from "./pages/Main";
+import { useEffect } from "react";
 
 const ProtectedLayout = ({ children }) => {
   const isAuthenticated = Cookies.get("authToken"); // Adjust according to your authentication logic
+  const navigate = useNavigate();
 
-  if (!isAuthenticated) {
-    window.location.href = "/login";
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return navigate("/login");
+    }
+  });
 
   return <div>{children}</div>;
 };
@@ -27,18 +36,8 @@ function App() {
       <div className="flex flex-col sm:flex-row w-screen h-screen  overflow-hidden">
         <Router>
           <Routes>
-
-            <Route
-              path="/login"
-              element={
-                <>
-                  {/* <Layout /> */}
-                  <Routes>
-                    <Route path="/" element={<Login />} />
-                  </Routes>
-                </>
-              }
-            />
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />} />
             <Route
               path="/*"
               element={
