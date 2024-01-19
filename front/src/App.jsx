@@ -27,7 +27,6 @@ function App() {
       <div className="flex flex-col sm:flex-row w-screen h-screen  overflow-hidden">
         <Router>
           <Routes>
-          <Route path="/" element={<Main />} />
 
             <Route
               path="/login"
