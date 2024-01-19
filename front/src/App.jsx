@@ -9,6 +9,7 @@ import Stock from "./pages/Stock";
 import Shop from "./pages/Shop";
 import Login from "./pages/Login";
 import Cookies from "js-cookie";
+import Main from "./pages/Main";
 
 const ProtectedLayout = ({ children }) => {
   const isAuthenticated = Cookies.get("authToken"); // Adjust according to your authentication logic
@@ -26,6 +27,8 @@ function App() {
       <div className="flex flex-col sm:flex-row w-screen h-screen  overflow-hidden">
         <Router>
           <Routes>
+          <Route path="/" element={<Main />} />
+
             <Route
               path="/login"
               element={
