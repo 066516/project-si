@@ -28,12 +28,12 @@ exports.createVente = async (req, res) => {
       return res.status(404).send({ message: "Product not found" });
     }
 
-    // const stockItem = await ProduitStock.findOne({ id_produit, id_shop });
-    // if (!stockItem || stockItem.quantite_en_stock < quantite_vendue) {
-    //   return res.status(400).send({
-    //     message: "Insufficient stock for this product in the specified shop",
-    //   });
-    // }
+    const stockItem = await ProduitStock.findOne({ id_produit, id_shop });
+    if (!stockItem || stockItem.quantite_en_stock < quantite_vendue) {
+      return res.status(400).send({
+        message: "Insufficient stock for this product in the specified shop",
+      });
+    }
     // If all exist, create the Vente
     const newVente = new Vente({
       id_client,
@@ -53,17 +53,17 @@ exports.createVente = async (req, res) => {
 
       if (client) {
         client.creditClient +=
-          newVente.montant_total_vente - montant_encaisse_vente;
+          newVente.montant_total_vente - parseInt(montant_encaisse_vente);
 
         await client.save();
       } else {
         throw new Error("client not found");
       }
-      newVente.reste = newVente.montant_total_vente - montant_encaisse_vente;
+      newVente.reste = newVente.montant_total_vente - parseInt(montant_encaisse_vente);
       await newVente.save();
     }
-    // stockItem.quantite_en_stock -= quantite_vendue;
-    // await stockItem.save();
+    stockItem.quantite_en_stock -= parseInt(quantite_vendue);
+    await stockItem.save();
     res.status(201).send({
       message: "Vente created successfully",
       data: newVente,

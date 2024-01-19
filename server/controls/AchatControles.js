@@ -39,12 +39,12 @@ exports.createAchat = async (req, res) => {
       id_produit: id_produit,
     });
     if (produitStockEntry) {
-      produitStockEntry.quantite_en_stock += quantite_achat;
+      produitStockEntry.quantite_en_stock += parseInt(quantite_achat);
       await produitStockEntry.save();
     } else {
       const newProduitStockEntry = new ProduitStock({
         id_produit: id_produit,
-        quantite_en_stock: quantite_achat,
+        quantite_en_stock: parseInt(quantite_achat),
       });
       await newProduitStockEntry.save();
     }
