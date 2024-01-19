@@ -4,11 +4,43 @@ const Product = require("../modles/product");
 exports.createProduct = async (req, res) => {
   try {
     // Check if a product with the same name already exists
-    const existingProduct = await Product.findOne({ name: req.body.name });
-    if (existingProduct) {
+    const existingProduct = await Product.findOne({
+      name: req.body.name,
+    });
+    if (existingProduct && !existingProduct.trash) {
       return res
         .status(400)
         .send({ message: "Product with this name already exists" });
+    }
+    if (existingProduct && existingProduct.trash) {
+      const updatedProduct = await Product.findOneAndUpdate(
+        { productId: existingProduct.productId },
+        { ...req.body, trash: false },
+        { new: true, runValidators: true }
+      );
+      const stock = await ProduitStock.findOneAndUpdate(
+        {
+          id_produit: updatedProduct.productId,
+          trash: true,
+        },
+        {
+          id_produit: updatedProduct.productId, // Reference the newly created product's _id
+          quantite_en_stock: updatedProduct.count,
+          id_shop: req.body.id_shop,
+          trash: false,
+        },
+
+        {
+          new: true, // Returns the updated document
+        }
+      );
+      return res.status(201).send({
+        message: "Product re-created successfully and added to stock",
+        data: {
+          product: updatedProduct,
+          stock: stock,
+        },
+      });
     }
 
     // Create a new product if it doesn't exist
@@ -39,7 +71,7 @@ exports.createProduct = async (req, res) => {
 
 exports.getProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ productId: req.params.id });
     if (!product) {
       return res.status(404).send({ message: "Product not found" });
     }
@@ -97,43 +129,36 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
+    // Update the product to set trash to true
     const updatedProduct = await Product.findOneAndUpdate(
-      {
-        productId: req.params.id,
-        trash: false,
-      },
-      {
-        $set: { trash: true },
-      },
-      {
-        new: true, // Returns the updated document
-      }
+      { productId: req.params.id, trash: false },
+      { $set: { trash: true } },
+      { new: true }
     );
 
-    const stock = await ProduitStock.findOneAndUpdate(
-      {
-        id_produit: req.params.id,
-        trash: false,
-      },
-      {
-        $set: { trash: true },
-      },
-      {
-        new: true, // Returns the updated document
-      }
+    // Update the stock to set trash to true
+    const updatedStock = await ProduitStock.findOneAndUpdate(
+      { id_produit: req.params.id, trash: false },
+      { $set: { trash: true } },
+      { new: true }
     );
-    stock.trash = true;
-    stock.save();
-    if (!updatedProduct || !stock) {
-      return res.status(404).send({ message: "Product and Stock not found" });
+    console.log(updatedProduct, updatedStock);
+
+    // Check if either the product or the stock was not found
+    if (!updatedProduct || !updatedStock) {
+      return res
+        .status(404)
+        .send({ message: "Product and/or Stock not found" });
     }
-    res
-      .status(200)
-      .send({ message: "Product and Stock  deleted successfully" });
+
+    // If both updates were successful
+    res.status(200).send({ message: "Product and Stock deleted successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
+
 exports.deleteAllProduct = async (req, res) => {
   try {
     await Product.deleteMany({});

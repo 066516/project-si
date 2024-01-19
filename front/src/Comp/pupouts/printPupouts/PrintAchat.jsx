@@ -4,6 +4,8 @@ import { ImCancelCircle } from "react-icons/im";
 
 function PrintAchat({ setPrintAchat, achat }) {
   console.log(achat);
+  const [sendemail, setsendemail] = useState(false);
+  const [email, setEmail] = useState("");
   const [reglement, setAddReglement] = useState(false);
   const [amount, setAmount] = useState(0);
   const [reglements, setreglements] = useState([]);
@@ -37,6 +39,9 @@ function PrintAchat({ setPrintAchat, achat }) {
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
+  const handleEmailtChange = (event) => {
+    setEmail(event.target.value);
+  };
   const fetchreglement = async () => {
     const apiUrl = "https://project-si.onrender.com";
     try {
@@ -67,6 +72,30 @@ function PrintAchat({ setPrintAchat, achat }) {
   const handlePrint = () => {
     fetchreglement();
     setPrintReglements(!printreglements);
+  };
+  const handlesend = () => {
+    function postData() {
+      return axios
+        .post("http://localhost:3000/sendAchat", {
+          to: email,
+          id: achat.id_achat,
+        })
+        .then((response) => {
+          // Handle response here
+          console.log("Data posted successfully:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error posting data:", error);
+        })
+        .finally(() => {});
+    }
+
+    postData();
+
+    setsendemail(!sendemail);
+    // Add logic to create achat
   };
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start  ">
@@ -142,17 +171,40 @@ function PrintAchat({ setPrintAchat, achat }) {
           </div>
           <div className="mb-4">
             <label htmlFor="phoneNumber" className="block mb-2">
-           reste
+              reste
             </label>
             <div className="border border-gray-300 rounded p-2 w-full">
               {achat.reste}{" "}
             </div>
           </div>
           <div className="flex justify-end">
-            <h1 className="bg-green-500 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase">
+            <h1
+              className="bg-green-500 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"
+              onClick={() => setsendemail(true)}
+            >
               send to client
             </h1>
           </div>
+
+          {sendemail && (
+            <div className="mb-4">
+              <label htmlFor="phoneNumber" className="block mb-2">
+                entre email
+              </label>
+              <input
+                type="email"
+                value={email}
+                className="border border-gray-300 rounded p-2 w-full"
+                onChange={handleEmailtChange}
+              />
+              <h1
+                className="bg-blue-500 mt-3 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"
+                onClick={handlesend}
+              >
+                send
+              </h1>
+            </div>
+          )}
           <div className="flex justify-between my-5">
             <h1
               className="bg-blue-500 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"
@@ -167,7 +219,6 @@ function PrintAchat({ setPrintAchat, achat }) {
               add reglement
             </h1>
           </div>
-
           {reglement && (
             <div className="mb-4">
               <label htmlFor="phoneNumber" className="block mb-2">
