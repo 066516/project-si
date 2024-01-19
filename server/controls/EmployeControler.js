@@ -6,6 +6,10 @@ exports.createEmploye = async (req, res) => {
     if (!shopExists) {
       return res.status(404).send({ message: "Shop not found" });
     }
+    const employeExist = await Employe.findOne({ email: req.body.email });
+    if(employeExist){
+      return res.status(409).json({message:"Email already in use!"})
+    }
     const newEmploye = new Employe(req.body);
     const savedEmploye = await newEmploye.save();
     console.log("Saved data:", savedEmploye);

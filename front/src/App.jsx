@@ -7,6 +7,18 @@ import Achates from "./pages/Achates";
 import Dealers from "./pages/Dealers";
 import Stock from "./pages/Stock";
 import Shop from "./pages/Shop";
+import Login from "./pages/Login";
+import Cookies from "js-cookie";
+
+const ProtectedLayout = ({ children }) => {
+  const isAuthenticated = Cookies.get("authToken"); // Adjust according to your authentication logic
+
+  if (!isAuthenticated) {
+    window.location.href = "/login";
+  }
+
+  return <div>{children}</div>;
+};
 
 function App() {
   return (
@@ -15,12 +27,12 @@ function App() {
         <Router>
           <Routes>
             <Route
-              path="/"
+              path="/login"
               element={
                 <>
-                  <Layout />
+                  {/* <Layout /> */}
                   <Routes>
-                    <Route path="/" element={<Dashbord />} />
+                    <Route path="/" element={<Login />} />
                   </Routes>
                 </>
               }
@@ -30,15 +42,17 @@ function App() {
               element={
                 <>
                   <Layout />
-                  <Routes>
-                    <Route path="/dashboard" element={<Dashbord />} />
-                    <Route path="/shops" element={<Shops />} />
-                    <Route path="/ventes" element={<Ventes />} />
-                    <Route path="/achats" element={<Achates />} />
-                    <Route path="/dealers" element={<Dealers />} />
-                    <Route path="/Stock" element={<Stock />} />
-                    <Route path="/shop" element={<Shop />} />
-                  </Routes>
+                  <ProtectedLayout>
+                    <Routes>
+                      <Route path="/dashboard" element={<Dashbord />} />
+                      <Route path="/shops" element={<Shops />} />
+                      <Route path="/ventes" element={<Ventes />} />
+                      <Route path="/achats" element={<Achates />} />
+                      <Route path="/dealers" element={<Dealers />} />
+                      <Route path="/Stock" element={<Stock />} />
+                      <Route path="/shop" element={<Shop />} />
+                    </Routes>
+                  </ProtectedLayout>
                 </>
               }
             />

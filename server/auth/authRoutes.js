@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("./user");
 const router = express.Router();
 const authenticateToken = require("./Middleware/authenticateToken");
+const Employe = require("../modles/Employe");
 
 router.post("/register", async (req, res) => {
   try {
@@ -23,11 +24,13 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user || !(await user.comparePassword(req.body.password))) {
-      return res.status(401).send({ message: "Invalid credentials" });
+    const user = await Employe.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(401).send({ message: "Invalid email" });
+    } else if (!(await user.comparePassword(req.body.password))) {
+      return res.status(401).send({ message: "Invalid password" });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.EmployeID }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
     // res.cookie("token", token, {
@@ -39,6 +42,7 @@ router.post("/login", async (req, res) => {
 
     res.status(200).send({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 });

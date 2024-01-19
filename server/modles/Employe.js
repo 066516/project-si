@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 const EmployeCounter = require("./Counters/counterEmploye");
 const { CronJob } = require("cron");
+const bcrypt = require("bcrypt");
 
 const EmployeSchema = new mongoose.Schema({
   EmployeID: { type: Number, index: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String },
   name: { type: String, required: true },
-  email: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   workIn: { type: Number, ref: "Shop", index: true },
   salary: { type: Number, default: 0 },
@@ -23,11 +25,16 @@ EmployeSchema.pre("save", async function (next) {
       { new: true, upsert: true }
     );
     doc.EmployeID = counterDoc.seq;
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10);
     next();
   } else {
     next();
   }
 });
+EmployeSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 const Employe = mongoose.model("Employe", EmployeSchema);
 

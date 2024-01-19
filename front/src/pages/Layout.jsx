@@ -4,7 +4,7 @@ import { FaSignOutAlt, FaBell, FaBars, FaTimes } from "react-icons/fa";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { Outlet, Link, useLocation } from "react-router-dom";
 // import NotificationPopOut from "../components/popOuts/NotificationPopOut";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 function Layout() {
   const [bol, setBol] = useState(false);
   const [notifVisible, setNotifVisible] = useState(false);
@@ -14,7 +14,7 @@ function Layout() {
   const logOutHandler = async () => {
     Cookies.remove("authToken");
     console.log("yes");
-    window.location.href = "/";
+    window.location.href = "/login";
   };
 
   const showNotif = () => {
