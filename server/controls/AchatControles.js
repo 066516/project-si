@@ -190,9 +190,9 @@ exports.deleteAchat = async (req, res) => {
     const { quantite_achat, id_produit, montant_encaisse_achat } = achat;
 
     // Update the stock
-    const stockItem = await ProduitStock.findOne({ id_produit });
+    const stockItem = await ProduitStock.findOne({ id_produit, id_shop: 1 });
     if (stockItem) {
-      stockItem.quantite_en_stock += quantite_achat; // Add back the quantity to the stock
+      stockItem.quantite_en_stock -= quantite_achat; // Add back the quantity to the stock
       await stockItem.save();
     }
 

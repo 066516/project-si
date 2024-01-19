@@ -51,6 +51,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
             id_produit: selectedProduct,
 
             quantite_transfert: parseInt(count),
+            
           }
         )
         .then((response) => {

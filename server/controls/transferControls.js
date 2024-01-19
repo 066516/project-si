@@ -140,8 +140,8 @@ exports.updateTransfert = async (req, res) => {
 
     // Update stock in origin shop
     const stockOrigin = await ProduitStock.findOne({
-      id_produit: updatedTransfert.id_produit,
-      id_shop: existingTransfert.id_centre, // Assuming this field exists
+      id_produit: existingTransfert.id_produit,
+      id_shop: 1, // Assuming this field exists
     });
 
     if (stockOrigin) {
@@ -153,8 +153,8 @@ exports.updateTransfert = async (req, res) => {
 
     // Update stock in destination shop
     const stockDestination = await ProduitStock.findOne({
-      id_produit: updatedTransfert.id_produit,
-      id_shop: updatedTransfert.id_centre,
+      id_produit: existingTransfert.id_produit,
+      id_shop: existingTransfert.id_centre,
     });
 
     if (stockDestination) {
@@ -187,7 +187,7 @@ exports.deleteTransfert = async (req, res) => {
     // Update stock in origin shop
     const stockOrigin = await ProduitStock.findOne({
       id_produit: transfert.id_produit,
-      id_shop: transfert.id_centre_origin, // Assuming this field exists
+      id_shop: transfert.id_centre, // Assuming this field exists
     });
 
     if (stockOrigin) {
