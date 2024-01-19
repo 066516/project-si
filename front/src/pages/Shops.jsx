@@ -6,7 +6,7 @@ import HeaderTops from "../Comp/Headres/HeaderTops";
 import { Link } from "react-router-dom";
 
 function Shops() {
-  const [idShop, setIdShop] = useState(1);
+  const [idShop, setIdShop] = useState(2);
   useEffect(() => {
     console.log(idShop);
   });
@@ -18,23 +18,13 @@ function Shops() {
       <div className="grid grid-cols-3 mt-3 shadow-r   shadow-b  shadow-t cursor-pointer">
         <h1
           className={` text-center shadow-r  ${
-            idShop == 1 ? "bg-gray-200" : ""
-          }    py-2 font-medium uppercase`}
-          onClick={() => {
-            setIdShop(1);
-          }}
-        >
-          Shop 1
-        </h1>
-        <h1
-          className={` text-center shadow-r  ${
-            idShop === 2 ? "bg-gray-200" : ""
+            idShop == 2 ? "bg-gray-200" : ""
           }    py-2 font-medium uppercase`}
           onClick={() => {
             setIdShop(2);
           }}
         >
-          Shop 2
+          Shop 1
         </h1>
         <h1
           className={` text-center shadow-r  ${
@@ -42,6 +32,16 @@ function Shops() {
           }    py-2 font-medium uppercase`}
           onClick={() => {
             setIdShop(3);
+          }}
+        >
+          Shop 2
+        </h1>
+        <h1
+          className={` text-center shadow-r  ${
+            idShop === 4 ? "bg-gray-200" : ""
+          }    py-2 font-medium uppercase`}
+          onClick={() => {
+            setIdShop(4);
           }}
         >
           Shop 3

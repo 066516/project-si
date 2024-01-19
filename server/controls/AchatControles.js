@@ -148,7 +148,7 @@ exports.updateAchat = async (req, res) => {
         id_produit: updatedAchat.id_produit,
       });
       if (stockItem) {
-        stockItem.quantite_en_stock -= newQuantiteAchat - oldQuantiteAchat;
+        stockItem.quantite_en_stock += newQuantiteAchat - oldQuantiteAchat;
         await stockItem.save();
       }
     }

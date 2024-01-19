@@ -7,6 +7,7 @@ function AddEmploye({ setAddEmplye }) {
   const [name, setName] = useState("");
   const [LastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [salaireJour, setsalaireJour] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -20,6 +21,7 @@ function AddEmploye({ setAddEmplye }) {
           email,
           phoneNumber,
           workIn: idShop ? idShop : 1,
+          salaireJour,
         })
         .then((response) => {
           // Handle response here
@@ -98,6 +100,19 @@ function AddEmploye({ setAddEmplye }) {
               id="phoneNumber"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              className="border border-gray-300 rounded p-2 w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block mb-2">
+              salaire Jour
+            </label>
+            <input
+              type="tel"
+              id="salaireJour"
+              value={salaireJour}
+              onChange={(e) => setsalaireJour(e.target.value)}
               className="border border-gray-300 rounded p-2 w-full"
               required
             />

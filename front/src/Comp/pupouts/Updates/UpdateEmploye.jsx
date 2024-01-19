@@ -4,6 +4,8 @@ import { ImCancelCircle } from "react-icons/im";
 
 function UpdateEmploye({ setEditEmploye, Employe }) {
   const [name, setName] = useState(Employe.name);
+  const [salaireJour, setsalaireJour] = useState(Employe.salaireJour);
+
   const [email, setEmail] = useState(Employe.email);
   const [phoneNumber, setPhoneNumber] = useState(Employe.phoneNumber);
   const [loading, setLoading] = useState(true);
@@ -16,6 +18,7 @@ function UpdateEmploye({ setEditEmploye, Employe }) {
           name: name,
           email,
           phoneNumber,
+          salaireJour,
         })
         .then((response) => {
           // Handle response here
@@ -92,6 +95,19 @@ function UpdateEmploye({ setEditEmploye, Employe }) {
               id="phoneNumber"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              className="border border-gray-300 rounded p-2 w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block mb-2">
+              salaire Jour
+            </label>
+            <input
+              type="tel"
+              id="salaireJour"
+              value={salaireJour}
+              onChange={(e) => setsalaireJour(e.target.value)}
               className="border border-gray-300 rounded p-2 w-full"
               required
             />
