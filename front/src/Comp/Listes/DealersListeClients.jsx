@@ -20,7 +20,7 @@ function DealersListeClients({
   const idShop = queryParams.get("idShop");
   useEffect(() => {
     const fetchVentes = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(
           `${apiUrl}/clients/${idShop == null ? 1 : idShop}`

@@ -19,7 +19,7 @@ function ShopListeEmploye({
   useEffect(() => {
     console.log("Fetching ...");
     const fetchVentes = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/employes/${idShop}`);
         console.log(response.data);

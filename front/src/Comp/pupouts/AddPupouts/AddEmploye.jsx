@@ -16,7 +16,7 @@ function AddEmploye({ setAddEmplye }) {
   const handleSubmit = (event) => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/employe ", {
+        .post("http://localhost:3000/employe ", {
           name: name + " " + LastName,
           email,
           phoneNumber,

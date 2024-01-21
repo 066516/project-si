@@ -12,7 +12,7 @@ function DeleteEmploye({ setDeleteEmploye, Employe }) {
   };
   const handledeleteEmploye = () => {
     const DeleteEmploye = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.delete(
           `${apiUrl}/employe/${Employe.EmployeID}`

@@ -12,7 +12,7 @@ function DeleteTransfer({ setdeleteTransfer, transfer }) {
   };
   const handleDeleteTransfer = () => {
     const Deletetransfer = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.delete(
           `${apiUrl}/transferts/${transfer.id_transfert}`

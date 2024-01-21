@@ -14,7 +14,7 @@ function UpdateAchat({ setEditacaht, info }) {
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/products`);
         console.log(response.data);
@@ -30,7 +30,7 @@ function UpdateAchat({ setEditacaht, info }) {
       }
     };
     const fetchFournisseurs = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/fournisseurs`);
         console.log(response.data);
@@ -81,7 +81,7 @@ function UpdateAchat({ setEditacaht, info }) {
     console.log("Achat created");
     function updateDate() {
       return axios
-        .put(`https://project-si.onrender.com/achats/${info.id_achat}`, {
+        .put(`http://localhost:3000/achats/${info.id_achat}`, {
           id_fournisseur: selectedSupplierId,
           id_produit: selectedProductId,
           quantite_achat: count,

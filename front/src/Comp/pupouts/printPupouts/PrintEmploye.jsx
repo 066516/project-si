@@ -14,7 +14,7 @@ function PrintEmploye({ setPrintEmploye, Employe }) {
   const handlePaySalary = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/salaries", {
+        .post("http://localhost:3000/salaries", {
           id_employe: Employe.EmployeID,
         })
         .then((response) => {
@@ -36,7 +36,7 @@ function PrintEmploye({ setPrintEmploye, Employe }) {
   const handleAddAnsence = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/absences", {
+        .post("http://localhost:3000/absences", {
           id_employe: Employe.EmployeID,
         })
         .then((response) => {
@@ -58,7 +58,7 @@ function PrintEmploye({ setPrintEmploye, Employe }) {
   const handleAddMarouf = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/masroufs", {
+        .post("http://localhost:3000/masroufs", {
           id_employe: Employe.EmployeID,
           montant_masrouf: amount,
         })
@@ -79,7 +79,7 @@ function PrintEmploye({ setPrintEmploye, Employe }) {
     setAddMasrouf(false);
   };
   // const fetchSalarys = async () => {
-  //   const apiUrl = "https://project-si.onrender.com";
+  //   const apiUrl = "http://localhost:3000";
   //   try {
   //     const response = await axios.get(
   //       `${apiUrl}/salaries/${Employe.EmployeID}`

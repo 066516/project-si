@@ -8,7 +8,7 @@ const LineChart = () => {
 
   useEffect(() => {
     const fetchSalesmontant = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/analyse/totalMontantAchat`);
         if (Array.isArray(response.data)) {

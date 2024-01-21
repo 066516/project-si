@@ -11,7 +11,7 @@ function DeleteClient({ setDeleteClient, client }) {
   };
   const handleCreateClient = () => {
     const Deleteclient = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.delete(
           `${apiUrl}/clients/${client.clientId}`

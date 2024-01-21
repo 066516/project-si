@@ -15,7 +15,7 @@ function AddTransfer({ setAddTransft }) {
   const queryParams = new URLSearchParams(location.search);
   const idShop = queryParams.get("idShop");
   const fetchProducts = async () => {
-    const apiUrl = "https://project-si.onrender.com";
+    const apiUrl = "http://localhost:3000";
     try {
       const response = await axios.get(`${apiUrl}/produitstocksShop/1`);
       console.log(response.data);
@@ -43,7 +43,7 @@ function AddTransfer({ setAddTransft }) {
   const handleCreateTransfert = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/transferts", {
+        .post("http://localhost:3000/transferts", {
           id_produit: selectedProduct,
           id_centre: parseInt(idShop),
           quantite_transfert: parseInt(count),

@@ -9,7 +9,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
   const queryParams = new URLSearchParams(location.search);
   const idShop = queryParams.get("idShop");
   const fetchProducts = async () => {
-    const apiUrl = "https://project-si.onrender.com";
+    const apiUrl = "http://localhost:3000";
     try {
       const response = await axios.get(`${apiUrl}/produitstocksShop/1`);
       console.log(response.data);
@@ -46,7 +46,7 @@ function UpdateTransfer({ setEditTransfer, transfer }) {
     function postData() {
       return axios
         .put(
-          `https://project-si.onrender.com/transferts/${transfer.id_transfert}`,
+          `http://localhost:3000/transferts/${transfer.id_transfert}`,
           {
             id_produit: selectedProduct,
 

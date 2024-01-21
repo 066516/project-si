@@ -19,7 +19,7 @@ function UpdatePv({ setUpdatePv, pv }) {
   const handleCreatePv = () => {
     function postData() {
       return axios
-        .put(`https://project-si.onrender.com/pvs/${pv.id_pv}`, {
+        .put(`http://localhost:3000/pvs/${pv.id_pv}`, {
           Pv_content: pv_Content,
         })
         .then((response) => {
