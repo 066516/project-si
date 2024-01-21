@@ -7,6 +7,7 @@ function UpdateProduct({ setEditPoductt, product }) {
   const [Catogry, setCatogry] = useState(product.productDetails.categoryId);
   const [price, setPrice] = useState(product.productDetails.price);
   const [Count, setCount] = useState(product.quantite_en_stock);
+  const [loading, setLoading] = useState(true);
 
   const handleSubmit = (event) => {
     function updateDate() {
@@ -22,12 +23,20 @@ function UpdateProduct({ setEditPoductt, product }) {
           return response.data;
         })
         .catch((error) => {
+          setLoading(false);
           console.error("Error updating date:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Correct usage of finally
         });
     }
     updateDate();
+
     // Add logic to send this data to the server or process it as needed
   };
+  if (!loading) {
+    setEditPoductt(false);
+  }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white text-blue2 relative top-3 p-5 rounded-xl">
@@ -35,7 +44,7 @@ function UpdateProduct({ setEditPoductt, product }) {
           onClick={() => setEditPoductt(false)}
           className="absolute top-2 right-2 cursor-pointer "
         />
-        <h1 className="text-lg font-semibold mb-4">Add New Product</h1>
+        <h1 className="text-lg font-semibold mb-4">update Product</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name" className="block mb-2">

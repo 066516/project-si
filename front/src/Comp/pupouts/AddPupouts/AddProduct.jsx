@@ -8,6 +8,8 @@ function AddProduct({ setAddProduct }) {
   const [Catogry, setCatogry] = useState("");
   const [price, setPrice] = useState("");
   const [Count, setCount] = useState("");
+  const [loading, setLoading] = useState(true);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const idShop = queryParams.get("idShop");
@@ -29,9 +31,15 @@ function AddProduct({ setAddProduct }) {
         .catch((error) => {
           // Handle errors here
           console.error("Error posting data:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Correct usage of finally
         });
     }
     postData();
+    if (!loading) {
+      setAddProduct(false);
+    }
     // Add logic to send this data to the server or process it as needed
   };
   return (
