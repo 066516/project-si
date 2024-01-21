@@ -13,7 +13,7 @@ const PieChart = () => {
 
   useEffect(() => {
     const fetchSalesmontant = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(
           `${apiUrl}/analyse/allProduct/${idShop == null ? 1 : idShop}`

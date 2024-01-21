@@ -18,7 +18,7 @@ function StockListe({
   useEffect(() => {
     console.log("Fetching stock...");
     const fetchVentes = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(
           `${apiUrl}/produitstocksShop/${idShop == null ? 1 : parseInt(idShop)}`
@@ -49,7 +49,7 @@ function StockListe({
   };
   function downloadExcelFile() {
     fetch(
-      `https://project-si.onrender.com/export/${idShop == null ? 1 : parseInt(idShop)}`
+      `http://localhost:3000/export/${idShop == null ? 1 : parseInt(idShop)}`
     ) // Adjust the URL as per your server configuration
       .then((response) => {
         if (!response.ok) {

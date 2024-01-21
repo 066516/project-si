@@ -15,7 +15,7 @@ function PrintAchat({ setPrintAchat, achat }) {
   const handleReglement = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/reglements", {
+        .post("http://localhost:3000/reglements", {
           id_fournisseur: achat.fournisseurDetails.Id_fournisseur,
           montant_reglement: amount,
           id_Achat: achat.id_achat,
@@ -43,7 +43,7 @@ function PrintAchat({ setPrintAchat, achat }) {
     setEmail(event.target.value);
   };
   const fetchreglement = async () => {
-    const apiUrl = "https://project-si.onrender.com";
+    const apiUrl = "http://localhost:3000";
     try {
       const response = await axios.get(
         `${apiUrl}/reglements/${achat.id_achat}`
@@ -76,7 +76,7 @@ function PrintAchat({ setPrintAchat, achat }) {
   const handlesend = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/sendAchat", {
+        .post("http://localhost:3000/sendAchat", {
           to: email,
           id: achat.id_achat,
         })

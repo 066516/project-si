@@ -6,7 +6,7 @@ function HeaderTops() {
   const [tops, setTops] = useState([]);
   useEffect(() => {
     const fetchHeadres = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/tops`);
         // console.log(response.data);

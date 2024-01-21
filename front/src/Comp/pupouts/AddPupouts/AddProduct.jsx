@@ -16,7 +16,7 @@ function AddProduct({ setAddProduct }) {
   const handleSubmit = (event) => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/product", {
+        .post("http://localhost:3000/product", {
           name,
           price,
           count: Count,

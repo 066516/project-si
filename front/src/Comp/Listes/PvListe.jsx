@@ -13,7 +13,7 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
   useEffect(() => {
     console.log("Fetching stock...");
     const fetchVentes = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(
           `${apiUrl}/pvs/${idShop == null ? 1 : parseInt(idShop)}`
@@ -56,7 +56,7 @@ function PvListe({ setEditPv, setPv, setDeletePv, setAddPv, setPrintPv }) {
     return `${day}/${month}/${year}`;
   }
   function downloadPdf(id) {
-    fetch(`https://project-si.onrender.com/api/pvs/download/${id}`)
+    fetch(`http://localhost:3000/api/pvs/download/${id}`)
       .then((response) => response.blob())
       .then((blob) => {
         // Create a URL for the blob

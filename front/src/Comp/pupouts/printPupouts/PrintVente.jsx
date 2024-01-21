@@ -15,7 +15,7 @@ function PrintVente({ setPrintVente, vente }) {
   const handleReglement = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/reglementClient", {
+        .post("http://localhost:3000/reglementClient", {
           id_client: vente.id_client,
           id_vente: vente.id_vente,
           montant_reglement: amount,
@@ -43,7 +43,7 @@ function PrintVente({ setPrintVente, vente }) {
     setEmail(event.target.value);
   };
   const fetchreglement = async () => {
-    const apiUrl = "https://project-si.onrender.com";
+    const apiUrl = "http://localhost:3000";
     try {
       const response = await axios.get(
         `${apiUrl}/reglementClient/${vente.id_vente}`
@@ -76,7 +76,7 @@ function PrintVente({ setPrintVente, vente }) {
   const handlesend = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/sendvente", {
+        .post("http://localhost:3000/sendvente", {
           to: email,
           id: vente.id_vente,
         })

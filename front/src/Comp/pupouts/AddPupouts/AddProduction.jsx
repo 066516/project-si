@@ -19,7 +19,7 @@ function AddProduction({ setAddProduction }) {
   useEffect(() => {
     // Replace with your API endpoint to fetch products
     const fetchProducts = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(
           `${apiUrl}/produitstocksShop/${idShop == null ? 1 : parseInt(idShop)}`
@@ -51,7 +51,7 @@ function AddProduction({ setAddProduction }) {
 
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/production", productData)
+        .post("http://localhost:3000/production", productData)
         .then((response) => {
           console.log("Data posted successfully:", response.data);
           return response.data;

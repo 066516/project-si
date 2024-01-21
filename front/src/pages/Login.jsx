@@ -40,13 +40,10 @@ function Login() {
     setIsLoading(true);
     // API call to backend using Axios
     try {
-      const response = await axios.post(
-        "https://project-si.onrender.com/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/login", {
+        email,
+        password,
+      });
 
       // Handle successful login
       Cookies.set("authToken", response.data.token, { expires: 7, path: "" });
@@ -143,7 +140,7 @@ function Login() {
                     className="bg-blue2 text-white py-3 px-2 my-6 text-center w-full rounded-xl font-semibold cursor-pointer hover:bg-blue2/80"
                     onClick={handleSubmit}
                   >
-                    Login 
+                    Login
                   </button>
                 )}
               </div>
@@ -153,7 +150,7 @@ function Login() {
                   <FaGoogle fontSize="22px" color="blue" />
                 </h1>
                 <h1 className=" text-white w-full h-full flex text-center justify-center items-center ">
-                  login in with google
+                  login with google
                 </h1>
               </div>
             </div>

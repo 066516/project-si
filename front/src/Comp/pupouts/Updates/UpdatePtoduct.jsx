@@ -12,7 +12,7 @@ function UpdateProduct({ setEditPoductt, product }) {
   const handleSubmit = (event) => {
     function updateDate() {
       return axios
-        .put(`https://project-si.onrender.com/product/${product.id_produit}`, {
+        .put(`http://localhost:3000/product/${product.id_produit}`, {
           name,
           price,
           count: Count,

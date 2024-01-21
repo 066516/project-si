@@ -21,7 +21,7 @@ function AddPv({ setAddPv }) {
   const handleCreatePv = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/pvs", {
+        .post("http://localhost:3000/pvs", {
           Pv_content: pv_Content,
           id_centre: idShop != null ? idShop : 1,
         })

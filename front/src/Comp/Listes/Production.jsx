@@ -14,7 +14,7 @@ function Production({ setDeleteProduction, setEditPoductt, setAddProduction }) {
   useEffect(() => {
     console.log("Fetching stock...");
     const fetchVentes = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(
           `${apiUrl}/production/${idShop == null ? 1 : parseInt(idShop)}`
@@ -45,9 +45,7 @@ function Production({ setDeleteProduction, setEditPoductt, setAddProduction }) {
   };
   function downloadExcelFile() {
     fetch(
-      `https://project-si.onrender.com/export/${
-        idShop == null ? 1 : parseInt(idShop)
-      }`
+      `http://localhost:3000/export/${idShop == null ? 1 : parseInt(idShop)}`
     ) // Adjust the URL as per your server configuration
       .then((response) => {
         if (!response.ok) {
@@ -101,13 +99,13 @@ function Production({ setDeleteProduction, setEditPoductt, setAddProduction }) {
       </div> */}
 
       <div className="w-full text-center font-medium mt-5">
-        <div className="grid md:grid-cols-6 grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold ">
+        <div className="grid  grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold ">
           <h1>Production Name </h1>
-          <h2 className="hidden md:flex justify-center">Catogry</h2>
+          <h2 className="">Catogry</h2>
           <h2>Price</h2>
           <h2>Count</h2>
           <h2 className=" ">type</h2>
-          <h2 className="text-red-500">Update Or delete Achat</h2>
+          {/* <h2 className="text-red-500">Update Or delete Achat</h2> */}
         </div>
         <div>
           {loading
@@ -116,21 +114,21 @@ function Production({ setDeleteProduction, setEditPoductt, setAddProduction }) {
                 return (
                   <div
                     key={stock.stockId}
-                    className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center"
+                    className="grid grid-cols-5  text-center py-2 px-2 items-center"
                   >
                     <h1 className="font-medium text-smaoy ">
                       {stock.productDetails.name}
                     </h1>
-                    <h2 className="hidden md:flex justify-center">
+                    <h2 className=" justify-center">
                       {" "}
                       {stock.productDetails.categoryId}
                     </h2>
                     <h2> {stock.productDetails.price}</h2>
                     <h2>{stock.productDetails.count}</h2>
 
-                    <h2 className="hidden md:flex">Production</h2>
+                    <h2 className="">Production</h2>
 
-                    <h2 className="flex justify-evenly">
+                    {/* <h2 className="flex justify-evenly">
                       <MdEdit
                         fontSize="25px"
                         color="blue"
@@ -141,7 +139,7 @@ function Production({ setDeleteProduction, setEditPoductt, setAddProduction }) {
                         color="red"
                         onClick={() => handleDelete(stock)}
                       />
-                    </h2>
+                    </h2> */}
                   </div>
                 );
               })}
