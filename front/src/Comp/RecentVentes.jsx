@@ -25,9 +25,7 @@ function RecentVentes() {
 
     fetchHeadres();
   }, []);
-  console.log("====================================");
-  console.log(recentSalesShop);
-  console.log("====================================");
+  
   return (
     <div className="w-full text-center">
       <div className="grid grid-cols-3 font-semibold px-[2px] bg-gray-300">

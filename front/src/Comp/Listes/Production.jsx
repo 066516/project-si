@@ -4,15 +4,11 @@ import { IoMdAdd } from "react-icons/io";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 
-function StockListe({
-  setDeleteProduct,
-  setEditPoductt,
-  setProduct,
-  setAddProduct,
-}) {
-  const [StockListe, setStockListe] = useState([]);
+function Production({ setDeleteProduction, setEditPoductt, setAddProduction }) {
+  const [Production, setProductions] = useState([]);
   const [loading, setLaoding] = useState(true);
   const location = useLocation();
+
   const queryParams = new URLSearchParams(location.search);
   const idShop = queryParams.get("idShop");
   useEffect(() => {
@@ -21,11 +17,11 @@ function StockListe({
       const apiUrl = "https://project-si.onrender.com";
       try {
         const response = await axios.get(
-          `${apiUrl}/produitstocksShop/${idShop == null ? 1 : parseInt(idShop)}`
+          `${apiUrl}/production/${idShop == null ? 1 : parseInt(idShop)}`
         );
         console.log(response.data);
         if (Array.isArray(response.data)) {
-          setStockListe(response.data); // Directly store the data if it's an array
+          setProductions(response.data); // Directly store the data if it's an array
         } else {
           console.error("Expected an array, received:", typeof response.data);
         }
@@ -39,17 +35,19 @@ function StockListe({
 
     fetchVentes();
   });
-  const handleEDit = (product) => {
-    setProduct(product);
+  const handleEDit = (Production) => {
+    setProduction(Production);
     setEditPoductt(true);
   };
-  const handleDelete = (product) => {
-    setProduct(product);
-    setDeleteProduct(true);
+  const handleDelete = (Production) => {
+    setProduction(Production);
+    setDeleteProduction(true);
   };
   function downloadExcelFile() {
     fetch(
-      `https://project-si.onrender.com/export/${idShop == null ? 1 : parseInt(idShop)}`
+      `https://project-si.onrender.com/export/${
+        idShop == null ? 1 : parseInt(idShop)
+      }`
     ) // Adjust the URL as per your server configuration
       .then((response) => {
         if (!response.ok) {
@@ -81,30 +79,30 @@ function StockListe({
     <>
       <div className="w-full flex justify-between mt-5">
         <h1 className="py-2 px-5 text-center  border border-red-500  font-bold text-red-500  rounded-xl border-[2px]">
-          Stock Products Liste
+          Stock Productions Liste
         </h1>
-        {/* <h1
+        <h1
           className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-red-500  text-red-500  rounded-xl border-[2px] "
           onClick={() => {
-            setAddProduct(true);
+            setAddProduction(true);
           }}
         >
-          Add Product
+          Add Production
           <IoMdAdd fontSize="25px" />
-        </h1> */}
+        </h1>
       </div>
-      <div className="w-full flex justify-end mt-5">
+      {/* <div className="w-full flex justify-end mt-5">
         <h1
           className="py-2 px-5 uppercase text-center cursor-pointer flex items-center gap-1 font-bold border border-blue2  text-blue2  rounded-xl border-[2px] "
           onClick={downloadExcelFile}
         >
           download liste stock
         </h1>
-      </div>
+      </div> */}
 
       <div className="w-full text-center font-medium mt-5">
         <div className="grid md:grid-cols-6 grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold ">
-          <h1>Product Name </h1>
+          <h1>Production Name </h1>
           <h2 className="hidden md:flex justify-center">Catogry</h2>
           <h2>Price</h2>
           <h2>Count</h2>
@@ -114,7 +112,7 @@ function StockListe({
         <div>
           {loading
             ? "loading"
-            : StockListe.map((stock) => {
+            : Production.map((stock) => {
                 return (
                   <div
                     key={stock.stockId}
@@ -128,12 +126,10 @@ function StockListe({
                       {stock.productDetails.categoryId}
                     </h2>
                     <h2> {stock.productDetails.price}</h2>
-                    <h2>{stock.quantite_en_stock}</h2>
-                    {stock.productDetails.IsRawMaterial ? (
-                      <h2 className="hidden md:flex">Row Material</h2>
-                    ) : (
-                      <h2 className="hidden md:flex">Production</h2>
-                    )}
+                    <h2>{stock.productDetails.count}</h2>
+
+                    <h2 className="hidden md:flex">Production</h2>
+
                     <h2 className="flex justify-evenly">
                       <MdEdit
                         fontSize="25px"
@@ -155,4 +151,4 @@ function StockListe({
   );
 }
 
-export default StockListe;
+export default Production;

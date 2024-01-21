@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function UpdateAchat({ setEditacaht, info }) {
-  console.log("====================================");
-  console.log(info);
-  console.log("====================================");
   // Sample data for products and suppliers
   const [products, setProducts] = useState([]);
   const [Fournisseurs, setFournisseurs] = useState([]);
   const [loading, setLaoding] = useState(true);
   const [loadingPost, setLaodingPost] = useState(true);
+  const [prixAchat, setprixAchat] = useState(info.prixAchat);
+
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
@@ -65,6 +64,9 @@ function UpdateAchat({ setEditacaht, info }) {
   const handleProductChange = (event) => {
     setSelectedProductId(event.target.value);
   };
+  const handlePrixChange = (event) => {
+    setprixAchat(event.target.value);
+  };
   const handleSupplierChange = (event) => {
     setSelectedSupplierId(event.target.value);
   };
@@ -85,7 +87,8 @@ function UpdateAchat({ setEditacaht, info }) {
           id_fournisseur: selectedSupplierId,
           id_produit: selectedProductId,
           quantite_achat: count,
-          montant_encaisse_achat:Amount,
+          prixAchat,
+          montant_encaisse_achat: Amount,
           statut_paiement_achat: selectedTypePay === "Totalment" ? true : false,
         })
         .then((response) => {
@@ -156,6 +159,14 @@ function UpdateAchat({ setEditacaht, info }) {
             placeholder="Enter Amount"
             value={Amount}
             onChange={handleAmountChange}
+            className="border-blue2 border border-1 rounded"
+          />
+          <h1 className="text-lg text-blue2">Enter prix Achat</h1>
+          <input
+            type="number"
+            placeholder="Enter prix"
+            value={prixAchat}
+            onChange={handlePrixChange}
             className="border-blue2 border border-1 rounded"
           />
 

@@ -33,6 +33,8 @@ import AddPv from "../Comp/pupouts/AddPupouts/AddPv";
 import DeletePv from "../Comp/pupouts/DeletePupouts/DeletePv";
 import PrintPv from "../Comp/pupouts/printPupouts/PrintPv";
 import UpdatePv from "../Comp/pupouts/Updates/UpdatePv";
+import Production from "../Comp/Listes/Production";
+import AddProduction from "../Comp/pupouts/AddPupouts/AddProduction";
 
 function Shop() {
   const location = useLocation();
@@ -69,6 +71,7 @@ function Shop() {
   const [deletePv, setDeletePv] = useState(false);
   const [printPv, setPrintPv] = useState(false);
   const [pv, setPv] = useState();
+  const [newProduction, setAddProduction] = useState(false);
   const [product, setProduct] = useState({
     name: "toamto",
     catogry: "hh",
@@ -220,6 +223,11 @@ function Shop() {
           <UpdatePv setUpdatePv={setEditPv} pv={pv} />
         </div>
       )}
+      {newProduction && (
+        <div className="w-screen h-screen">
+          <AddProduction setAddProduction={setAddProduction} pv={pv} />
+        </div>
+      )}
 
       <div
         className={` text-black   shadow-lg      h-screen w-full  px-3 mt-12  overflow-y-scroll    pb-20   `}
@@ -244,7 +252,7 @@ function Shop() {
               setshow(2);
             }}
           >
-            Liste ventes
+            Liste purchase
           </h1>
           <h1
             className={` text-center shadow-r  ${
@@ -285,6 +293,16 @@ function Shop() {
             }}
           >
             pv liste
+          </h1>
+          <h1
+            className={` text-center shadow-r  ${
+              show === 7 ? "bg-gray-200" : ""
+            }    py-2 font-medium uppercase`}
+            onClick={() => {
+              setshow(7);
+            }}
+          >
+            production liste
           </h1>
         </div>
         {show == 1 && (
@@ -345,6 +363,7 @@ function Shop() {
             setPrintPv={setPrintPv}
           />
         )}
+        {show == 7 && <Production setAddProduction={setAddProduction} />}
       </div>
     </>
   );

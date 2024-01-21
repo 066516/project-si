@@ -132,10 +132,10 @@ function Achates() {
         <HeaderTopsAchates />
         <div className="w-full flex justify-between mt-5">
           <h1 className="py-2 px-5 text-center  border border-smaoy font-bold text-smaoy rounded-xl border-[2px]">
-            Achates liste
+            Sales liste
           </h1>
           <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-smaoy text-smaoy rounded-xl border-[2px]">
-            Add Achat
+            Add Sale
             <IoMdAdd
               fontSize="25px"
               onClick={() => {
@@ -195,7 +195,7 @@ function Achates() {
                       {formatDate(achat.date_achat)}
                     </h2>
                     <h2>{achat.quantite_achat} </h2>
-                    <h2>{achat.quantite_achat} DA</h2>
+                    <h2>{achat.montant_total_achat} DA</h2>
                     {achat.statut_paiement_achat ? (
                       <h2 className="hidden md:flex">Totalment</h2>
                     ) : (

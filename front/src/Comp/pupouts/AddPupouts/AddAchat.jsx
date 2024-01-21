@@ -49,9 +49,10 @@ function AddAchat({ setAddAchat }) {
   // State for selected product, supplier, count, Amount, and payment type
   const [selectedProductId, setSelectedProductId] = useState(0);
   const [selectedSupplierId, setSelectedSupplierId] = useState(0);
-  const [selectedTypePay, setSelectedTypePay] = useState("");
+  const [selectedTypePay, setSelectedTypePay] = useState(true);
   const [count, setCount] = useState(0);
   const [Amount, setAmount] = useState(0);
+  const [prixAchat, setprixAchat] = useState(0);
 
   // Event handlers
   const handleProductChange = (event) => {
@@ -62,6 +63,9 @@ function AddAchat({ setAddAchat }) {
   };
   const handleCountChange = (event) => {
     setCount(event.target.value);
+  };
+  const handlePrixChange = (event) => {
+    setprixAchat(event.target.value);
   };
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
@@ -76,8 +80,9 @@ function AddAchat({ setAddAchat }) {
           id_fournisseur: selectedSupplierId,
           id_produit: selectedProductId,
           quantite_achat: count,
-          montant_encaisse_achat:Amount,
+          montant_encaisse_achat: Amount,
           statut_paiement_achat: selectedTypePay === "Totalment" ? true : false,
+          prixAchat,
         })
         .then((response) => {
           // Handle response here
@@ -157,6 +162,14 @@ function AddAchat({ setAddAchat }) {
             placeholder="Enter Amount"
             value={Amount}
             onChange={handleAmountChange}
+            className="border-blue2 border border-1 rounded"
+          />
+          <h1 className="text-lg text-blue2">Enter prix Achat</h1>
+          <input
+            type="number"
+            placeholder="Enter prix"
+            value={prixAchat}
+            onChange={handlePrixChange}
             className="border-blue2 border border-1 rounded"
           />
 

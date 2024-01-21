@@ -145,10 +145,10 @@ function Ventes() {
         <HeaderTopsVente />
         <div className="w-full flex justify-between mt-5">
           <h1 className="py-2 px-5 text-center  border border-smaoy font-bold text-smaoy rounded-xl border-[2px]">
-            Ventes liste
+          purchase liste
           </h1>
           <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-smaoy text-smaoy rounded-xl border-[2px]">
-            Add vente
+            Add purchase
             <IoMdAdd
               fontSize="25px"
               onClick={() => {

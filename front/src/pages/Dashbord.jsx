@@ -79,7 +79,7 @@ function Dashbord() {
           </div>
           <div className="w-full rounded-xl">
             <div className="bg-purple w-full py-2   text-center text-white uppercase font-bold">
-              Recently Ventes
+              Recently purchase
             </div>
             <RecentVentes />
           </div>

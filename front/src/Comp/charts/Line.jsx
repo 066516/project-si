@@ -54,7 +54,7 @@ const LineChart = () => {
         labels: months,
         datasets: [
           {
-            label: "Sales in USD",
+            label: "purchase in USD",
             data: salesData,
             fill: false,
             borderColor: "rgba(75, 192, 192, 1)",

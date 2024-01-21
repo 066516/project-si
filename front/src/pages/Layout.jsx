@@ -65,7 +65,7 @@ function Layout() {
                 route.pathname === "/ventes" ? "text-purple" : "text-black"
               }`}
             >
-              Ventes
+              purchase
             </Link>
             <Link
               to="/achats"
@@ -73,7 +73,7 @@ function Layout() {
                 route.pathname === "/achats" ? "text-purple" : "text-black"
               }`}
             >
-              Achats
+              Sales
             </Link>
             <Link
               to="/dealers"

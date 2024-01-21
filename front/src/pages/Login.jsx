@@ -143,7 +143,7 @@ function Login() {
                     className="bg-blue2 text-white py-3 px-2 my-6 text-center w-full rounded-xl font-semibold cursor-pointer hover:bg-blue2/80"
                     onClick={handleSubmit}
                   >
-                    Login in
+                    Login 
                   </button>
                 )}
               </div>

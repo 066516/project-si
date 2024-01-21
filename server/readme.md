@@ -45,7 +45,7 @@ npm install
 # Run the application
 npm run start
 
-# The server will start on a default port 3001
+# The server will start on a default port 3000
 
 
 ```
@@ -63,8 +63,8 @@ Before starting the client side of the application, make sure:
 
 If you have any questions, feedback, or want to contribute to the project, feel free to reach out. Here's how you can contact me:
 
-- **Nabil Ghemam Djeridi**: [Your Email](mailto:ghmamnbyl@gmail.com)
+- **Nabil Ghemam Djeridi**: [ Email](mailto:ghmamnbyl@gmail.com)
   or
-- **Walaa Bouzar**: [Your Email](mailto:Bouzarwalaa@gmail.com)
+- **Walaa Bouzar**: [ Email](mailto:Bouzarwalaa@gmail.com)
 
 Feel free to open an issue for questions, suggestions, or discussions regarding the project. Your input is highly valued and contributes to the improvement of this project.
