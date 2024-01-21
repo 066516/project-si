@@ -1,10 +1,4 @@
-# Project Title
-
-Provide a brief, clear title for your project.
-
-## Description
-
-Give a brief description of your project. What does it do? What technologies does it use? Why did you create it?
+# project si
 
 ### Prerequisites
 
