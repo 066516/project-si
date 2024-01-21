@@ -43,10 +43,10 @@ function Achates() {
     if (searchTerm === "") {
       fetchVentes();
     }
+    console.log("====================================");
+    console.log(AchatListe);
+    console.log("====================================");
   });
-  console.log("====================================");
-  console.log(AchatListe);
-  console.log("====================================");
 
   const handleEDit = (achat) => {
     setInfo(achat);

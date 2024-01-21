@@ -17,7 +17,7 @@ function AddEmploye({ setAddEmplye }) {
     function postData() {
       return axios
         .post("https://project-si.onrender.com/employe ", {
-          name: name + LastName,
+          name: name + " " + LastName,
           email,
           phoneNumber,
           workIn: idShop ? idShop : 1,
