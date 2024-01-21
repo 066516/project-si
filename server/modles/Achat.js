@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const CounterAchat = require("./Counters/AchatCounter");
-const Product = require("./product");
 
 const achatSchema = new mongoose.Schema({
   id_achat: { type: Number, unique: true, index: true },
@@ -11,6 +10,7 @@ const achatSchema = new mongoose.Schema({
   reste: { type: Number, default: 0 },
   date_achat: { type: Date, default: Date.now },
   montant_encaisse_achat: { type: Number, default: 0 },
+  prixAchat: { type: Number, required: true },
   statut_paiement_achat: { type: Boolean, required: true, default: true },
 });
 
@@ -30,14 +30,10 @@ achatSchema.pre("save", async function (next) {
     next();
   }
   try {
-    const product = await Product.findOne({ productId: this.id_produit });
-    if (!product) {
-      next(new Error("Product not found"));
-    } else {
-      this.montant_total_achat = product.price * this.quantite_achat;
-      if (!this.statut_paiement_achat) {
-        this.reste = this.montant_total_achat;
-      }
+    this.montant_total_achat = this.prixAchat * this.quantite_achat;
+    if (!this.statut_paiement_achat) {
+      this.reste = this.montant_total_achat;
+
       next();
     }
   } catch (err) {

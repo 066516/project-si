@@ -6,6 +6,7 @@ exports.createProduction = async (req, res) => {
   const { count, name, price, shop } = req.body;
 
   const { products } = req.body;
+  console.log(req.body);
   try {
     const existProduct = await Product.findOne({ name: name });
     if (existProduct) {
@@ -65,7 +66,20 @@ exports.createProduction = async (req, res) => {
 };
 exports.getAllProductions = async (req, res) => {
   try {
-    const prodction = await Prodction.find();
+    let prodction = await Prodction.find({ Shop_creation: req.params.id });
+    prodction = await Promise.all(
+      prodction.map(async (stock) => {
+        stock = stock.toObject(); // Convert Mongoose document to a plain JavaScript object
+
+        // Fetch product details
+        const product = await Product.findOne({
+          productId: stock.id_product,
+        }).select("name categoryId IsRawMaterial price count");
+        stock.productDetails = product; // Add product details to stock
+
+        return stock;
+      })
+    );
     res.status(200).send(prodction);
   } catch (error) {
     res.status(500).send(error);
@@ -73,7 +87,8 @@ exports.getAllProductions = async (req, res) => {
 };
 exports.getAllProductionsListe = async (req, res) => {
   try {
-    const prodction = await ListeProduction.find();
+    let prodction = await ListeProduction.find();
+
     res.status(200).send(prodction);
   } catch (error) {
     res.status(500).send(error);

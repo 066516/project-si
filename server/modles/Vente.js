@@ -28,14 +28,9 @@ venteSchema.pre("save", async function (next) {
       return next(err);
     }
     try {
-      const product = await Product.findOne({ productId: this.id_produit });
-      if (product) {
-        this.prix_unitaire_vente = product.price; // Set unit price from the product
-        this.montant_total_vente =
-          this.quantite_vendue * this.prix_unitaire_vente; // Calculate total sale amount
-      } else {
-        next(new Error("Product not found"));
-      }
+      this.montant_total_vente =
+        this.quantite_vendue * this.prix_unitaire_vente; // Calculate total sale amount
+
       next();
     } catch (error) {
       next(error);

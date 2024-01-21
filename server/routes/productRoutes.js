@@ -5,7 +5,7 @@ const productionController = require("../controls/ProdctionControles");
 
 router.post("/product", productController.createProduct);
 router.post("/production", productionController.createProduction);
-router.get("/production", productionController.getAllProductions);
+router.get("/production/:id", productionController.getAllProductions);
 router.get("/product/:id", productController.getProduct);
 router.get("/products", productController.getAllProducts);
 router.get("/productsliste", productionController.getAllProductionsListe);
