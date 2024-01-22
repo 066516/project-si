@@ -40,7 +40,6 @@ exports.analyseTotalMontant = async (req, res) => {
   }
 };
 
-
 exports.getAllProductsAndQuantities = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -447,9 +446,7 @@ exports.calculateProfitEvolution = async (req, res) => {
   const year = new Date().getFullYear(); // Utiliser l'année actuelle
 
   if (!idShop) {
-    return res
-      .status(400)
-      .send({ message: "Shop ID is required" });
+    return res.status(400).send({ message: "Shop ID is required" });
   }
 
   try {
@@ -467,14 +464,16 @@ exports.calculateProfitEvolution = async (req, res) => {
             date_vente: { $gte: startOfMonth, $lte: endOfMonth },
           },
         },
-        { $group: { _id: null, totalRevenue: { $sum: "$montant_total_vente" } } },
+        {
+          $group: { _id: null, totalRevenue: { $sum: "$montant_total_vente" } },
+        },
       ]);
 
       // Calculer les transferts totaux pour le mois
       const totalTransfers = await Transfert.aggregate([
         {
           $match: {
-            id_shop: idShop,
+            id_centre: idShop,
             date_transfert: { $gte: startOfMonth, $lte: endOfMonth },
           },
         },
@@ -490,7 +489,7 @@ exports.calculateProfitEvolution = async (req, res) => {
 
     res.status(200).send(monthlyProfits);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
-

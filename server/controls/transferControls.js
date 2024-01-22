@@ -45,6 +45,7 @@ exports.createTransfert = async (req, res) => {
       id_produit,
       id_centre,
       quantite_transfert,
+      cout_transfert: quantite_transfert * productExists.price,
     });
     await newTransfert.save();
     // Update or create stock in ProduitStock for the destination shop
