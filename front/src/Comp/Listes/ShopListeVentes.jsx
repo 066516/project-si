@@ -40,8 +40,9 @@ function ShopListeVentes({
       }
     };
 
+    if(!searchTerm)
     fetchVentes();
-  }, [ventesListe.length]);
+  });
 
   const handleEDit = (vente) => {
     console.log(vente);
@@ -103,7 +104,7 @@ function ShopListeVentes({
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
-        <h1 className="py-2 px-5 text-center  border border-red-500 font-bold text-red-500 rounded-xl border-[2px]">
+        <h1 className="py-2 px-5 text-center   border-red-500 font-bold text-red-500 rounded-xl border-[2px]">
           Liste purchase
         </h1>
         <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-red-500 text-red-500 rounded-xl border-[2px]">

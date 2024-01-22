@@ -2,27 +2,44 @@ import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
 
-const LineChart = () => {
+const LineChart = ({ idShop }) => {
   const chartRef = useRef(null);
   const [salesData, setSalesData] = useState([]);
 
   useEffect(() => {
     const fetchSalesmontant = async () => {
       const apiUrl = "https://project-si.onrender.com";
-      try {
-        const response = await axios.get(`${apiUrl}/analyse/totalMontantAchat`);
-        if (Array.isArray(response.data)) {
-          setSalesData(response.data);
-        } else {
-          console.error("Expected an array, received:", typeof response.data);
+      if (idShop) {
+        try {
+          const response = await axios.get(
+            `${apiUrl}/analyse/benefice/${idShop}`
+          );
+          console.log("response", response.data);
+          if (Array.isArray(response.data)) {
+            setSalesData(response.data);
+          } else {
+            console.error("Expected an array, received:", typeof response.data);
+          }
+        } catch (error) {
+          console.error("Error fetching:", error);
         }
-      } catch (error) {
-        console.error("Error fetching:", error);
+      } else {
+        try {
+          const response = await axios.get(
+            `${apiUrl}/analyse/totalMontantAchat`
+          );
+          if (Array.isArray(response.data)) {
+            setSalesData(response.data);
+          } else {
+            console.error("Expected an array, received:", typeof response.data);
+          }
+        } catch (error) {
+          console.error("Error fetching:", error);
+        }
       }
     };
-
     fetchSalesmontant();
-  }, []);
+  }, [idShop]);
 
   useEffect(() => {
     if (!chartRef.current) return; // Check if the ref is defined
@@ -54,7 +71,7 @@ const LineChart = () => {
         labels: months,
         datasets: [
           {
-            label: "purchase in USD",
+            label: idShop ? "Profit in USD" : "purchase in USD",
             data: salesData,
             fill: false,
             borderColor: "rgba(75, 192, 192, 1)",
@@ -70,7 +87,7 @@ const LineChart = () => {
             beginAtZero: true,
             title: {
               display: true,
-              text: "Sales in USD",
+              text: idShop ? "Profit in USD" : "purchase in USD",
             },
           },
         },

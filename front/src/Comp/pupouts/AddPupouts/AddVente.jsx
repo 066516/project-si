@@ -18,6 +18,7 @@ function AddVente({ setAddVente }) {
   const [count, setCount] = useState(0);
   const [Amount, setAmount] = useState(0);
   const [countinsf, setCountinsf] = useState(false);
+  const [prix, setprix] = useState(0);
 
   useEffect(() => {
     console.log("Fetching ventes...");
@@ -86,6 +87,7 @@ function AddVente({ setAddVente }) {
           id_client: selectedClientId,
           id_produit: selectedProductId,
           quantite_vendue: count,
+          prix_unitaire_vente: prix,
           montant_encaisse_vente: Amount,
           id_shop: idShop == null ? 1 : parseInt(idShop),
           statut_paiement_vente: selectedTypePay === "Totalment" ? true : false,
@@ -125,7 +127,7 @@ function AddVente({ setAddVente }) {
   }
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
-      <div className="bg-white relative top-3 p-5 rounded-xl">
+      <div className="bg-white relative top-3 p-5 rounded-xl overflow-y-scroll h-[90%]">
         <h1 className="uppercase font-semibold">New Vente</h1>
         <ImCancelCircle
           onClick={() => setAddVente(false)}
@@ -193,6 +195,16 @@ function AddVente({ setAddVente }) {
             placeholder="Enter count"
             value={count}
             onChange={handleCountChange}
+            className="border-blue2 border border-1 rounded"
+          />
+          <h1 className="text-lg text-blue2">Enter prix</h1>
+          <input
+            type="number"
+            placeholder="Enter count"
+            value={prix}
+            onChange={(e) => {
+              setprix(e.target.value);
+            }}
             className="border-blue2 border border-1 rounded"
           />
 

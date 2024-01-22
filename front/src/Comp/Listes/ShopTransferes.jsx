@@ -89,7 +89,10 @@ function ShopTransferes({
                 key={transfer.id_transfert}
                 className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center"
               >
-                <h1 className="font-medium text-smaoy " onClick={()=>handlePrint(transfer)}>
+                <h1
+                  className="font-medium text-smaoy "
+                  onClick={() => handlePrint(transfer)}
+                >
                   {transfer.productDetails.name}
                 </h1>
                 <h2 className="hidden md:flex justify-center">
@@ -98,7 +101,7 @@ function ShopTransferes({
                 <h2>{formatDate(transfer.date_transfert)}</h2>
                 <h2>{transfer.quantite_transfert}</h2>
                 <h2 className="text-green-500 hidden md:flex justify-center">
-                  {transfer.cout_transfert}
+                  {transfer.quantite_transfert * transfer.productDetails.price}
                 </h2>
                 <h2 className="flex justify-evenly">
                   <MdEdit

@@ -43,7 +43,7 @@ function AddTransfer({ setAddTransft }) {
   const handleCreateTransfert = () => {
     function postData() {
       return axios
-        .post("https://project-si.onrender.com/transferts", {
+        .post("http://localhost:3000/transferts", {
           id_produit: selectedProduct,
           id_centre: parseInt(idShop),
           quantite_transfert: parseInt(count),
