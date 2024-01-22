@@ -59,7 +59,8 @@ exports.createVente = async (req, res) => {
       } else {
         throw new Error("client not found");
       }
-      newVente.reste = newVente.montant_total_vente - parseInt(montant_encaisse_vente);
+      newVente.reste =
+        newVente.montant_total_vente - parseInt(montant_encaisse_vente);
       await newVente.save();
     }
     stockItem.quantite_en_stock -= parseInt(quantite_vendue);
@@ -259,7 +260,7 @@ exports.getTopEntities = async (req, res) => {
       { $sort: { totalSold: -1 } },
       { $limit: 1 },
     ]);
-
+    console.log(topProduct);
     // Top Shops (excluding shop 1)
     const resultArray = await Vente.aggregate([
       { $match: { id_shop: { $ne: 1, $ne: null } } }, // Exclude shop 1 and null shop IDs

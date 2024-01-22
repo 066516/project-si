@@ -40,6 +40,7 @@ exports.analyseTotalMontant = async (req, res) => {
   }
 };
 
+
 exports.getAllProductsAndQuantities = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -443,49 +444,53 @@ exports.findTopSellingProductForMonthAndYear = async (req, res) => {
 };
 exports.calculateProfitEvolution = async (req, res) => {
   const idShop = parseInt(req.params.idShop);
-  const year = parseInt(req.query.year);
-  const month = parseInt(req.query.month);
+  const year = new Date().getFullYear(); // Utiliser l'année actuelle
 
-  if (!year || !month || !idShop) {
+  if (!idShop) {
     return res
       .status(400)
-      .send({ message: "Shop ID, year, and month are required" });
+      .send({ message: "Shop ID is required" });
   }
 
   try {
-    const startOfMonth = new Date(year, month - 1, 1);
-    const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
+    let monthlyProfits = [];
 
-    // Calculate total sales for the shop
-    const totalSales = await Vente.aggregate([
-      {
-        $match: {
-          id_shop: idShop,
-          date_vente: { $gte: startOfMonth, $lte: endOfMonth },
+    for (let month = 1; month <= 12; month++) {
+      const startOfMonth = new Date(year, month - 1, 1);
+      const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
+
+      // Calculer les ventes totales pour le mois
+      const totalSales = await Vente.aggregate([
+        {
+          $match: {
+            id_shop: idShop,
+            date_vente: { $gte: startOfMonth, $lte: endOfMonth },
+          },
         },
-      },
-      { $group: { _id: null, totalRevenue: { $sum: "$montant_total_vente" } } },
-    ]);
+        { $group: { _id: null, totalRevenue: { $sum: "$montant_total_vente" } } },
+      ]);
 
-    // Calculate total transfers for the shop
-    const totalTransfers = await Transfert.aggregate([
-      {
-        $match: {
-          id_shop: idShop,
-          date_transfert: { $gte: startOfMonth, $lte: endOfMonth },
+      // Calculer les transferts totaux pour le mois
+      const totalTransfers = await Transfert.aggregate([
+        {
+          $match: {
+            id_shop: idShop,
+            date_transfert: { $gte: startOfMonth, $lte: endOfMonth },
+          },
         },
-      },
-      { $group: { _id: null, totalCost: { $sum: "$cout_transfert" } } },
-    ]);
+        { $group: { _id: null, totalCost: { $sum: "$cout_transfert" } } },
+      ]);
 
-    const revenue = totalSales[0] ? totalSales[0].totalRevenue : 0;
-    const cost = totalTransfers[0] ? totalTransfers[0].totalCost : 0;
+      const revenue = totalSales[0] ? totalSales[0].totalRevenue : 0;
+      const cost = totalTransfers[0] ? totalTransfers[0].totalCost : 0;
 
-    // Calculate profit
-    const profit = revenue - cost;
+      // Calculer le profit pour le mois et l'ajouter au tableau
+      monthlyProfits.push(revenue - cost);
+    }
 
-    res.status(200).send({ idShop, year, month, profit });
+    res.status(200).send(monthlyProfits);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+

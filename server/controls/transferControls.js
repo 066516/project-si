@@ -99,7 +99,7 @@ exports.getAllTransferts = async (req, res) => {
         // Fetch product details
         const product = await Product.findOne({
           productId: transfer.id_produit,
-        }).select("name categoryId"); // Replace 'idProduct' and 'name' with actual field names in your Product model
+        }).select("name categoryId price"); // Replace 'idProduct' and 'name' with actual field names in your Product model
         transfer.productDetails = product || {
           name: "Unknown Product",
           categoryId: "not Found",
