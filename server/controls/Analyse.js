@@ -312,6 +312,7 @@ exports.findTopInOneShop = async (req, res) => {
 
     // Calculate profit
     const profit = totalAmount - totalExpenses;
+    console.log(profit)
 
     // Additional details for topClient
     let clientDetails = { nom: "Unknown", prenom: "Unknown" };
