@@ -218,19 +218,19 @@ exports.deleteAchat = async (req, res) => {
 exports.getTops = async (req, res) => {
   try {
     const topEmployee = await Employe.aggregate([
-      { $match: { workIn: 1 } },
+      { $match: { workIn: 1, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },
     ]);
 
     // Top Product
-    const topProduct = await Achat.aggregate([
+    const topProduct = await Vente.aggregate([
       // Assuming 'id_shop' is a relevant field in your schema
       {
         $group: {
           _id: "$id_produit", // Group by 'id_produit' in 'Achat'
-          totalSold: { $sum: "$quantite_achat" }, // Sum the 'montant_total_achat'
+          totalSold: { $sum: "$quantite_vendue" }, // Sum the 'montant_total_achat'
         },
       },
       { $sort: { totalSold: -1 } }, // Sort by total sold amount in descending order
@@ -305,7 +305,7 @@ exports.getTops = async (req, res) => {
 exports.getTops2 = async (req, res) => {
   try {
     const topEmployee = await Employe.aggregate([
-      { $match: { workIn: 1 } },
+      { $match: { workIn: 1, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },

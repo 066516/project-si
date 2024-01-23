@@ -245,7 +245,7 @@ exports.getTopEntities = async (req, res) => {
 
     // Top Employee
     const topEmployee = await Employe.aggregate([
-      // { $match: { workIn: { $ne: 1 } } },
+      { $match: { workIn: { $ne: 1 }, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },
@@ -275,7 +275,7 @@ exports.getTopEntities = async (req, res) => {
     ]);
 
     // Convert the array result to an object
-    const topShop = resultArray.length > 0 ? resultArray[0] : null;
+    const topShop = resultArray.length > 0 ? resultArray[0] : 0;
     let clientDetails = { nom: "Unknown", prenom: "Unknown" };
     if (topClient.length > 0 && topClient[0]._id) {
       const client = await Client.findOne({
@@ -331,7 +331,7 @@ exports.getTops = async (req, res) => {
 
     // Top Employee
     const topEmployee = await Employe.aggregate([
-      { $match: { workIn: 1 } },
+      { $match: { workIn: 1, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },
