@@ -298,7 +298,7 @@ exports.findTopInOneShop = async (req, res) => {
 
     // Calculate total expenses
     const totalExpensesResult = await Transfert.aggregate([
-      { $match: { id_shop: id } },
+      { $match: { id_centre: id } },
       {
         $group: {
           _id: null,
@@ -312,6 +312,7 @@ exports.findTopInOneShop = async (req, res) => {
 
     // Calculate profit
     const profit = totalAmount - totalExpenses;
+
     // Additional details for topClient
     let clientDetails = { nom: "Unknown", prenom: "Unknown" };
     if (topClient.length > 0 && topClient[0]._id) {

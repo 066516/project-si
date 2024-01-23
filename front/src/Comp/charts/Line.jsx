@@ -96,11 +96,11 @@ const LineChart = ({ idShop }) => {
   }, [salesData]); // Add salesData to the dependency array
 
   return (
-    <div style={{ width: "auto", height: "auto" }}>
+    <div style={{ height: "auto" }}>
       <canvas
         id="lineChart"
         ref={chartRef}
-        style={{ width: "300px", height: "200px" }}
+        style={{ width: "100%", height: "200px" }}
       ></canvas>
     </div>
   );

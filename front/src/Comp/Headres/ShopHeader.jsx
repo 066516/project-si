@@ -6,12 +6,13 @@ function ShopHeader({ idShop }) {
   const [tops, setTops] = useState([]);
   useEffect(() => {
     const fetchHeadres = async () => {
-      const apiUrl = "https://project-si.onrender.com";
+      const apiUrl = "http://localhost:3000";
       try {
         const response = await axios.get(`${apiUrl}/analyse/tops/${idShop}`);
         // console.log(response.data);
         // console.log("Expected an array, received:", typeof response.data);
-        setTops(response.data); // Directly store the data if it's an array
+        setTops(response.data); 
+        console.log(response.data);// Directly store the data if it's an array
       } catch (error) {
         console.error("Error fetching ventes:", error);
       } finally {

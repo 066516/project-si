@@ -20,6 +20,7 @@ const SalesChart = ({ idShop }) => {
         console.log(idShop);
         if (Array.isArray(response.data)) {
           setSalesData(response.data);
+          console.log(response.data);
         } else {
           console.error("Expected an array, received:", typeof response.data);
         }

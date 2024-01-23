@@ -105,10 +105,10 @@ function ShopListeVentes({
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
         <h1 className="py-2 px-5 text-center   border-red-500 font-bold text-red-500 rounded-xl border-[2px]">
-          Liste purchase
+          Liste Sales
         </h1>
         <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-red-500 text-red-500 rounded-xl border-[2px]">
-          Add purchase
+          Add Sale
           <IoMdAdd
             fontSize="25px"
             onClick={() => {
