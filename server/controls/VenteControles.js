@@ -245,7 +245,7 @@ exports.getTopEntities = async (req, res) => {
 
     // Top Employee
     const topEmployee = await Employe.aggregate([
-      { $match: { workIn: { $ne: 1 }, trash: false } },
+      { $match: { workIn: 1, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },
