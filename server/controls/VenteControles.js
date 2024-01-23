@@ -9,6 +9,7 @@ exports.createVente = async (req, res) => {
     id_client,
     id_produit,
     id_shop,
+    date_vente,
     quantite_vendue,
     prix_unitaire_vente,
     montant_encaisse_vente,
@@ -42,7 +43,7 @@ exports.createVente = async (req, res) => {
       quantite_vendue,
       prix_unitaire_vente,
       montant_encaisse_vente,
-      date_vente: new Date(),
+      date_vente,
       statut_paiement_vente, // or based on your business logic
     });
     await newVente.save();

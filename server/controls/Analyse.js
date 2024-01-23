@@ -31,8 +31,12 @@ exports.analyseTotalMontant = async (req, res) => {
     ]);
 
     // Map the results to an array of numbers representing the total amount for each month
-    const montantArray = totalPerMonth.map((group) => group.totalMontant);
-
+    const montantArray = Array.from({ length: 12 }, (_, i) => {
+      const monthData = totalPerMonth.find(
+        (group) => group._id.month === i + 1
+      );
+      return monthData ? monthData.totalMontant : 0;
+    });
     res.status(200).send(montantArray);
   } catch (error) {
     console.error("Error in analyseTotalMontant:", error);
@@ -153,8 +157,12 @@ exports.calculateMonthlyTotalSales = async (req, res) => {
     ]);
 
     // Map the results to an array of numbers representing total sales amount for each month
-    const salesAmounts = monthlyTotals.map((group) => group.totalMontantVente);
-
+    const salesAmounts = Array.from({ length: 12 }, (_, i) => {
+      const monthData = monthlyTotals.find(
+        (group) => group._id.month === i + 1
+      );
+      return monthData ? monthData.totalMontantVente : 0;
+    });
     res.status(200).send(salesAmounts);
   } catch (error) {
     res.status(500).send(error);

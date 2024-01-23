@@ -54,8 +54,9 @@ exports.createAchat = async (req, res) => {
       });
 
       if (fournisseur) {
-        fournisseur.solde_fournisseur +=
-          newAchat.montant_total_achat - montant_encaisse_achat;
+        fournisseur.solde_fournisseur += parseInt(
+          newAchat.montant_total_achat - montant_encaisse_achat
+        );
 
         await fournisseur.save();
       } else {
