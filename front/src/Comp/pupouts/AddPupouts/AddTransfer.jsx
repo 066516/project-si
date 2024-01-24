@@ -37,13 +37,15 @@ function AddTransfer({ setAddTransft }) {
     setSelectedProduct(event.target.value);
   };
   const handleCountChange = (event) => {
-    setCount(event.target.value);
+    if (event.target.value < 0) {
+      setCount(-event.target.value);
+    } else setCount(event.target.value);
   };
 
   const handleCreateTransfert = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/transferts", {
+        .post("https://project-si.onrender.com/transferts", {
           id_produit: selectedProduct,
           id_centre: parseInt(idShop),
           quantite_transfert: parseInt(count),

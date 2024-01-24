@@ -19,7 +19,7 @@ function AddVente({ setAddVente }) {
   const [Amount, setAmount] = useState(0);
   const [countinsf, setCountinsf] = useState(false);
   const [prix, setprix] = useState(0);
-
+  const [error, setError] = useState("");
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
@@ -72,14 +72,36 @@ function AddVente({ setAddVente }) {
     setSelectedClientId(event.target.value);
   };
   const handleCountChange = (event) => {
-    setCount(event.target.value);
+    if (event.target.value < 0) {
+      setCount(-event.target.value);
+    } else setCount(event.target.value);
   };
   const handleAmountChange = (event) => {
-    setAmount(event.target.value);
+    if (event.target.value < 0) {
+      setAmount(-event.target.value);
+    } else setAmount(event.target.value);
   };
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
   };
+
+  const handleCancelVente = () => {
+    console.log("Vente canceled");
+    setAddVente(false);
+  };
+  var product;
+  if (selectedProductId != 0) {
+    product = products.find(
+      (product) => product.id_produit === parseInt(selectedProductId)
+    );
+    if (count > product.quantite_en_stock && !countinsf) {
+      setCountinsf(true);
+    }
+    if (count < product.quantite_en_stock && countinsf) {
+      setCountinsf(false);
+    }
+    console.log(product); // This will log the product with id 2
+  }
   const handleCreateVente = () => {
     function postData() {
       return axios
@@ -105,26 +127,18 @@ function AddVente({ setAddVente }) {
           setLaodingPost(false); // Correct usage of finally
         });
     }
-    setAddVente(false);
-    postData();
-  };
-  const handleCancelVente = () => {
-    console.log("Vente canceled");
-    setAddVente(false);
-  };
-  var product;
-  if (selectedProductId != 0) {
-    product = products.find(
-      (product) => product.id_produit === parseInt(selectedProductId)
-    );
-    if (count > product.quantite_en_stock && !countinsf) {
-      setCountinsf(true);
+    if (
+      selectedClientId &&
+      selectedProductId != 0 &&
+      count < product.quantite_en_stock
+    ) {
+      setAddVente(false);
+      postData();
+    } else {
+      setError("Tous les champs doivent être remplis");
     }
-    if (count < product.quantite_en_stock && countinsf) {
-      setCountinsf(false);
-    }
-    console.log(product); // This will log the product with id 2
-  }
+  };
+  console.log("hello");
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
       <div className="bg-white relative top-3 p-5 rounded-xl overflow-y-scroll h-[90%]">
@@ -170,7 +184,7 @@ function AddVente({ setAddVente }) {
 
               <div className=" text-red-500 rounded p-2 w-full">
                 {count > product.quantite_en_stock
-                  ? " Insufficient stock for transfer"
+                  ? " Insufficient stock for vente"
                   : ""}
               </div>
             </>
@@ -200,22 +214,29 @@ function AddVente({ setAddVente }) {
           <h1 className="text-lg text-blue2">Enter prix</h1>
           <input
             type="number"
-            placeholder="Enter count"
+            placeholder="Enter price"
             value={prix}
             onChange={(e) => {
-              setprix(e.target.value);
+              if (e.target.value < 0) {
+                setprix(-e.target.value);
+              } else setprix(e.target.value);
             }}
             className="border-blue2 border border-1 rounded"
           />
 
-          <h1 className="text-lg text-blue2">Enter Amount</h1>
-          <input
-            type="number"
-            placeholder="Enter Amount"
-            value={Amount}
-            onChange={handleAmountChange}
-            className="border-blue2 border border-1 rounded"
-          />
+          {selectedTypePay !== "Totalment" && (
+            <>
+              {" "}
+              <h1 className="text-lg text-blue2">Enter Amount</h1>
+              <input
+                type="number"
+                placeholder="Enter Amount"
+                value={Amount}
+                onChange={handleAmountChange}
+                className="border-blue2 border border-1 rounded"
+              />
+            </>
+          )}
           <h1 className="text-lg text-blue2">how you want to pay</h1>
           <select
             value={selectedTypePay}
@@ -226,7 +247,7 @@ function AddVente({ setAddVente }) {
             <option value="Totalment">Totalment</option>
             <option value="Parcielment">Parcielment</option>
           </select>
-
+          {error && <div className="text-red-500 my-2"> {error}</div>}
           <div className="mt-5 flex justify-between">
             <h1
               className="bg-blue2 w-fit text-white px-5 py-2 cursor-pointer rounded-xl"

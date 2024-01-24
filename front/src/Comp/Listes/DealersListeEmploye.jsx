@@ -105,7 +105,6 @@ function DealersListeEmploye({
                   color="red"
                   onClick={() => handleDelete(employe)}
                 />
-                <MdOutlineSmartDisplay fontSize="25px" color="green" />
                 {/* <GiPayMoney onClick={paysalaryHandle} />
                 <span
                   className="font-bold text-3xl text-center  pb-3 flex items-center justify-center "
