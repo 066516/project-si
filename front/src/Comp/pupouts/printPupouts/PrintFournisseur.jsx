@@ -18,7 +18,7 @@ function PrintFournisseur({ setPrintFournisseur, fournisseur }) {
   const handleReglement = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/reglements", {
+        .post("https://project-si.onrender.com/reglements", {
           id_fournisseur: fournisseur.Id_fournisseur,
           montant_reglement: amount,
         })
@@ -42,7 +42,7 @@ function PrintFournisseur({ setPrintFournisseur, fournisseur }) {
   };
 
   const fetchreglement = async () => {
-    const apiUrl = "http://localhost:3000";
+    const apiUrl = "https://project-si.onrender.com";
     try {
       const response = await axios.get(
         `${apiUrl}/reglements/${fournisseur.Id_fournisseur}`

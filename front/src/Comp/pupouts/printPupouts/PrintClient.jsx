@@ -19,7 +19,7 @@ function PrintClient({ setPrintClient, Client }) {
   const handleReglement = () => {
     function postData() {
       return axios
-        .post("http://localhost:3000/reglementClient", {
+        .post("https://project-si.onrender.com/reglementClient", {
           id_client: Client.clientId,
 
           montant_reglement: amount,
@@ -43,7 +43,7 @@ function PrintClient({ setPrintClient, Client }) {
     }
   };
   const fetchreglement = async () => {
-    const apiUrl = "http://localhost:3000";
+    const apiUrl = "https://project-si.onrender.com";
     try {
       const response = await axios.get(
         `${apiUrl}/reglementClient/${Client.clientId}`

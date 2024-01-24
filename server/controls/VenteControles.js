@@ -233,7 +233,7 @@ exports.getTopEntities = async (req, res) => {
   try {
     // Top Client
     const topClient = await Vente.aggregate([
-      { $match: { id_shop: { $ne: 1 } } },
+      { $match: { id_shop: 1 } },
       {
         $group: {
           _id: "$id_client",
