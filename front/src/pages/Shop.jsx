@@ -252,7 +252,7 @@ function Shop() {
               setshow(2);
             }}
           >
-            Liste purchase
+            Liste Sales
           </h1>
           <h1
             className={` text-center shadow-r  ${

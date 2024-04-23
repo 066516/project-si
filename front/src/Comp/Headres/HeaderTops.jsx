@@ -11,7 +11,8 @@ function HeaderTops() {
         const response = await axios.get(`${apiUrl}/tops`);
         // console.log(response.data);
         // console.log("Expected an array, received:", typeof response.data);
-        setTops(response.data); // Directly store the data if it's an array
+        setTops(response.data);
+        console.log(response.data); // Directly store the data if it's an array
       } catch (error) {
         console.error("Error fetching ventes:", error);
       } finally {

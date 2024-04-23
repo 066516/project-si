@@ -3,7 +3,7 @@ const CounterReglement = require("./Counters/CounterReglmentClient"); // Counter
 const reglementSchema = new mongoose.Schema({
   id_reglement_Client: { type: Number, unique: true, index: true },
   id_client: { type: Number, ref: "Client" },
-  id_vente: { type: Number, ref: "Vente" },
+  // id_vente: { type: Number, ref: "Vente" },
   montant_reglement: { type: Number, required: true },
   date_reglement: { type: Date, default: Date.now },
 });

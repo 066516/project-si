@@ -73,13 +73,13 @@ function Dashbord() {
         <div className="lg:w-1/4 w-full flex flex-col gap-3 lg:mt-8 rounded-3xl justify-center items-center pb-10  ">
           <div className="w-full rounded-3xl">
             <div className="bg-purple w-full py-2   text-center text-white uppercase font-bold">
-              Recently Sales
+              Recently purchases
             </div>
             <RecentSales />
           </div>
           <div className="w-full rounded-xl">
             <div className="bg-purple w-full py-2   text-center text-white uppercase font-bold">
-              Recently purchase
+              Recently sales
             </div>
             <RecentVentes />
           </div>

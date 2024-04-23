@@ -31,8 +31,12 @@ exports.analyseTotalMontant = async (req, res) => {
     ]);
 
     // Map the results to an array of numbers representing the total amount for each month
-    const montantArray = totalPerMonth.map((group) => group.totalMontant);
-
+    const montantArray = Array.from({ length: 12 }, (_, i) => {
+      const monthData = totalPerMonth.find(
+        (group) => group._id.month === i + 1
+      );
+      return monthData ? monthData.totalMontant : 0;
+    });
     res.status(200).send(montantArray);
   } catch (error) {
     console.error("Error in analyseTotalMontant:", error);
@@ -153,8 +157,12 @@ exports.calculateMonthlyTotalSales = async (req, res) => {
     ]);
 
     // Map the results to an array of numbers representing total sales amount for each month
-    const salesAmounts = monthlyTotals.map((group) => group.totalMontantVente);
-
+    const salesAmounts = Array.from({ length: 12 }, (_, i) => {
+      const monthData = monthlyTotals.find(
+        (group) => group._id.month === i + 1
+      );
+      return monthData ? monthData.totalMontantVente : 0;
+    });
     res.status(200).send(salesAmounts);
   } catch (error) {
     res.status(500).send(error);
@@ -290,7 +298,7 @@ exports.findTopInOneShop = async (req, res) => {
 
     // Calculate total expenses
     const totalExpensesResult = await Transfert.aggregate([
-      { $match: { id_shop: id } },
+      { $match: { id_centre: id } },
       {
         $group: {
           _id: null,
@@ -304,6 +312,8 @@ exports.findTopInOneShop = async (req, res) => {
 
     // Calculate profit
     const profit = totalAmount - totalExpenses;
+    console.log(profit)
+
     // Additional details for topClient
     let clientDetails = { nom: "Unknown", prenom: "Unknown" };
     if (topClient.length > 0 && topClient[0]._id) {
@@ -443,49 +453,53 @@ exports.findTopSellingProductForMonthAndYear = async (req, res) => {
 };
 exports.calculateProfitEvolution = async (req, res) => {
   const idShop = parseInt(req.params.idShop);
-  const year = parseInt(req.query.year);
-  const month = parseInt(req.query.month);
+  const year = new Date().getFullYear(); // Utiliser l'année actuelle
 
-  if (!year || !month || !idShop) {
-    return res
-      .status(400)
-      .send({ message: "Shop ID, year, and month are required" });
+  if (!idShop) {
+    return res.status(400).send({ message: "Shop ID is required" });
   }
 
   try {
-    const startOfMonth = new Date(year, month - 1, 1);
-    const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
+    let monthlyProfits = [];
 
-    // Calculate total sales for the shop
-    const totalSales = await Vente.aggregate([
-      {
-        $match: {
-          id_shop: idShop,
-          date_vente: { $gte: startOfMonth, $lte: endOfMonth },
+    for (let month = 1; month <= 12; month++) {
+      const startOfMonth = new Date(year, month - 1, 1);
+      const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
+
+      // Calculer les ventes totales pour le mois
+      const totalSales = await Vente.aggregate([
+        {
+          $match: {
+            id_shop: idShop,
+            date_vente: { $gte: startOfMonth, $lte: endOfMonth },
+          },
         },
-      },
-      { $group: { _id: null, totalRevenue: { $sum: "$montant_total_vente" } } },
-    ]);
-
-    // Calculate total transfers for the shop
-    const totalTransfers = await Transfert.aggregate([
-      {
-        $match: {
-          id_shop: idShop,
-          date_transfert: { $gte: startOfMonth, $lte: endOfMonth },
+        {
+          $group: { _id: null, totalRevenue: { $sum: "$montant_total_vente" } },
         },
-      },
-      { $group: { _id: null, totalCost: { $sum: "$cout_transfert" } } },
-    ]);
+      ]);
 
-    const revenue = totalSales[0] ? totalSales[0].totalRevenue : 0;
-    const cost = totalTransfers[0] ? totalTransfers[0].totalCost : 0;
+      // Calculer les transferts totaux pour le mois
+      const totalTransfers = await Transfert.aggregate([
+        {
+          $match: {
+            id_centre: idShop,
+            date_transfert: { $gte: startOfMonth, $lte: endOfMonth },
+          },
+        },
+        { $group: { _id: null, totalCost: { $sum: "$cout_transfert" } } },
+      ]);
 
-    // Calculate profit
-    const profit = revenue - cost;
+      const revenue = totalSales[0] ? totalSales[0].totalRevenue : 0;
+      const cost = totalTransfers[0] ? totalTransfers[0].totalCost : 0;
 
-    res.status(200).send({ idShop, year, month, profit });
+      // Calculer le profit pour le mois et l'ajouter au tableau
+      monthlyProfits.push(revenue - cost);
+    }
+
+    res.status(200).send(monthlyProfits);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };

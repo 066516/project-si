@@ -8,31 +8,35 @@ function DealersListeFournisseur({
   setDeleteFournisseur,
   setEditFournisseur,
   setfournisseur,
-  setPrintFournisseur
+  setPrintFournisseur,
 }) {
   const [fournisseursListe, setfournisseursListe] = useState([]);
+  const [fournisseursFiltres, setfournisseursFiltres] = useState([]);
+  const [filter, setFilter] = useState(false);
   const [loading, setLaoding] = useState(true);
-
-  useEffect(() => {
-    const fetchVentes = async () => {
-      const apiUrl = "https://project-si.onrender.com";
-      try {
-        const response = await axios.get(`${apiUrl}/fournisseurs`);
-        console.log(response.data);
-        if (Array.isArray(response.data)) {
-          setfournisseursListe(response.data); // Directly store the data if it's an array
-        } else {
-          console.error("Expected an array, received:", typeof response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching :", error);
-      } finally {
-        setLaoding(false);
+  const fetchVentes = async () => {
+    const apiUrl = "https://project-si.onrender.com";
+    try {
+      const response = await axios.get(`${apiUrl}/fournisseurs`);
+      console.log(response.data);
+      if (Array.isArray(response.data)) {
+        setfournisseursListe(response.data); // Directly store the data if it's an array
+        // setfournisseursFiltres(response.data); // Directly store the data if it's an array
+      } else {
+        console.error("Expected an array, received:", typeof response.data);
       }
-    };
-
+    } catch (error) {
+      console.error("Error fetching :", error);
+    } finally {
+      setLaoding(false);
+    }
+  };
+  useEffect(() => {
     fetchVentes();
-  }, );
+    if (!filter) {
+      setfournisseursFiltres(fournisseursListe);
+    }
+  });
   const handleEDit = (fournisseur) => {
     setfournisseur(fournisseur);
     setEditFournisseur(true);
@@ -46,7 +50,21 @@ function DealersListeFournisseur({
 
     setDeleteFournisseur(true);
   };
- 
+  const handleFilter = () => {
+    if (!filter) {
+      // The filter is currently true, so we will disable it and apply the filter
+      setFilter(true);
+      let fournisseursFiltre = fournisseursListe.filter(
+        (fournisseur) => parseInt(fournisseur.solde_fournisseur) > 0
+      );
+      setfournisseursFiltres(fournisseursFiltre);
+    } else {
+      // The filter is currently false, so we will enable it and reset the list
+      setFilter(false);
+      setfournisseursFiltres(fournisseursListe); // Réinitialiser la liste des fournisseurs
+    }
+  };
+
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
@@ -63,6 +81,12 @@ function DealersListeFournisseur({
           />
         </h1>
       </div>
+      <h1
+        className="py-2 px-5 text-center mt-3 capitalize cursor-pointer  w-fit border-smaoy font-bold text-smaoy rounded-xl border-[2px]"
+        onClick={handleFilter}
+      >
+        {filter ? "Afficher tous les fournisseurs" : "Filtrer sur sol"}
+      </h1>
       <div className="grid md:grid-cols-6 grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold mt-5">
         <h1>Full Name </h1>
         <h2>Adresse Fournisseur</h2>
@@ -72,13 +96,16 @@ function DealersListeFournisseur({
         <h2 className="text-red-500">Update Or delete Employe</h2>
       </div>
       <div>
-        {fournisseursListe.map((fournisseur) => {
+        {fournisseursFiltres.map((fournisseur) => {
           return (
             <div
               key={fournisseur.Id_fournisseur}
               className="grid md:grid-cols-6 grid-cols-5 text-center py-2 px-2 items-center"
             >
-              <h1 className="font-medium text-smaoy cursor-pointer " onClick={()=>handlePrint(fournisseur)} >
+              <h1
+                className="font-medium text-smaoy cursor-pointer "
+                onClick={() => handlePrint(fournisseur)}
+              >
                 {" "}
                 {fournisseur.Nom_fournisseur} {fournisseur.Prenom_fournisseur}{" "}
               </h1>

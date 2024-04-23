@@ -8,6 +8,8 @@ function AddAchat({ setAddAchat }) {
   const [loading, setLaoding] = useState(true);
   const [loadingPost, setLaodingPost] = useState(true);
   // Sample data for products and suppliers
+  const [error, setError] = useState("");
+
   useEffect(() => {
     console.log("Fetching ventes...");
     const fetchProducts = async () => {
@@ -62,23 +64,33 @@ function AddAchat({ setAddAchat }) {
     setSelectedSupplierId(event.target.value);
   };
   const handleCountChange = (event) => {
-    setCount(event.target.value);
+    if (event.target.value < 0) {
+      setCount(-event.target.value);
+    } else setCount(event.target.value);
   };
   const handlePrixChange = (event) => {
-    setprixAchat(event.target.value);
+    if (event.target.value < 0) {
+      setprixAchat(-event.target.value);
+    } else setprixAchat(event.target.value);
   };
   const handleAmountChange = (event) => {
-    setAmount(event.target.value);
+    if (event.target.value < 0) {
+      setAmount(-event.target.value);
+    } else setAmount(event.target.value);
   };
   const handleTypePayChange = (event) => {
     setSelectedTypePay(event.target.value);
   };
   const handleCreateAchat = () => {
     function postData() {
+      const product = products.find(
+        (product) => product.name === selectedProductId
+      );
+      console.log(product);
       return axios
         .post("https://project-si.onrender.com/achat", {
           id_fournisseur: selectedSupplierId,
-          id_produit: selectedProductId,
+          id_produit: product.productId,
           quantite_achat: count,
           montant_encaisse_achat: Amount,
           statut_paiement_achat: selectedTypePay === "Totalment" ? true : false,
@@ -97,8 +109,12 @@ function AddAchat({ setAddAchat }) {
           setLaodingPost(false); // Correct usage of finally
         });
     }
-    setAddAchat(false);
-    postData();
+    if (selectedProductId != 0 && selectedSupplierId != 0 && prixAchat != 0) {
+      setAddAchat(false);
+      postData();
+    } else {
+      setError("Tous les champs doivent être remplis");
+    }
     console.log("Achat created");
     // Add logic to create achat
   };
@@ -117,7 +133,7 @@ function AddAchat({ setAddAchat }) {
         />
         <div>
           <h1 className="text-lg text-blue2">Choose a Product</h1>
-          <select
+          {/* <select
             value={selectedProductId}
             onChange={handleProductChange}
             className="rounded-xl w-60 border-blue2 border border-1"
@@ -128,7 +144,24 @@ function AddAchat({ setAddAchat }) {
                 {product.name}
               </option>
             ))}
-          </select>
+          </select> */}
+          <input
+            list="products"
+            name="product"
+            id="product"
+            onChange={handleProductChange}
+            className="rounded-xl w-60 border-blue2 border border-1"
+          />
+          <datalist
+            id="products"
+            className="rounded-xl w-60 border-blue2 border border-1"
+          >
+            {products.map((product) => (
+              <option key={product.productId} value={product.name}>
+                {product.name}
+              </option>
+            ))}
+          </datalist>
 
           <h1 className="text-lg text-blue2">Choose a Supplier</h1>
           <select
@@ -156,14 +189,6 @@ function AddAchat({ setAddAchat }) {
             className="border-blue2 border border-1 rounded"
           />
 
-          <h1 className="text-lg text-blue2">Enter Amount</h1>
-          <input
-            type="number"
-            placeholder="Enter Amount"
-            value={Amount}
-            onChange={handleAmountChange}
-            className="border-blue2 border border-1 rounded"
-          />
           <h1 className="text-lg text-blue2">Enter prix Achat</h1>
           <input
             type="number"
@@ -173,6 +198,19 @@ function AddAchat({ setAddAchat }) {
             className="border-blue2 border border-1 rounded"
           />
 
+          {selectedTypePay !== "Totalment" && (
+            <>
+              {" "}
+              <h1 className="text-lg text-blue2">Enter Amount</h1>
+              <input
+                type="number"
+                placeholder="Enter Amount"
+                value={Amount}
+                onChange={handleAmountChange}
+                className="border-blue2 border border-1 rounded"
+              />
+            </>
+          )}
           <h1 className="text-lg text-blue2">Payment Method</h1>
           <select
             value={selectedTypePay}
@@ -183,6 +221,7 @@ function AddAchat({ setAddAchat }) {
             <option value="Totalment">Totalment</option>
             <option value="Parcielment">Parcielment</option>
           </select>
+          {error && <div className="text-red-500 my-2"> {error}</div>}
 
           <div className="mt-5 flex justify-between">
             <h1

@@ -14,7 +14,8 @@ function ShopListeVentes({
   const [loading, setLaoding] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("client"); // Default search type
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]); // Data to display
 
   useEffect(() => {
@@ -40,8 +41,8 @@ function ShopListeVentes({
       }
     };
 
-    fetchVentes();
-  }, [ventesListe.length]);
+    if (!searchTerm && searchType !== "date") fetchVentes();
+  });
 
   const handleEDit = (vente) => {
     console.log(vente);
@@ -88,26 +89,44 @@ function ShopListeVentes({
               .includes(searchValue.toLowerCase()) // Adjust if necessary
         );
         break;
-      case "date":
-        // Filter logic for date
-        filtered = ventesListe.filter(
-          (item) => formatDate(item.date_vente) === formatDate(searchValue) // Adjust the property to match your date format
-        );
-        break;
+      // case "date":
+      //   // Filter logic for date
+      //   filtered = ventesListe.filter((item) => {
+      //     const itemDate = new Date(item.date_vente); // Convert the item's date to a Date object
+      //     const searchStartDate = new Date(startDate); // Convert the start date to a Date object
+      //     const searchEndDate = new Date(endDate); // Convert the end date to a Date object
+
+      //     // Check if the item's date falls within the selected date range
+      //     return itemDate >= searchStartDate && itemDate <= searchEndDate;
+      //   });
+      //   break;
       default:
         filtered = ventesListe;
     }
     setFilteredData(filtered);
   };
+  const handleSearchDate = (startDate, endDate) => {
+    let filtered = ventesListe.filter((item) => {
+      const itemDate = new Date(item.date_vente); // Convert the item's date to a Date object
+      const searchStartDate = new Date(startDate); // Convert the start date to a Date object
+      const searchEndDate = new Date(endDate); // Convert the end date to a Date object
 
+      // Check if the item's date falls within the selected date range
+      return (
+        formatDate(itemDate) >= formatDate(searchStartDate) &&
+        formatDate(itemDate) <= formatDate(searchEndDate)
+      );
+    });
+    setFilteredData(filtered);
+  };
   return (
     <div className="w-full text-center font-medium mt-5">
       <div className="w-full flex justify-between mt-5">
-        <h1 className="py-2 px-5 text-center  border border-red-500 font-bold text-red-500 rounded-xl border-[2px]">
-          Liste purchase
+        <h1 className="py-2 px-5 text-center   border-red-500 font-bold text-red-500 rounded-xl border-[2px]">
+          Liste Sales
         </h1>
         <h1 className="py-2 px-5 text-center cursor-pointer flex items-center gap-1 font-bold border border-red-500 text-red-500 rounded-xl border-[2px]">
-          Add purchase
+          Add Sale
           <IoMdAdd
             fontSize="25px"
             onClick={() => {
@@ -126,13 +145,39 @@ function ShopListeVentes({
           <option value="product">Product</option>
           <option value="date">Date</option>
         </select>
-        <input
-          type={searchType === "date" ? "date" : "text"}
-          placeholder={`Search by ${searchType}...`}
-          value={searchTerm}
-          onChange={(event) => handleSearch(event.target.value, searchType)}
-          className="rounded-xl border border-red-500 p-2"
-        />
+
+        {searchType === "date" ? (
+          <>
+            <input
+              type="date"
+              placeholder="Start date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="rounded-xl border border-red-500 p-2"
+            />
+            <input
+              type="date"
+              placeholder="End date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="rounded-xl border border-red-500 p-2"
+            />
+            <button
+              onClick={() => handleSearchDate(startDate, endDate)}
+              className="rounded-xl border border-red-500 p-2"
+            >
+              Search
+            </button>
+          </>
+        ) : (
+          <input
+            type="text"
+            placeholder={`Search by ${searchType}...`}
+            value={searchTerm}
+            onChange={(event) => handleSearch(event.target.value, searchType)}
+            className="rounded-xl border border-red-500 p-2"
+          />
+        )}
         {/* Render filteredData */}
       </div>
 

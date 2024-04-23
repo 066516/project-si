@@ -18,16 +18,16 @@ exports.createReglement = async (req, res) => {
     }
 
     // Check if the Vente exists
-    const AchatExists = await Achat.findOne({ id_achat: id_Achat });
-    if (!AchatExists) {
-      return res.status(404).send({ message: "Vente not found" });
-    }
+    // const AchatExists = await Achat.findOne({ id_achat: id_Achat });
+    // if (!AchatExists) {
+    //   return res.status(404).send({ message: "Vente not found" });
+    // }
 
     // If both exist, create the Reglement
     const newReglement = await Reglement.create({
       id_fournisseur,
       montant_reglement,
-      id_Achat,
+    
       // Set the date here, or it will be set by default
     });
 
@@ -35,8 +35,8 @@ exports.createReglement = async (req, res) => {
     await fournisseurExists.save();
 
     // Update Vente's reste
-    AchatExists.reste -= montant_reglement;
-    await AchatExists.save();
+    // AchatExists.reste -= montant_reglement;
+    // await AchatExists.save();
 
     res.status(201).send({
       message: "Reglement created successfully",
@@ -48,7 +48,7 @@ exports.createReglement = async (req, res) => {
   }
 };
 exports.createReglementClient = async (req, res) => {
-  const { id_client, id_vente, montant_reglement } = req.body;
+  const { id_client, montant_reglement } = req.body;
 
   try {
     // Check if the Client exists
@@ -58,15 +58,14 @@ exports.createReglementClient = async (req, res) => {
     }
 
     // Check if the Vente exists
-    const venteExists = await Vente.findOne({ id_vente: id_vente });
-    if (!venteExists) {
-      return res.status(404).send({ message: "Vente not found" });
-    }
+    // const venteExists = await Vente.findOne({ id_vente: id_vente });
+    // if (!venteExists) {
+    //   return res.status(404).send({ message: "Vente not found" });
+    // }
 
     // If both exist, create the ReglementClient
     const newReglementClient = await ReglementClient.create({
       id_client,
-      id_vente,
       montant_reglement,
       // The date will be set automatically to the current date by default
     });
@@ -77,13 +76,12 @@ exports.createReglementClient = async (req, res) => {
     clientExists.creditClient -= montant_reglement;
     await clientExists.save();
 
-    venteExists.reste -= montant_reglement;
-    await venteExists.save();
+    // venteExists.reste -= montant_reglement;
+    // await venteExists.save();
 
     res.status(201).send({
       message: "Reglement Client created successfully",
       data: newReglementClient,
-      venteExists,
     });
   } catch (error) {
     console.log(error);
@@ -108,7 +106,7 @@ exports.getReglement = async (req, res) => {
 exports.getAllReglements = async (req, res) => {
   const id = req.params.id;
   try {
-    const reglements = await Reglement.find({ id_Achat: id });
+    const reglements = await Reglement.find({ id_fournisseur: id });
     res.status(200).send(reglements);
   } catch (error) {
     res.status(500).send(error);
@@ -116,8 +114,9 @@ exports.getAllReglements = async (req, res) => {
 };
 exports.getAllReglementsClient = async (req, res) => {
   const id = req.params.id;
+  console.log(id);
   try {
-    const reglements = await ReglementClient.find({ id_vente: id });
+    const reglements = await ReglementClient.find({ id_client: id });
     res.status(200).send(reglements);
   } catch (error) {
     res.status(500).send(error);

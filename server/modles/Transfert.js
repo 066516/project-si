@@ -24,18 +24,18 @@ transfertSchema.pre("save", async function (next) {
     } catch (err) {
       next(err);
     }
-    try {
-      const product = await Product.findOne({ productId: this.id_produit });
-      if (!product) {
-        next(new Error("Product not found"));
-      } else {
-        this.cout_transfert = product.price * this.quantite_transfert;
+    // try {
+    //   const product = await Product.findOne({ productId: this.id_produit });
+    //   if (!product) {
+    //     next(new Error("Product not found"));
+    //   } else {
+    //     this.cout_transfert = product.price * this.quantite_transfert;
 
-        next();
-      }
-    } catch (err) {
-      next(err);
-    }
+    //     next();
+    //   }
+    // } catch (err) {
+    //   next(err);
+    // }
   } else {
     next();
   }

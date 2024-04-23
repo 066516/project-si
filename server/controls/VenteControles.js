@@ -9,6 +9,7 @@ exports.createVente = async (req, res) => {
     id_client,
     id_produit,
     id_shop,
+    date_vente,
     quantite_vendue,
     prix_unitaire_vente,
     montant_encaisse_vente,
@@ -42,7 +43,7 @@ exports.createVente = async (req, res) => {
       quantite_vendue,
       prix_unitaire_vente,
       montant_encaisse_vente,
-      date_vente: new Date(),
+      date_vente,
       statut_paiement_vente, // or based on your business logic
     });
     await newVente.save();
@@ -59,7 +60,8 @@ exports.createVente = async (req, res) => {
       } else {
         throw new Error("client not found");
       }
-      newVente.reste = newVente.montant_total_vente - parseInt(montant_encaisse_vente);
+      newVente.reste =
+        newVente.montant_total_vente - parseInt(montant_encaisse_vente);
       await newVente.save();
     }
     stockItem.quantite_en_stock -= parseInt(quantite_vendue);
@@ -231,7 +233,7 @@ exports.getTopEntities = async (req, res) => {
   try {
     // Top Client
     const topClient = await Vente.aggregate([
-      { $match: { id_shop: { $ne: 1 } } },
+      { $match: { id_shop: 1 } },
       {
         $group: {
           _id: "$id_client",
@@ -244,7 +246,7 @@ exports.getTopEntities = async (req, res) => {
 
     // Top Employee
     const topEmployee = await Employe.aggregate([
-      // { $match: { workIn: { $ne: 1 } } },
+      { $match: { workIn: 1, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },
@@ -259,7 +261,7 @@ exports.getTopEntities = async (req, res) => {
       { $sort: { totalSold: -1 } },
       { $limit: 1 },
     ]);
-
+    console.log(topProduct);
     // Top Shops (excluding shop 1)
     const resultArray = await Vente.aggregate([
       { $match: { id_shop: { $ne: 1, $ne: null } } }, // Exclude shop 1 and null shop IDs
@@ -274,7 +276,7 @@ exports.getTopEntities = async (req, res) => {
     ]);
 
     // Convert the array result to an object
-    const topShop = resultArray.length > 0 ? resultArray[0] : null;
+    const topShop = resultArray.length > 0 ? resultArray[0] : 0;
     let clientDetails = { nom: "Unknown", prenom: "Unknown" };
     if (topClient.length > 0 && topClient[0]._id) {
       const client = await Client.findOne({
@@ -330,7 +332,7 @@ exports.getTops = async (req, res) => {
 
     // Top Employee
     const topEmployee = await Employe.aggregate([
-      { $match: { workIn: 1 } },
+      { $match: { workIn: 1, trash: false } },
       { $group: { _id: "$EmployeID", totalSales: { $sum: "$salary" } } },
       { $sort: { totalSales: -1 } },
       { $limit: 1 },

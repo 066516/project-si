@@ -1,9 +1,79 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 
 function PrintClient({ setPrintClient, Client }) {
   console.log(Client);
+  const [reglements, setreglements] = useState([]);
+  const [loading, setLaoding] = useState(true);
+  const [printreglements, setPrintReglements] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [reglement, setAddReglement] = useState(false);
+
+  useEffect(() => {}, []);
+  const handleAmountChange = (event) => {
+    if (event.target.value > Client.creditClient) {
+      setAmount(Client.creditClient);
+    } else setAmount(event.target.value);
+  };
+  const handleReglement = () => {
+    function postData() {
+      return axios
+        .post("https://project-si.onrender.com/reglementClient", {
+          id_client: Client.clientId,
+
+          montant_reglement: amount,
+        })
+        .then((response) => {
+          // Handle response here
+          console.log("Data posted successfully:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error posting data:", error);
+        })
+        .finally(() => {
+          // setLaodingPost(false); // Correct usage of finally
+        });
+    }
+    if (amount <= Client.creditClient) {
+      postData();
+      setAddReglement(false);
+    }
+  };
+  const fetchreglement = async () => {
+    const apiUrl = "https://project-si.onrender.com";
+    try {
+      const response = await axios.get(
+        `${apiUrl}/reglementClient/${Client.clientId}`
+      );
+      console.log(response.data);
+      console.log(response.data);
+      if (Array.isArray(response.data)) {
+        setreglements(response.data); // Directly store the data if it's an array
+      } else {
+        console.error("Expected an array, received:", typeof response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching :", error);
+    } finally {
+      setLaoding(false);
+    }
+  };
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate(); // Gets the day of the month (1-31)
+    const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1
+    const year = date.getFullYear(); // Gets the year (four digits)
+
+    // Format the date as "dd/mm/yyyy"
+    return `${day}/${month}/${year}`;
+  }
+  const handlePrint = () => {
+    fetchreglement();
+    setPrintReglements(!printreglements);
+  };
 
   return (
     <div className="relative bg-blue2/80 z-[100] w-screen h-screen flex justify-center items-start">
@@ -60,6 +130,57 @@ function PrintClient({ setPrintClient, Client }) {
             </div>
           </div>
 
+          {reglement && (
+            <div className="mb-4">
+              <label htmlFor="phoneNumber" className="block mb-2">
+                entre reglement amount
+              </label>
+              <input
+                type="number"
+                value={amount}
+                className="border border-gray-300 rounded p-2 w-full"
+                onChange={handleAmountChange}
+              />
+              <h1
+                className="bg-blue-500 mt-3 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"
+                onClick={handleReglement}
+              >
+                add
+              </h1>
+            </div>
+          )}
+          {printreglements && (
+            <div className=" border mt-5 text-center">
+              {" "}
+              <div className="grid grid-cols-2 mb-2">
+                <h1>Date</h1>
+                <h1>amount</h1>
+              </div>
+              {!loading &&
+                reglements.map((regl) => {
+                  return (
+                    <div key={regl} className="grid grid-cols-2 text-black">
+                      <h1> {formatDate(regl.date_reglement)} </h1>
+                      <h1>{regl.montant_reglement} </h1>
+                    </div>
+                  );
+                })}{" "}
+            </div>
+          )}
+          <div className="flex justify-between my-5">
+            <h1
+              className="bg-blue-500 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"
+              onClick={handlePrint}
+            >
+              print reglements
+            </h1>
+            <h1
+              className="bg-green-400 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"
+              onClick={() => setAddReglement(!reglement)}
+            >
+              add reglement
+            </h1>
+          </div>
           <div className="mt-5 flex justify-between">
             <h1
               className="bg-red-500 w-fit text-white px-5 py-2 cursor-pointer rounded-xl uppercase"

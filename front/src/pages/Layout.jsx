@@ -34,7 +34,7 @@ function Layout() {
           !bol && "hidden "
         } sm:flex flex-col text-black duration-1000 ease-in-out bg-white	 `}
       >
-        <div className=" side-bar h-full absolute z-[100] w-full flex flex-col shadow-lg  items-center">
+        <div className=" side-bar h-full uppercase absolute z-[100] w-full flex flex-col shadow-lg  items-center">
           {!bol ? <img src={img} className=" image1 w-1/3 py-6" /> : ""}
           <div className=" text-black font-medium flex flex-col h-1/2 sm:h-1/3  justify-between mt-20 sm:mt-7">
             <Link
@@ -65,7 +65,7 @@ function Layout() {
                 route.pathname === "/ventes" ? "text-purple" : "text-black"
               }`}
             >
-              purchase
+              sales
             </Link>
             <Link
               to="/achats"
@@ -73,7 +73,7 @@ function Layout() {
                 route.pathname === "/achats" ? "text-purple" : "text-black"
               }`}
             >
-              Sales
+              purchase
             </Link>
             <Link
               to="/dealers"

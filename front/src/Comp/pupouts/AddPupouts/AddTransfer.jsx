@@ -37,7 +37,9 @@ function AddTransfer({ setAddTransft }) {
     setSelectedProduct(event.target.value);
   };
   const handleCountChange = (event) => {
-    setCount(event.target.value);
+    if (event.target.value < 0) {
+      setCount(-event.target.value);
+    } else setCount(event.target.value);
   };
 
   const handleCreateTransfert = () => {

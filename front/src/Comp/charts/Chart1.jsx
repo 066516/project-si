@@ -3,12 +3,12 @@ import Chart from "chart.js/auto";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const SalesChart = () => {
+const SalesChart = ({ idShop }) => {
   const chartRef = useRef(null);
   const [salesData, setSalesData] = useState([]);
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const idShop = queryParams.get("idShop");
+  // const location = useLocation();
+  // const queryParams = new URLSearchParams(location.search);
+  // const idShop = queryParams.get("idShop");
 
   useEffect(() => {
     const fetchSalesmontant = async () => {
@@ -17,8 +17,10 @@ const SalesChart = () => {
         const response = await axios.get(
           `${apiUrl}/analyse/totalMontantVente/${idShop == null ? 1 : idShop}`
         );
+        console.log(idShop);
         if (Array.isArray(response.data)) {
           setSalesData(response.data);
+          console.log(response.data);
         } else {
           console.error("Expected an array, received:", typeof response.data);
         }
@@ -90,4 +92,3 @@ const SalesChart = () => {
 };
 
 export default SalesChart;
-

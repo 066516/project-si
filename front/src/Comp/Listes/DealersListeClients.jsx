@@ -18,6 +18,8 @@ function DealersListeClients({
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const idShop = queryParams.get("idShop");
+  const [clinetsFiltres, setclinetsFiltres] = useState([]);
+  const [filter, setFilter] = useState(false);
   useEffect(() => {
     const fetchVentes = async () => {
       const apiUrl = "https://project-si.onrender.com";
@@ -37,8 +39,10 @@ function DealersListeClients({
         setLaoding(false);
       }
     };
-
     fetchVentes();
+    if (!filter) {
+      setclinetsFiltres(clientsListe);
+    }
   });
   const handleEDit = (client) => {
     setClient(client);
@@ -54,6 +58,20 @@ function DealersListeClients({
   };
   const reglementyHandle = () => {
     setreglementClient(true);
+  };
+  const handleFilter = () => {
+    if (!filter) {
+      // The filter is currently true, so we will disable it and apply the filter
+      setFilter(true);
+      let clinetsFiltre = clientsListe.filter(
+        (clinet) => parseInt(clinet.creditClient) > 0
+      );
+      setclinetsFiltres(clinetsFiltre);
+    } else {
+      // The filter is currently false, so we will enable it and reset the list
+      setFilter(false);
+      setclinetsFiltres(clientsListe); // Réinitialiser la liste des clinets
+    }
   };
   return (
     <div className="w-full text-center font-medium mt-5">
@@ -71,6 +89,12 @@ function DealersListeClients({
           />
         </h1>
       </div>
+      <h1
+        className="py-2 px-5 text-center mt-3 capitalize cursor-pointer  w-fit border-smaoy font-bold text-smaoy rounded-xl border-[2px]"
+        onClick={handleFilter}
+      >
+        {filter ? "Afficher tous les clintes" : "Filtrer par sold"}
+      </h1>
       <div className="grid md:grid-cols-6 grid-cols-5 text-center bg-gray-300 px-2 py-2 font-semibold mt-5">
         <h1>Full Name </h1>
         <h2>Adresse Client</h2>
@@ -80,7 +104,7 @@ function DealersListeClients({
         <h2 className="text-red-500">Update Or delete Achat</h2>
       </div>
       <div className="h-[240px] overflow-y-scroll ">
-        {clientsListe.map((client) => {
+        {clinetsFiltres.map((client) => {
           return (
             <div
               key={client.clientId}
@@ -97,7 +121,7 @@ function DealersListeClients({
                 {client.telephoneClient}{" "}
               </h2>
               <h2 className="text-red-500">{client.creditClient} DA</h2>
-              <h2>-20</h2>
+              <h2>20</h2>
               <h2 className="flex justify-evenly">
                 <MdEdit
                   fontSize="25px"
@@ -109,7 +133,6 @@ function DealersListeClients({
                   color="red"
                   onClick={() => handleDelete(client)}
                 />
-                <GiPayMoney onClick={reglementyHandle} />
               </h2>
             </div>
           );

@@ -8,7 +8,7 @@ const venteSchema = new mongoose.Schema({
   id_shop: { type: Number, ref: "Shop" },
   quantite_vendue: { type: Number, required: true },
   prix_unitaire_vente: { type: Number, required: true, default: 0 },
-  date_vente: { type: Date, default: Date.now },
+  date_vente: { type: Date, default: Date.now() },
   montant_total_vente: { type: Number, default: 0 },
   montant_encaisse_vente: { type: Number, default: 0 },
   reste: { type: Number, default: 0 },

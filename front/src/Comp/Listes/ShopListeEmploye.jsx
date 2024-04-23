@@ -87,7 +87,6 @@ function ShopListeEmploye({
             <div
               key={employe.EmployeID}
               className="grid md:grid-cols-6 grid-cols-4 text-center py-2 px-2 items-center"
-             
             >
               <h1
                 className="font-medium text-red-500 cursor-pointer "
@@ -102,7 +101,7 @@ function ShopListeEmploye({
               <h2 className="hidden md:flex justify-center">
                 {employe.salary} DA{" "}
               </h2>
-              <h2>20</h2>
+              <h2>{employe.nbAbsence} </h2>
               <h2 className="flex justify-evenly cursor-pointer items-center ">
                 <MdEdit
                   fontSize="25px"
@@ -114,7 +113,6 @@ function ShopListeEmploye({
                   color="red"
                   onClick={() => handleDelete(employe)}
                 />
-                <MdOutlineSmartDisplay fontSize="25px" color="green" />
                 {/* <GiPayMoney onClick={paysalaryHandle} />
                 <span
                   className="font-bold text-3xl text-center  pb-3 flex items-center justify-center "
