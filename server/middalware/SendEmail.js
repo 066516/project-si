@@ -1,13 +1,13 @@
 const transporter = require("../controls/Email"); // Assuming this file exports your transporter instance
 const path = require("path");
 const sendEmail = async (title) => {
-  const to = "ghmamnbyl@gmail.com";
+  const to = "ghmamdjeridinabil@gmail.com";
   const subject = "last pv";
   const text = "pv today";
 
   const filePath = path.join(__dirname, "../pvs", title + ".pdf");
   const mailOptions = {
-    from: "countalit@gmail.com",
+    from: "ghmamnbyl@gmail.com",
     to,
     subject,
     text,
