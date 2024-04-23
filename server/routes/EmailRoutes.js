@@ -21,7 +21,7 @@ router.post("/send-email", async (req, res) => {
 
   //  const too=`<h1>${to}</h1>`
   const mailOptions = {
-    from: "countalit@gmail.com",
+    from: "ghmamnbyl@gmail.com",
     to: to,
     subject,
     html: htmlContent,
